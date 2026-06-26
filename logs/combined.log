@@ -1,0 +1,958 @@
+2026-06-26T14:03:14.640Z [SUCCESS] [RESET] System reset initiated by user 1021765669185925150 completed successfully.
+2026-06-26T14:03:27.027Z [INFO] [VOICE] Locked down 🔒 General: 1 members affected
+2026-06-26T14:03:50.388Z [WARN] [VOICE_LOCKDOWN] Failed to unmute/undeafen user 879926401690665000 on VC exit: Target user is not connected to voice.
+2026-06-26T14:04:28.441Z [INFO] [VOICE_LOCKDOWN] User sarah.ngl joined locked down VC 1518838092851576843, muted/deafened.
+2026-06-26T14:05:03.301Z [INFO] [VOICE_LOCKDOWN] User sarah.ngl left locked down VC 1518838092851576843, unmuted/undeafened.
+2026-06-26T14:05:40.393Z [INFO] [VOICE] Unlocked General: 0 members restored
+2026-06-26T14:58:12.648Z [INFO] [BOT] Starting Amo.GG...
+2026-06-26T14:58:12.658Z [INFO] [DB] Database initialized
+2026-06-26T14:58:12.676Z [DEBUG] [LOADER] Loaded command: config [admin]
+2026-06-26T14:58:12.679Z [DEBUG] [LOADER] Loaded command: reset [admin]
+2026-06-26T14:58:12.682Z [DEBUG] [LOADER] Loaded command: confess [confessions]
+2026-06-26T14:58:12.690Z [DEBUG] [LOADER] Loaded command: dev [dev]
+2026-06-26T14:58:12.714Z [DEBUG] [LOADER] Loaded command: gameping [gameping]
+2026-06-26T14:58:12.719Z [DEBUG] [LOADER] Loaded command: gamepingalias [gameping]
+2026-06-26T14:58:12.739Z [DEBUG] [LOADER] Loaded command: arole [roles]
+2026-06-26T14:58:12.742Z [DEBUG] [LOADER] Loaded command: inrole [roles]
+2026-06-26T14:58:12.746Z [DEBUG] [LOADER] Loaded command: role [roles]
+2026-06-26T14:58:12.751Z [DEBUG] [LOADER] Loaded command: suggest [suggestions]
+2026-06-26T14:58:12.758Z [DEBUG] [LOADER] Loaded command: bb [utility]
+2026-06-26T14:58:12.763Z [DEBUG] [LOADER] Loaded command: embed [utility]
+2026-06-26T14:58:12.774Z [DEBUG] [LOADER] Loaded command: giveaway [utility]
+2026-06-26T14:58:12.777Z [DEBUG] [LOADER] Loaded command: help [utility]
+2026-06-26T14:58:12.780Z [DEBUG] [LOADER] Loaded command: ping [utility]
+2026-06-26T14:58:12.782Z [DEBUG] [LOADER] Loaded command: serverinfo [utility]
+2026-06-26T14:58:12.791Z [DEBUG] [LOADER] Loaded command: snipe [utility]
+2026-06-26T14:58:12.796Z [DEBUG] [LOADER] Loaded command: disconnect [voice]
+2026-06-26T14:58:12.798Z [DEBUG] [LOADER] Loaded command: dragme [voice]
+2026-06-26T14:58:12.803Z [DEBUG] [LOADER] Loaded command: forcemove [voice]
+2026-06-26T14:58:12.809Z [DEBUG] [LOADER] Loaded command: gpvc [voice]
+2026-06-26T14:58:12.811Z [DEBUG] [LOADER] Loaded command: move [voice]
+2026-06-26T14:58:12.813Z [DEBUG] [LOADER] Loaded command: shiftvc [voice]
+2026-06-26T14:58:12.818Z [DEBUG] [LOADER] Loaded command: usermove [voice]
+2026-06-26T14:58:12.823Z [DEBUG] [LOADER] Loaded command: vcdeafen [voice]
+2026-06-26T14:58:12.826Z [DEBUG] [LOADER] Loaded command: vclockdown [voice]
+2026-06-26T14:58:12.829Z [DEBUG] [LOADER] Loaded command: vcmute [voice]
+2026-06-26T14:58:12.832Z [DEBUG] [LOADER] Loaded command: vcundeafen [voice]
+2026-06-26T14:58:12.836Z [DEBUG] [LOADER] Loaded command: vcunlockdown [voice]
+2026-06-26T14:58:12.842Z [DEBUG] [LOADER] Loaded command: vcunmute [voice]
+2026-06-26T14:58:12.844Z [DEBUG] [LOADER] Loaded command: wv [voice]
+2026-06-26T14:58:12.845Z [INFO] [LOADER] Loaded 31 commands
+2026-06-26T14:58:12.848Z [DEBUG] [LOADER] Loaded buttons: admin:reset_cancel
+2026-06-26T14:58:12.853Z [DEBUG] [LOADER] Loaded buttons: admin:reset_confirm
+2026-06-26T14:58:12.859Z [DEBUG] [LOADER] Loaded buttons: confession:anonymous
+2026-06-26T14:58:12.861Z [DEBUG] [LOADER] Loaded buttons: confession:known
+2026-06-26T14:58:12.866Z [DEBUG] [LOADER] Loaded buttons: config:clear
+2026-06-26T14:58:12.870Z [DEBUG] [LOADER] Loaded buttons: config:close
+2026-06-26T14:58:12.875Z [DEBUG] [LOADER] Loaded buttons: dev:logs
+2026-06-26T14:58:12.878Z [DEBUG] [LOADER] Loaded buttons: embed
+2026-06-26T14:58:12.881Z [DEBUG] [LOADER] Loaded buttons: giveaway:enter
+2026-06-26T14:58:12.887Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_config
+2026-06-26T14:58:12.894Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_create
+2026-06-26T14:58:12.898Z [DEBUG] [LOADER] Loaded buttons: gpvc:manage
+2026-06-26T14:58:12.905Z [DEBUG] [LOADER] Loaded buttons: help:back
+2026-06-26T14:58:12.909Z [DEBUG] [LOADER] Loaded buttons: help:btn_home
+2026-06-26T14:58:12.911Z [DEBUG] [LOADER] Loaded buttons: help:btn_list
+2026-06-26T14:58:12.914Z [DEBUG] [LOADER] Loaded buttons: help:page
+2026-06-26T14:58:12.917Z [DEBUG] [LOADER] Loaded buttons: help:report
+2026-06-26T14:58:12.923Z [DEBUG] [LOADER] Loaded buttons: help:sort
+2026-06-26T14:58:12.928Z [DEBUG] [LOADER] Loaded buttons: report:accept
+2026-06-26T14:58:12.934Z [DEBUG] [LOADER] Loaded buttons: report:complete
+2026-06-26T14:58:12.941Z [DEBUG] [LOADER] Loaded buttons: report:reject
+2026-06-26T14:58:12.947Z [DEBUG] [LOADER] Loaded buttons: suggestion:complete
+2026-06-26T14:58:12.950Z [DEBUG] [LOADER] Loaded buttons: suggestion:thread
+2026-06-26T14:58:12.953Z [DEBUG] [LOADER] Loaded buttons: suggestion:vote
+2026-06-26T14:58:12.959Z [DEBUG] [LOADER] Loaded selects: config:channel_set
+2026-06-26T14:58:12.963Z [DEBUG] [LOADER] Loaded selects: config:perm_set
+2026-06-26T14:58:12.968Z [DEBUG] [LOADER] Loaded selects: config:role_set
+2026-06-26T14:58:12.973Z [DEBUG] [LOADER] Loaded selects: config:select
+2026-06-26T14:58:12.976Z [DEBUG] [LOADER] Loaded selects: gpvc:select_kick
+2026-06-26T14:58:12.980Z [DEBUG] [LOADER] Loaded selects: gpvc:select_regame
+2026-06-26T14:58:12.984Z [DEBUG] [LOADER] Loaded selects: gpvc:select_game
+2026-06-26T14:58:12.989Z [DEBUG] [LOADER] Loaded selects: help:category
+2026-06-26T14:58:12.992Z [DEBUG] [LOADER] Loaded selects: help:command
+2026-06-26T14:58:12.998Z [DEBUG] [LOADER] Loaded modals: confession:submit
+2026-06-26T14:58:13.002Z [DEBUG] [LOADER] Loaded modals: embed:submit
+2026-06-26T14:58:13.006Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_config
+2026-06-26T14:58:13.009Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_relimit
+2026-06-26T14:58:13.013Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_status
+2026-06-26T14:58:13.017Z [DEBUG] [LOADER] Loaded modals: help:report_modal
+2026-06-26T14:58:13.022Z [DEBUG] [LOADER] Loaded modals: suggestion:submit
+2026-06-26T14:58:13.025Z [DEBUG] [LOADER] Loaded event: interactionCreate
+2026-06-26T14:58:13.028Z [DEBUG] [LOADER] Loaded event: messageCreate
+2026-06-26T14:58:13.031Z [DEBUG] [LOADER] Loaded event: messageDelete
+2026-06-26T14:58:13.035Z [DEBUG] [LOADER] Loaded event: clientReady
+2026-06-26T14:58:13.040Z [DEBUG] [LOADER] Loaded event: voiceStateUpdate
+2026-06-26T14:58:14.679Z [SUCCESS] [BOT] Amo.GG is online as Amo.GG#3390
+2026-06-26T14:58:14.680Z [INFO] [GIVEAWAY_TICKER] Giveaway background scheduler started
+2026-06-26T14:59:05.673Z [ERROR] [CMD] Error in command: Received one or more errors
+Error: Received one or more errors
+    at _UnionValidator.handle (D:\Amo.gg\node_modules\@sapphire\shapeshift\dist\cjs\index.cjs:1965:23)
+    at _UnionValidator.parse (D:\Amo.gg\node_modules\@sapphire\shapeshift\dist\cjs\index.cjs:972:90)
+    at SectionBuilder.toJSON (D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:3129:37)
+    at D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:2830:64
+    at Array.map (<anonymous>)
+    at ContainerBuilder.toJSON (D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:2830:35)
+    at D:\Amo.gg\node_modules\discord.js\src\structures\MessagePayload.js:151:46
+    at Array.map (<anonymous>)
+    at MessagePayload.resolveBody (D:\Amo.gg\node_modules\discord.js\src\structures\MessagePayload.js:150:49)
+    at TextChannel.send (D:\Amo.gg\node_modules\discord.js\src\structures\interfaces\TextBasedChannel.js:189:32)
+2026-06-26T14:59:14.973Z [ERROR] [CMD] Error in command: Received one or more errors
+Error: Received one or more errors
+    at _UnionValidator.handle (D:\Amo.gg\node_modules\@sapphire\shapeshift\dist\cjs\index.cjs:1965:23)
+    at _UnionValidator.parse (D:\Amo.gg\node_modules\@sapphire\shapeshift\dist\cjs\index.cjs:972:90)
+    at SectionBuilder.toJSON (D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:3129:37)
+    at D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:2830:64
+    at Array.map (<anonymous>)
+    at ContainerBuilder.toJSON (D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:2830:35)
+    at D:\Amo.gg\node_modules\discord.js\src\structures\MessagePayload.js:151:46
+    at Array.map (<anonymous>)
+    at MessagePayload.resolveBody (D:\Amo.gg\node_modules\discord.js\src\structures\MessagePayload.js:150:49)
+    at TextChannel.send (D:\Amo.gg\node_modules\discord.js\src\structures\interfaces\TextBasedChannel.js:189:32)
+2026-06-26T15:02:13.448Z [INFO] [BOT] Starting Amo.GG...
+2026-06-26T15:02:13.456Z [INFO] [DB] Database initialized
+2026-06-26T15:02:13.476Z [DEBUG] [LOADER] Loaded command: config [admin]
+2026-06-26T15:02:13.481Z [DEBUG] [LOADER] Loaded command: reset [admin]
+2026-06-26T15:02:13.485Z [DEBUG] [LOADER] Loaded command: confess [confessions]
+2026-06-26T15:02:13.492Z [DEBUG] [LOADER] Loaded command: dev [dev]
+2026-06-26T15:02:13.505Z [DEBUG] [LOADER] Loaded command: gameping [gameping]
+2026-06-26T15:02:13.509Z [DEBUG] [LOADER] Loaded command: gamepingalias [gameping]
+2026-06-26T15:02:13.527Z [DEBUG] [LOADER] Loaded command: arole [roles]
+2026-06-26T15:02:13.541Z [DEBUG] [LOADER] Loaded command: inrole [roles]
+2026-06-26T15:02:13.555Z [DEBUG] [LOADER] Loaded command: role [roles]
+2026-06-26T15:02:13.559Z [DEBUG] [LOADER] Loaded command: suggest [suggestions]
+2026-06-26T15:02:13.571Z [DEBUG] [LOADER] Loaded command: bb [utility]
+2026-06-26T15:02:13.581Z [DEBUG] [LOADER] Loaded command: embed [utility]
+2026-06-26T15:02:13.592Z [DEBUG] [LOADER] Loaded command: giveaway [utility]
+2026-06-26T15:02:13.602Z [DEBUG] [LOADER] Loaded command: help [utility]
+2026-06-26T15:02:13.605Z [DEBUG] [LOADER] Loaded command: ping [utility]
+2026-06-26T15:02:13.607Z [DEBUG] [LOADER] Loaded command: serverinfo [utility]
+2026-06-26T15:02:13.619Z [DEBUG] [LOADER] Loaded command: snipe [utility]
+2026-06-26T15:02:13.624Z [DEBUG] [LOADER] Loaded command: disconnect [voice]
+2026-06-26T15:02:13.627Z [DEBUG] [LOADER] Loaded command: dragme [voice]
+2026-06-26T15:02:13.636Z [DEBUG] [LOADER] Loaded command: forcemove [voice]
+2026-06-26T15:02:13.640Z [DEBUG] [LOADER] Loaded command: gpvc [voice]
+2026-06-26T15:02:13.642Z [DEBUG] [LOADER] Loaded command: move [voice]
+2026-06-26T15:02:13.652Z [DEBUG] [LOADER] Loaded command: shiftvc [voice]
+2026-06-26T15:02:13.655Z [DEBUG] [LOADER] Loaded command: usermove [voice]
+2026-06-26T15:02:13.657Z [DEBUG] [LOADER] Loaded command: vcdeafen [voice]
+2026-06-26T15:02:13.661Z [DEBUG] [LOADER] Loaded command: vclockdown [voice]
+2026-06-26T15:02:13.670Z [DEBUG] [LOADER] Loaded command: vcmute [voice]
+2026-06-26T15:02:13.673Z [DEBUG] [LOADER] Loaded command: vcundeafen [voice]
+2026-06-26T15:02:13.676Z [DEBUG] [LOADER] Loaded command: vcunlockdown [voice]
+2026-06-26T15:02:13.683Z [DEBUG] [LOADER] Loaded command: vcunmute [voice]
+2026-06-26T15:02:13.689Z [DEBUG] [LOADER] Loaded command: wv [voice]
+2026-06-26T15:02:13.690Z [INFO] [LOADER] Loaded 31 commands
+2026-06-26T15:02:13.693Z [DEBUG] [LOADER] Loaded buttons: admin:reset_cancel
+2026-06-26T15:02:13.700Z [DEBUG] [LOADER] Loaded buttons: admin:reset_confirm
+2026-06-26T15:02:13.704Z [DEBUG] [LOADER] Loaded buttons: confession:anonymous
+2026-06-26T15:02:13.706Z [DEBUG] [LOADER] Loaded buttons: confession:known
+2026-06-26T15:02:13.713Z [DEBUG] [LOADER] Loaded buttons: config:clear
+2026-06-26T15:02:13.719Z [DEBUG] [LOADER] Loaded buttons: config:close
+2026-06-26T15:02:13.722Z [DEBUG] [LOADER] Loaded buttons: dev:logs
+2026-06-26T15:02:13.725Z [DEBUG] [LOADER] Loaded buttons: embed
+2026-06-26T15:02:13.731Z [DEBUG] [LOADER] Loaded buttons: giveaway:enter
+2026-06-26T15:02:13.738Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_config
+2026-06-26T15:02:13.746Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_create
+2026-06-26T15:02:13.755Z [DEBUG] [LOADER] Loaded buttons: gpvc:manage
+2026-06-26T15:02:13.765Z [DEBUG] [LOADER] Loaded buttons: help:back
+2026-06-26T15:02:13.771Z [DEBUG] [LOADER] Loaded buttons: help:btn_home
+2026-06-26T15:02:13.775Z [DEBUG] [LOADER] Loaded buttons: help:btn_list
+2026-06-26T15:02:13.778Z [DEBUG] [LOADER] Loaded buttons: help:page
+2026-06-26T15:02:13.782Z [DEBUG] [LOADER] Loaded buttons: help:report
+2026-06-26T15:02:13.787Z [DEBUG] [LOADER] Loaded buttons: help:sort
+2026-06-26T15:02:13.791Z [DEBUG] [LOADER] Loaded buttons: report:accept
+2026-06-26T15:02:13.796Z [DEBUG] [LOADER] Loaded buttons: report:complete
+2026-06-26T15:02:13.803Z [DEBUG] [LOADER] Loaded buttons: report:reject
+2026-06-26T15:02:13.814Z [DEBUG] [LOADER] Loaded buttons: suggestion:complete
+2026-06-26T15:02:13.820Z [DEBUG] [LOADER] Loaded buttons: suggestion:thread
+2026-06-26T15:02:13.823Z [DEBUG] [LOADER] Loaded buttons: suggestion:vote
+2026-06-26T15:02:13.829Z [DEBUG] [LOADER] Loaded selects: config:channel_set
+2026-06-26T15:02:13.838Z [DEBUG] [LOADER] Loaded selects: config:perm_set
+2026-06-26T15:02:13.842Z [DEBUG] [LOADER] Loaded selects: config:role_set
+2026-06-26T15:02:13.848Z [DEBUG] [LOADER] Loaded selects: config:select
+2026-06-26T15:02:13.855Z [DEBUG] [LOADER] Loaded selects: gpvc:select_kick
+2026-06-26T15:02:13.869Z [DEBUG] [LOADER] Loaded selects: gpvc:select_regame
+2026-06-26T15:02:13.872Z [DEBUG] [LOADER] Loaded selects: gpvc:select_game
+2026-06-26T15:02:13.876Z [DEBUG] [LOADER] Loaded selects: help:category
+2026-06-26T15:02:13.881Z [DEBUG] [LOADER] Loaded selects: help:command
+2026-06-26T15:02:13.891Z [DEBUG] [LOADER] Loaded modals: confession:submit
+2026-06-26T15:02:13.897Z [DEBUG] [LOADER] Loaded modals: embed:submit
+2026-06-26T15:02:13.903Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_config
+2026-06-26T15:02:13.907Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_relimit
+2026-06-26T15:02:13.913Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_status
+2026-06-26T15:02:13.921Z [DEBUG] [LOADER] Loaded modals: help:report_modal
+2026-06-26T15:02:13.925Z [DEBUG] [LOADER] Loaded modals: suggestion:submit
+2026-06-26T15:02:13.930Z [DEBUG] [LOADER] Loaded event: interactionCreate
+2026-06-26T15:02:13.937Z [DEBUG] [LOADER] Loaded event: messageCreate
+2026-06-26T15:02:13.939Z [DEBUG] [LOADER] Loaded event: messageDelete
+2026-06-26T15:02:13.943Z [DEBUG] [LOADER] Loaded event: clientReady
+2026-06-26T15:02:13.952Z [DEBUG] [LOADER] Loaded event: voiceStateUpdate
+2026-06-26T15:02:15.829Z [SUCCESS] [BOT] Amo.GG is online as Amo.GG#3390
+2026-06-26T15:02:15.830Z [INFO] [GIVEAWAY_TICKER] Giveaway background scheduler started
+2026-06-26T15:02:37.909Z [ERROR] [CMD] Error in command: Received one or more errors
+Error: Received one or more errors
+    at _UnionValidator.handle (D:\Amo.gg\node_modules\@sapphire\shapeshift\dist\cjs\index.cjs:1965:23)
+    at _UnionValidator.parse (D:\Amo.gg\node_modules\@sapphire\shapeshift\dist\cjs\index.cjs:972:90)
+    at SectionBuilder.toJSON (D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:3129:37)
+    at D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:2830:64
+    at Array.map (<anonymous>)
+    at ContainerBuilder.toJSON (D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:2830:35)
+    at D:\Amo.gg\node_modules\discord.js\src\structures\MessagePayload.js:151:46
+    at Array.map (<anonymous>)
+    at MessagePayload.resolveBody (D:\Amo.gg\node_modules\discord.js\src\structures\MessagePayload.js:150:49)
+    at TextChannel.send (D:\Amo.gg\node_modules\discord.js\src\structures\interfaces\TextBasedChannel.js:189:32)
+2026-06-26T15:03:08.177Z [ERROR] [CMD] Error in command: Received one or more errors
+Error: Received one or more errors
+    at _UnionValidator.handle (D:\Amo.gg\node_modules\@sapphire\shapeshift\dist\cjs\index.cjs:1965:23)
+    at _UnionValidator.parse (D:\Amo.gg\node_modules\@sapphire\shapeshift\dist\cjs\index.cjs:972:90)
+    at SectionBuilder.toJSON (D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:3129:37)
+    at D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:2830:64
+    at Array.map (<anonymous>)
+    at ContainerBuilder.toJSON (D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:2830:35)
+    at D:\Amo.gg\node_modules\discord.js\src\structures\MessagePayload.js:151:46
+    at Array.map (<anonymous>)
+    at MessagePayload.resolveBody (D:\Amo.gg\node_modules\discord.js\src\structures\MessagePayload.js:150:49)
+    at TextChannel.send (D:\Amo.gg\node_modules\discord.js\src\structures\interfaces\TextBasedChannel.js:191:61)
+2026-06-26T15:10:44.965Z [INFO] [BOT] Starting Amo.GG...
+2026-06-26T15:10:44.995Z [INFO] [DB] Database initialized
+2026-06-26T15:10:45.010Z [DEBUG] [LOADER] Loaded command: config [admin]
+2026-06-26T15:10:45.018Z [DEBUG] [LOADER] Loaded command: reset [admin]
+2026-06-26T15:10:45.025Z [DEBUG] [LOADER] Loaded command: confess [confessions]
+2026-06-26T15:10:45.050Z [DEBUG] [LOADER] Loaded command: dev [dev]
+2026-06-26T15:10:45.059Z [DEBUG] [LOADER] Loaded command: gameping [gameping]
+2026-06-26T15:10:45.069Z [DEBUG] [LOADER] Loaded command: gamepingalias [gameping]
+2026-06-26T15:10:45.092Z [DEBUG] [LOADER] Loaded command: arole [roles]
+2026-06-26T15:10:45.096Z [DEBUG] [LOADER] Loaded command: inrole [roles]
+2026-06-26T15:10:45.104Z [DEBUG] [LOADER] Loaded command: role [roles]
+2026-06-26T15:10:45.107Z [DEBUG] [LOADER] Loaded command: suggest [suggestions]
+2026-06-26T15:10:45.112Z [DEBUG] [LOADER] Loaded command: bb [utility]
+2026-06-26T15:10:45.122Z [DEBUG] [LOADER] Loaded command: embed [utility]
+2026-06-26T15:10:45.134Z [DEBUG] [LOADER] Loaded command: giveaway [utility]
+2026-06-26T15:10:45.142Z [DEBUG] [LOADER] Loaded command: help [utility]
+2026-06-26T15:10:45.151Z [DEBUG] [LOADER] Loaded command: ping [utility]
+2026-06-26T15:10:45.156Z [DEBUG] [LOADER] Loaded command: serverinfo [utility]
+2026-06-26T15:10:45.163Z [DEBUG] [LOADER] Loaded command: snipe [utility]
+2026-06-26T15:10:45.174Z [DEBUG] [LOADER] Loaded command: disconnect [voice]
+2026-06-26T15:10:45.177Z [DEBUG] [LOADER] Loaded command: dragme [voice]
+2026-06-26T15:10:45.184Z [DEBUG] [LOADER] Loaded command: forcemove [voice]
+2026-06-26T15:10:45.190Z [DEBUG] [LOADER] Loaded command: gpvc [voice]
+2026-06-26T15:10:45.192Z [DEBUG] [LOADER] Loaded command: move [voice]
+2026-06-26T15:10:45.195Z [DEBUG] [LOADER] Loaded command: shiftvc [voice]
+2026-06-26T15:10:45.205Z [DEBUG] [LOADER] Loaded command: usermove [voice]
+2026-06-26T15:10:45.208Z [DEBUG] [LOADER] Loaded command: vcdeafen [voice]
+2026-06-26T15:10:45.211Z [DEBUG] [LOADER] Loaded command: vclockdown [voice]
+2026-06-26T15:10:45.222Z [DEBUG] [LOADER] Loaded command: vcmute [voice]
+2026-06-26T15:10:45.226Z [DEBUG] [LOADER] Loaded command: vcundeafen [voice]
+2026-06-26T15:10:45.233Z [DEBUG] [LOADER] Loaded command: vcunlockdown [voice]
+2026-06-26T15:10:45.238Z [DEBUG] [LOADER] Loaded command: vcunmute [voice]
+2026-06-26T15:10:45.241Z [DEBUG] [LOADER] Loaded command: wv [voice]
+2026-06-26T15:10:45.242Z [INFO] [LOADER] Loaded 31 commands
+2026-06-26T15:10:45.250Z [DEBUG] [LOADER] Loaded buttons: admin:reset_cancel
+2026-06-26T15:10:45.256Z [DEBUG] [LOADER] Loaded buttons: admin:reset_confirm
+2026-06-26T15:10:45.259Z [DEBUG] [LOADER] Loaded buttons: confession:anonymous
+2026-06-26T15:10:45.266Z [DEBUG] [LOADER] Loaded buttons: confession:known
+2026-06-26T15:10:45.273Z [DEBUG] [LOADER] Loaded buttons: config:clear
+2026-06-26T15:10:45.277Z [DEBUG] [LOADER] Loaded buttons: config:close
+2026-06-26T15:10:45.283Z [DEBUG] [LOADER] Loaded buttons: dev:logs
+2026-06-26T15:10:45.287Z [DEBUG] [LOADER] Loaded buttons: embed
+2026-06-26T15:10:45.290Z [DEBUG] [LOADER] Loaded buttons: giveaway:enter
+2026-06-26T15:10:45.295Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_config
+2026-06-26T15:10:45.307Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_create
+2026-06-26T15:10:45.311Z [DEBUG] [LOADER] Loaded buttons: gpvc:manage
+2026-06-26T15:10:45.321Z [DEBUG] [LOADER] Loaded buttons: help:back
+2026-06-26T15:10:45.324Z [DEBUG] [LOADER] Loaded buttons: help:btn_home
+2026-06-26T15:10:45.326Z [DEBUG] [LOADER] Loaded buttons: help:btn_list
+2026-06-26T15:10:45.331Z [DEBUG] [LOADER] Loaded buttons: help:page
+2026-06-26T15:10:45.336Z [DEBUG] [LOADER] Loaded buttons: help:report
+2026-06-26T15:10:45.340Z [DEBUG] [LOADER] Loaded buttons: help:sort
+2026-06-26T15:10:45.344Z [DEBUG] [LOADER] Loaded buttons: report:accept
+2026-06-26T15:10:45.353Z [DEBUG] [LOADER] Loaded buttons: report:complete
+2026-06-26T15:10:45.359Z [DEBUG] [LOADER] Loaded buttons: report:reject
+2026-06-26T15:10:45.371Z [DEBUG] [LOADER] Loaded buttons: suggestion:complete
+2026-06-26T15:10:45.374Z [DEBUG] [LOADER] Loaded buttons: suggestion:thread
+2026-06-26T15:10:45.377Z [DEBUG] [LOADER] Loaded buttons: suggestion:vote
+2026-06-26T15:10:45.387Z [DEBUG] [LOADER] Loaded selects: config:channel_set
+2026-06-26T15:10:45.390Z [DEBUG] [LOADER] Loaded selects: config:perm_set
+2026-06-26T15:10:45.394Z [DEBUG] [LOADER] Loaded selects: config:role_set
+2026-06-26T15:10:45.403Z [DEBUG] [LOADER] Loaded selects: config:select
+2026-06-26T15:10:45.409Z [DEBUG] [LOADER] Loaded selects: gpvc:select_kick
+2026-06-26T15:10:45.425Z [DEBUG] [LOADER] Loaded selects: gpvc:select_regame
+2026-06-26T15:10:45.429Z [DEBUG] [LOADER] Loaded selects: gpvc:select_game
+2026-06-26T15:10:45.436Z [DEBUG] [LOADER] Loaded selects: help:category
+2026-06-26T15:10:45.440Z [DEBUG] [LOADER] Loaded selects: help:command
+2026-06-26T15:10:45.453Z [DEBUG] [LOADER] Loaded modals: confession:submit
+2026-06-26T15:10:45.458Z [DEBUG] [LOADER] Loaded modals: embed:submit
+2026-06-26T15:10:45.469Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_config
+2026-06-26T15:10:45.474Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_relimit
+2026-06-26T15:10:45.484Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_status
+2026-06-26T15:10:45.490Z [DEBUG] [LOADER] Loaded modals: help:report_modal
+2026-06-26T15:10:45.494Z [DEBUG] [LOADER] Loaded modals: suggestion:submit
+2026-06-26T15:10:45.500Z [DEBUG] [LOADER] Loaded event: interactionCreate
+2026-06-26T15:10:45.504Z [DEBUG] [LOADER] Loaded event: messageCreate
+2026-06-26T15:10:45.507Z [DEBUG] [LOADER] Loaded event: messageDelete
+2026-06-26T15:10:45.511Z [DEBUG] [LOADER] Loaded event: clientReady
+2026-06-26T15:10:45.519Z [DEBUG] [LOADER] Loaded event: voiceStateUpdate
+2026-06-26T15:10:47.685Z [SUCCESS] [BOT] Amo.GG is online as Amo.GG#3390
+2026-06-26T15:10:47.687Z [INFO] [GIVEAWAY_TICKER] Giveaway background scheduler started
+2026-06-26T15:14:16.493Z [INFO] [TEMP_VC] Created "🎮 Gaming VCs" Category channel.
+2026-06-26T15:14:17.186Z [INFO] [TEMP_VC] Created temporary VC 1520084823367221308 for user 1021765669185925150
+2026-06-26T15:14:18.543Z [ERROR] [GPVC_CREATE] Failed to create temp voice channel: Invalid Form Body
+flags[MESSAGE_CANNOT_REMOVE_COMPONENTS_V2_FLAG]: The MessageFlags.IS_COMPONENTS_V2 flag cannot be removed from a message once it has been set.
+DiscordAPIError[50035]: Invalid Form Body
+flags[MESSAGE_CANNOT_REMOVE_COMPONENTS_V2_FLAG]: The MessageFlags.IS_COMPONENTS_V2 flag cannot be removed from a message once it has been set.
+    at handleErrors (D:\Amo.gg\node_modules\@discordjs\rest\dist\index.js:762:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async SequentialHandler.runRequest (D:\Amo.gg\node_modules\@discordjs\rest\dist\index.js:1163:23)
+    at async SequentialHandler.queueRequest (D:\Amo.gg\node_modules\@discordjs\rest\dist\index.js:994:14)
+    at async _REST.request (D:\Amo.gg\node_modules\@discordjs\rest\dist\index.js:1307:22)
+    at async InteractionWebhook.editMessage (D:\Amo.gg\node_modules\discord.js\src\structures\Webhook.js:351:15)
+    at async ButtonInteraction.editReply (D:\Amo.gg\node_modules\discord.js\src\structures\interfaces\InteractionResponses.js:247:17)
+    at async Object.execute (file:///D:/Amo.gg/src/components/buttons/gpvc-btn-create.js?update=1782486645298:63:24)
+    at async Object.execute (file:///D:/Amo.gg/src/events/interactionCreate.js?update=1782486645495:17:9)
+2026-06-26T15:15:06.497Z [INFO] [TEMP_VC] VC 1520084823367221308 locked state updated to: true
+2026-06-26T15:22:56.091Z [INFO] [BOT] Starting Amo.GG...
+2026-06-26T15:22:56.108Z [INFO] [DB] Database initialized
+2026-06-26T15:22:56.138Z [DEBUG] [LOADER] Loaded command: config [admin]
+2026-06-26T15:22:56.143Z [DEBUG] [LOADER] Loaded command: reset [admin]
+2026-06-26T15:22:56.148Z [DEBUG] [LOADER] Loaded command: confess [confessions]
+2026-06-26T15:22:56.166Z [DEBUG] [LOADER] Loaded command: dev [dev]
+2026-06-26T15:22:56.178Z [DEBUG] [LOADER] Loaded command: gameping [gameping]
+2026-06-26T15:22:56.191Z [DEBUG] [LOADER] Loaded command: gamepingalias [gameping]
+2026-06-26T15:22:56.239Z [DEBUG] [LOADER] Loaded command: arole [roles]
+2026-06-26T15:22:56.244Z [DEBUG] [LOADER] Loaded command: inrole [roles]
+2026-06-26T15:22:56.256Z [DEBUG] [LOADER] Loaded command: role [roles]
+2026-06-26T15:22:56.262Z [DEBUG] [LOADER] Loaded command: suggest [suggestions]
+2026-06-26T15:22:56.275Z [DEBUG] [LOADER] Loaded command: bb [utility]
+2026-06-26T15:22:56.283Z [DEBUG] [LOADER] Loaded command: embed [utility]
+2026-06-26T15:22:56.293Z [DEBUG] [LOADER] Loaded command: giveaway [utility]
+2026-06-26T15:22:56.301Z [DEBUG] [LOADER] Loaded command: help [utility]
+2026-06-26T15:22:56.308Z [DEBUG] [LOADER] Loaded command: ping [utility]
+2026-06-26T15:22:56.312Z [DEBUG] [LOADER] Loaded command: serverinfo [utility]
+2026-06-26T15:22:56.323Z [DEBUG] [LOADER] Loaded command: snipe [utility]
+2026-06-26T15:22:56.331Z [DEBUG] [LOADER] Loaded command: disconnect [voice]
+2026-06-26T15:22:56.339Z [DEBUG] [LOADER] Loaded command: dragme [voice]
+2026-06-26T15:22:56.343Z [DEBUG] [LOADER] Loaded command: forcemove [voice]
+2026-06-26T15:22:56.347Z [DEBUG] [LOADER] Loaded command: gpvc [voice]
+2026-06-26T15:22:56.356Z [DEBUG] [LOADER] Loaded command: move [voice]
+2026-06-26T15:22:56.360Z [DEBUG] [LOADER] Loaded command: shiftvc [voice]
+2026-06-26T15:22:56.364Z [DEBUG] [LOADER] Loaded command: usermove [voice]
+2026-06-26T15:22:56.374Z [DEBUG] [LOADER] Loaded command: vcdeafen [voice]
+2026-06-26T15:22:56.378Z [DEBUG] [LOADER] Loaded command: vclockdown [voice]
+2026-06-26T15:22:56.385Z [DEBUG] [LOADER] Loaded command: vcmute [voice]
+2026-06-26T15:22:56.393Z [DEBUG] [LOADER] Loaded command: vcundeafen [voice]
+2026-06-26T15:22:56.396Z [DEBUG] [LOADER] Loaded command: vcunlockdown [voice]
+2026-06-26T15:22:56.403Z [DEBUG] [LOADER] Loaded command: vcunmute [voice]
+2026-06-26T15:22:56.410Z [DEBUG] [LOADER] Loaded command: wv [voice]
+2026-06-26T15:22:56.411Z [INFO] [LOADER] Loaded 31 commands
+2026-06-26T15:22:56.416Z [DEBUG] [LOADER] Loaded buttons: admin:reset_cancel
+2026-06-26T15:22:56.422Z [DEBUG] [LOADER] Loaded buttons: admin:reset_confirm
+2026-06-26T15:22:56.426Z [DEBUG] [LOADER] Loaded buttons: confession:anonymous
+2026-06-26T15:22:56.428Z [DEBUG] [LOADER] Loaded buttons: confession:known
+2026-06-26T15:22:56.441Z [DEBUG] [LOADER] Loaded buttons: config:clear
+2026-06-26T15:22:56.445Z [DEBUG] [LOADER] Loaded buttons: config:close
+2026-06-26T15:22:56.451Z [DEBUG] [LOADER] Loaded buttons: dev:logs
+2026-06-26T15:22:56.456Z [DEBUG] [LOADER] Loaded buttons: embed
+2026-06-26T15:22:56.460Z [DEBUG] [LOADER] Loaded buttons: giveaway:enter
+2026-06-26T15:22:56.467Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_config
+2026-06-26T15:22:56.479Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_create
+2026-06-26T15:22:56.485Z [DEBUG] [LOADER] Loaded buttons: gpvc:manage
+2026-06-26T15:22:56.494Z [DEBUG] [LOADER] Loaded buttons: help:back
+2026-06-26T15:22:56.498Z [DEBUG] [LOADER] Loaded buttons: help:btn_home
+2026-06-26T15:22:56.505Z [DEBUG] [LOADER] Loaded buttons: help:btn_list
+2026-06-26T15:22:56.509Z [DEBUG] [LOADER] Loaded buttons: help:page
+2026-06-26T15:22:56.512Z [DEBUG] [LOADER] Loaded buttons: help:report
+2026-06-26T15:22:56.516Z [DEBUG] [LOADER] Loaded buttons: help:sort
+2026-06-26T15:22:56.525Z [DEBUG] [LOADER] Loaded buttons: report:accept
+2026-06-26T15:22:56.529Z [DEBUG] [LOADER] Loaded buttons: report:complete
+2026-06-26T15:22:56.536Z [DEBUG] [LOADER] Loaded buttons: report:reject
+2026-06-26T15:22:56.546Z [DEBUG] [LOADER] Loaded buttons: suggestion:complete
+2026-06-26T15:22:56.550Z [DEBUG] [LOADER] Loaded buttons: suggestion:thread
+2026-06-26T15:22:56.555Z [DEBUG] [LOADER] Loaded buttons: suggestion:vote
+2026-06-26T15:22:56.561Z [DEBUG] [LOADER] Loaded selects: config:channel_set
+2026-06-26T15:22:56.566Z [DEBUG] [LOADER] Loaded selects: config:perm_set
+2026-06-26T15:22:56.573Z [DEBUG] [LOADER] Loaded selects: config:role_set
+2026-06-26T15:22:56.576Z [DEBUG] [LOADER] Loaded selects: config:select
+2026-06-26T15:22:56.581Z [DEBUG] [LOADER] Loaded selects: gpvc:select_kick
+2026-06-26T15:22:56.592Z [DEBUG] [LOADER] Loaded selects: gpvc:select_regame
+2026-06-26T15:22:56.595Z [DEBUG] [LOADER] Loaded selects: gpvc:select_game
+2026-06-26T15:22:56.600Z [DEBUG] [LOADER] Loaded selects: gpvc:select_trust
+2026-06-26T15:22:56.608Z [DEBUG] [LOADER] Loaded selects: gpvc:select_untrust
+2026-06-26T15:22:56.611Z [DEBUG] [LOADER] Loaded selects: help:category
+2026-06-26T15:22:56.614Z [DEBUG] [LOADER] Loaded selects: help:command
+2026-06-26T15:22:56.627Z [DEBUG] [LOADER] Loaded modals: confession:submit
+2026-06-26T15:22:56.630Z [DEBUG] [LOADER] Loaded modals: embed:submit
+2026-06-26T15:22:56.640Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_config
+2026-06-26T15:22:56.646Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_relimit
+2026-06-26T15:22:56.654Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_status
+2026-06-26T15:22:56.658Z [DEBUG] [LOADER] Loaded modals: help:report_modal
+2026-06-26T15:22:56.662Z [DEBUG] [LOADER] Loaded modals: suggestion:submit
+2026-06-26T15:22:56.666Z [DEBUG] [LOADER] Loaded event: interactionCreate
+2026-06-26T15:22:56.674Z [DEBUG] [LOADER] Loaded event: messageCreate
+2026-06-26T15:22:56.676Z [DEBUG] [LOADER] Loaded event: messageDelete
+2026-06-26T15:22:56.679Z [DEBUG] [LOADER] Loaded event: clientReady
+2026-06-26T15:22:56.688Z [DEBUG] [LOADER] Loaded event: voiceStateUpdate
+2026-06-26T15:22:58.449Z [SUCCESS] [BOT] Amo.GG is online as Amo.GG#3390
+2026-06-26T15:22:58.451Z [INFO] [GIVEAWAY_TICKER] Giveaway background scheduler started
+2026-06-26T15:23:04.509Z [INFO] [TEMP_VC] Deleted empty temporary voice channel: VALORANT (1520084823367221308)
+2026-06-26T15:23:04.996Z [INFO] [TEMP_VC] Deleted empty "🎮 Gaming VCs" Category channel.
+2026-06-26T15:23:55.633Z [INFO] [TEMP_VC] Created "🎮 Gaming VCs" Category channel.
+2026-06-26T15:23:56.268Z [INFO] [TEMP_VC] Created temporary VC 1520087251927957556 for user 1021765669185925150
+2026-06-26T15:24:21.063Z [INFO] [TEMP_VC] VC 1520087251927957556 locked state updated to: true
+2026-06-26T15:24:42.610Z [ERROR] [GPVC_UNTRUST] Failed to untrust member: Invalid Form Body
+flags[MESSAGE_CANNOT_REMOVE_COMPONENTS_V2_FLAG]: The MessageFlags.IS_COMPONENTS_V2 flag cannot be removed from a message once it has been set.
+2026-06-26T15:24:43.071Z [ERROR] [INTERACTION] Error in interaction: Invalid Form Body
+flags[MESSAGE_CANNOT_REMOVE_COMPONENTS_V2_FLAG]: The MessageFlags.IS_COMPONENTS_V2 flag cannot be removed from a message once it has been set.
+DiscordAPIError[50035]: Invalid Form Body
+flags[MESSAGE_CANNOT_REMOVE_COMPONENTS_V2_FLAG]: The MessageFlags.IS_COMPONENTS_V2 flag cannot be removed from a message once it has been set.
+    at handleErrors (D:\Amo.gg\node_modules\@discordjs\rest\dist\index.js:762:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async SequentialHandler.runRequest (D:\Amo.gg\node_modules\@discordjs\rest\dist\index.js:1163:23)
+    at async SequentialHandler.queueRequest (D:\Amo.gg\node_modules\@discordjs\rest\dist\index.js:994:14)
+    at async _REST.request (D:\Amo.gg\node_modules\@discordjs\rest\dist\index.js:1307:22)
+    at async InteractionWebhook.editMessage (D:\Amo.gg\node_modules\discord.js\src\structures\Webhook.js:351:15)
+    at async UserSelectMenuInteraction.editReply (D:\Amo.gg\node_modules\discord.js\src\structures\interfaces\InteractionResponses.js:247:17)
+    at async Object.execute (file:///D:/Amo.gg/src/components/selects/gpvc-untrust.js?update=1782487376603:68:7)
+    at async Object.execute (file:///D:/Amo.gg/src/events/interactionCreate.js?update=1782487376663:33:9)
+2026-06-26T15:27:55.567Z [INFO] [BOT] Starting Amo.GG...
+2026-06-26T15:27:55.574Z [INFO] [DB] Database initialized
+2026-06-26T15:27:55.585Z [DEBUG] [LOADER] Loaded command: config [admin]
+2026-06-26T15:27:55.590Z [DEBUG] [LOADER] Loaded command: reset [admin]
+2026-06-26T15:27:55.596Z [DEBUG] [LOADER] Loaded command: confess [confessions]
+2026-06-26T15:27:55.602Z [DEBUG] [LOADER] Loaded command: dev [dev]
+2026-06-26T15:27:55.611Z [DEBUG] [LOADER] Loaded command: gameping [gameping]
+2026-06-26T15:27:55.616Z [DEBUG] [LOADER] Loaded command: gamepingalias [gameping]
+2026-06-26T15:27:55.642Z [DEBUG] [LOADER] Loaded command: arole [roles]
+2026-06-26T15:27:55.647Z [DEBUG] [LOADER] Loaded command: inrole [roles]
+2026-06-26T15:27:55.653Z [DEBUG] [LOADER] Loaded command: role [roles]
+2026-06-26T15:27:55.662Z [DEBUG] [LOADER] Loaded command: suggest [suggestions]
+2026-06-26T15:27:55.670Z [DEBUG] [LOADER] Loaded command: bb [utility]
+2026-06-26T15:27:55.675Z [DEBUG] [LOADER] Loaded command: embed [utility]
+2026-06-26T15:27:55.682Z [DEBUG] [LOADER] Loaded command: giveaway [utility]
+2026-06-26T15:27:55.703Z [DEBUG] [LOADER] Loaded command: help [utility]
+2026-06-26T15:27:55.707Z [DEBUG] [LOADER] Loaded command: ping [utility]
+2026-06-26T15:27:55.712Z [DEBUG] [LOADER] Loaded command: serverinfo [utility]
+2026-06-26T15:27:55.718Z [DEBUG] [LOADER] Loaded command: snipe [utility]
+2026-06-26T15:27:55.722Z [DEBUG] [LOADER] Loaded command: disconnect [voice]
+2026-06-26T15:27:55.726Z [DEBUG] [LOADER] Loaded command: dragme [voice]
+2026-06-26T15:27:55.730Z [DEBUG] [LOADER] Loaded command: forcemove [voice]
+2026-06-26T15:27:55.735Z [DEBUG] [LOADER] Loaded command: gpvc [voice]
+2026-06-26T15:27:55.741Z [DEBUG] [LOADER] Loaded command: move [voice]
+2026-06-26T15:27:55.748Z [DEBUG] [LOADER] Loaded command: shiftvc [voice]
+2026-06-26T15:27:55.755Z [DEBUG] [LOADER] Loaded command: usermove [voice]
+2026-06-26T15:27:55.763Z [DEBUG] [LOADER] Loaded command: vcdeafen [voice]
+2026-06-26T15:27:55.769Z [DEBUG] [LOADER] Loaded command: vclockdown [voice]
+2026-06-26T15:27:55.781Z [DEBUG] [LOADER] Loaded command: vcmute [voice]
+2026-06-26T15:27:55.786Z [DEBUG] [LOADER] Loaded command: vcundeafen [voice]
+2026-06-26T15:27:55.791Z [DEBUG] [LOADER] Loaded command: vcunlockdown [voice]
+2026-06-26T15:27:55.797Z [DEBUG] [LOADER] Loaded command: vcunmute [voice]
+2026-06-26T15:27:55.801Z [DEBUG] [LOADER] Loaded command: wv [voice]
+2026-06-26T15:27:55.801Z [INFO] [LOADER] Loaded 31 commands
+2026-06-26T15:27:55.806Z [DEBUG] [LOADER] Loaded buttons: admin:reset_cancel
+2026-06-26T15:27:55.812Z [DEBUG] [LOADER] Loaded buttons: admin:reset_confirm
+2026-06-26T15:27:55.815Z [DEBUG] [LOADER] Loaded buttons: confession:anonymous
+2026-06-26T15:27:55.818Z [DEBUG] [LOADER] Loaded buttons: confession:known
+2026-06-26T15:27:55.828Z [DEBUG] [LOADER] Loaded buttons: config:clear
+2026-06-26T15:27:55.832Z [DEBUG] [LOADER] Loaded buttons: config:close
+2026-06-26T15:27:55.836Z [DEBUG] [LOADER] Loaded buttons: dev:logs
+2026-06-26T15:27:55.843Z [DEBUG] [LOADER] Loaded buttons: embed
+2026-06-26T15:27:55.847Z [DEBUG] [LOADER] Loaded buttons: giveaway:enter
+2026-06-26T15:27:55.851Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_config
+2026-06-26T15:27:55.862Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_create
+2026-06-26T15:27:55.868Z [DEBUG] [LOADER] Loaded buttons: gpvc:manage
+2026-06-26T15:27:55.872Z [DEBUG] [LOADER] Loaded buttons: help:back
+2026-06-26T15:27:55.877Z [DEBUG] [LOADER] Loaded buttons: help:btn_home
+2026-06-26T15:27:55.883Z [DEBUG] [LOADER] Loaded buttons: help:btn_list
+2026-06-26T15:27:55.888Z [DEBUG] [LOADER] Loaded buttons: help:page
+2026-06-26T15:27:55.893Z [DEBUG] [LOADER] Loaded buttons: help:report
+2026-06-26T15:27:55.896Z [DEBUG] [LOADER] Loaded buttons: help:sort
+2026-06-26T15:27:55.903Z [DEBUG] [LOADER] Loaded buttons: report:accept
+2026-06-26T15:27:55.908Z [DEBUG] [LOADER] Loaded buttons: report:complete
+2026-06-26T15:27:55.914Z [DEBUG] [LOADER] Loaded buttons: report:reject
+2026-06-26T15:27:55.927Z [DEBUG] [LOADER] Loaded buttons: suggestion:complete
+2026-06-26T15:27:55.931Z [DEBUG] [LOADER] Loaded buttons: suggestion:thread
+2026-06-26T15:27:55.936Z [DEBUG] [LOADER] Loaded buttons: suggestion:vote
+2026-06-26T15:27:55.942Z [DEBUG] [LOADER] Loaded selects: config:channel_set
+2026-06-26T15:27:55.947Z [DEBUG] [LOADER] Loaded selects: config:perm_set
+2026-06-26T15:27:55.952Z [DEBUG] [LOADER] Loaded selects: config:role_set
+2026-06-26T15:27:55.957Z [DEBUG] [LOADER] Loaded selects: config:select
+2026-06-26T15:27:55.962Z [DEBUG] [LOADER] Loaded selects: gpvc:select_kick
+2026-06-26T15:27:55.966Z [DEBUG] [LOADER] Loaded selects: gpvc:select_regame
+2026-06-26T15:27:55.970Z [DEBUG] [LOADER] Loaded selects: gpvc:select_game
+2026-06-26T15:27:55.975Z [DEBUG] [LOADER] Loaded selects: gpvc:select_trust
+2026-06-26T15:27:55.980Z [DEBUG] [LOADER] Loaded selects: gpvc:select_untrust
+2026-06-26T15:27:55.984Z [DEBUG] [LOADER] Loaded selects: help:category
+2026-06-26T15:27:55.988Z [DEBUG] [LOADER] Loaded selects: help:command
+2026-06-26T15:27:56.002Z [DEBUG] [LOADER] Loaded modals: confession:submit
+2026-06-26T15:27:56.007Z [DEBUG] [LOADER] Loaded modals: embed:submit
+2026-06-26T15:27:56.012Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_config
+2026-06-26T15:27:56.017Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_relimit
+2026-06-26T15:27:56.028Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_status
+2026-06-26T15:27:56.035Z [DEBUG] [LOADER] Loaded modals: help:report_modal
+2026-06-26T15:27:56.040Z [DEBUG] [LOADER] Loaded modals: suggestion:submit
+2026-06-26T15:27:56.048Z [DEBUG] [LOADER] Loaded event: interactionCreate
+2026-06-26T15:27:56.053Z [DEBUG] [LOADER] Loaded event: messageCreate
+2026-06-26T15:27:56.058Z [DEBUG] [LOADER] Loaded event: messageDelete
+2026-06-26T15:27:56.062Z [DEBUG] [LOADER] Loaded event: clientReady
+2026-06-26T15:27:56.067Z [DEBUG] [LOADER] Loaded event: voiceStateUpdate
+2026-06-26T15:27:57.547Z [SUCCESS] [BOT] Amo.GG is online as Amo.GG#3390
+2026-06-26T15:27:57.549Z [INFO] [GIVEAWAY_TICKER] Giveaway background scheduler started
+2026-06-26T15:33:07.086Z [INFO] [BOT] Starting Amo.GG...
+2026-06-26T15:33:07.094Z [INFO] [DB] Database initialized
+2026-06-26T15:33:07.109Z [DEBUG] [LOADER] Loaded command: config [admin]
+2026-06-26T15:33:07.116Z [DEBUG] [LOADER] Loaded command: reset [admin]
+2026-06-26T15:33:07.124Z [DEBUG] [LOADER] Loaded command: confess [confessions]
+2026-06-26T15:33:07.139Z [DEBUG] [LOADER] Loaded command: dev [dev]
+2026-06-26T15:33:07.160Z [DEBUG] [LOADER] Loaded command: gameping [gameping]
+2026-06-26T15:33:07.164Z [DEBUG] [LOADER] Loaded command: gamepingalias [gameping]
+2026-06-26T15:33:07.189Z [DEBUG] [LOADER] Loaded command: arole [roles]
+2026-06-26T15:33:07.219Z [DEBUG] [LOADER] Loaded command: inrole [roles]
+2026-06-26T15:33:07.267Z [DEBUG] [LOADER] Loaded command: role [roles]
+2026-06-26T15:33:07.273Z [DEBUG] [LOADER] Loaded command: suggest [suggestions]
+2026-06-26T15:33:07.279Z [DEBUG] [LOADER] Loaded command: bb [utility]
+2026-06-26T15:33:07.305Z [DEBUG] [LOADER] Loaded command: embed [utility]
+2026-06-26T15:33:07.315Z [DEBUG] [LOADER] Loaded command: giveaway [utility]
+2026-06-26T15:33:07.321Z [DEBUG] [LOADER] Loaded command: help [utility]
+2026-06-26T15:33:07.327Z [DEBUG] [LOADER] Loaded command: ping [utility]
+2026-06-26T15:33:07.329Z [DEBUG] [LOADER] Loaded command: serverinfo [utility]
+2026-06-26T15:33:07.334Z [DEBUG] [LOADER] Loaded command: snipe [utility]
+2026-06-26T15:33:07.347Z [DEBUG] [LOADER] Loaded command: disconnect [voice]
+2026-06-26T15:33:07.350Z [DEBUG] [LOADER] Loaded command: dragme [voice]
+2026-06-26T15:33:07.355Z [DEBUG] [LOADER] Loaded command: forcemove [voice]
+2026-06-26T15:33:07.362Z [DEBUG] [LOADER] Loaded command: gpvc [voice]
+2026-06-26T15:33:07.365Z [DEBUG] [LOADER] Loaded command: move [voice]
+2026-06-26T15:33:07.367Z [DEBUG] [LOADER] Loaded command: shiftvc [voice]
+2026-06-26T15:33:07.375Z [DEBUG] [LOADER] Loaded command: usermove [voice]
+2026-06-26T15:33:07.378Z [DEBUG] [LOADER] Loaded command: vcdeafen [voice]
+2026-06-26T15:33:07.382Z [DEBUG] [LOADER] Loaded command: vclockdown [voice]
+2026-06-26T15:33:07.385Z [DEBUG] [LOADER] Loaded command: vcmute [voice]
+2026-06-26T15:33:07.393Z [DEBUG] [LOADER] Loaded command: vcundeafen [voice]
+2026-06-26T15:33:07.396Z [DEBUG] [LOADER] Loaded command: vcunlockdown [voice]
+2026-06-26T15:33:07.398Z [DEBUG] [LOADER] Loaded command: vcunmute [voice]
+2026-06-26T15:33:07.402Z [DEBUG] [LOADER] Loaded command: wv [voice]
+2026-06-26T15:33:07.403Z [INFO] [LOADER] Loaded 31 commands
+2026-06-26T15:33:07.409Z [DEBUG] [LOADER] Loaded buttons: admin:reset_cancel
+2026-06-26T15:33:07.414Z [DEBUG] [LOADER] Loaded buttons: admin:reset_confirm
+2026-06-26T15:33:07.416Z [DEBUG] [LOADER] Loaded buttons: confession:anonymous
+2026-06-26T15:33:07.419Z [DEBUG] [LOADER] Loaded buttons: confession:known
+2026-06-26T15:33:07.427Z [DEBUG] [LOADER] Loaded buttons: config:clear
+2026-06-26T15:33:07.430Z [DEBUG] [LOADER] Loaded buttons: config:close
+2026-06-26T15:33:07.433Z [DEBUG] [LOADER] Loaded buttons: dev:logs
+2026-06-26T15:33:07.439Z [DEBUG] [LOADER] Loaded buttons: embed
+2026-06-26T15:33:07.445Z [DEBUG] [LOADER] Loaded buttons: giveaway:enter
+2026-06-26T15:33:07.452Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_config
+2026-06-26T15:33:07.464Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_create
+2026-06-26T15:33:07.469Z [DEBUG] [LOADER] Loaded buttons: gpvc:manage
+2026-06-26T15:33:07.478Z [DEBUG] [LOADER] Loaded buttons: help:back
+2026-06-26T15:33:07.482Z [DEBUG] [LOADER] Loaded buttons: help:btn_home
+2026-06-26T15:33:07.484Z [DEBUG] [LOADER] Loaded buttons: help:btn_list
+2026-06-26T15:33:07.487Z [DEBUG] [LOADER] Loaded buttons: help:page
+2026-06-26T15:33:07.492Z [DEBUG] [LOADER] Loaded buttons: help:report
+2026-06-26T15:33:07.495Z [DEBUG] [LOADER] Loaded buttons: help:sort
+2026-06-26T15:33:07.500Z [DEBUG] [LOADER] Loaded buttons: report:accept
+2026-06-26T15:33:07.505Z [DEBUG] [LOADER] Loaded buttons: report:complete
+2026-06-26T15:33:07.510Z [DEBUG] [LOADER] Loaded buttons: report:reject
+2026-06-26T15:33:07.517Z [DEBUG] [LOADER] Loaded buttons: suggestion:complete
+2026-06-26T15:33:07.521Z [DEBUG] [LOADER] Loaded buttons: suggestion:thread
+2026-06-26T15:33:07.525Z [DEBUG] [LOADER] Loaded buttons: suggestion:vote
+2026-06-26T15:33:07.529Z [DEBUG] [LOADER] Loaded selects: config:channel_set
+2026-06-26T15:33:07.533Z [DEBUG] [LOADER] Loaded selects: config:perm_set
+2026-06-26T15:33:07.538Z [DEBUG] [LOADER] Loaded selects: config:role_set
+2026-06-26T15:33:07.542Z [DEBUG] [LOADER] Loaded selects: config:select
+2026-06-26T15:33:07.546Z [DEBUG] [LOADER] Loaded selects: gpvc:select_kick
+2026-06-26T15:33:07.551Z [DEBUG] [LOADER] Loaded selects: gpvc:select_regame
+2026-06-26T15:33:07.556Z [DEBUG] [LOADER] Loaded selects: gpvc:select_game
+2026-06-26T15:33:07.561Z [DEBUG] [LOADER] Loaded selects: gpvc:select_trust
+2026-06-26T15:33:07.564Z [DEBUG] [LOADER] Loaded selects: gpvc:select_untrust
+2026-06-26T15:33:07.567Z [DEBUG] [LOADER] Loaded selects: help:category
+2026-06-26T15:33:07.571Z [DEBUG] [LOADER] Loaded selects: help:command
+2026-06-26T15:33:07.581Z [DEBUG] [LOADER] Loaded modals: confession:submit
+2026-06-26T15:33:07.585Z [DEBUG] [LOADER] Loaded modals: embed:submit
+2026-06-26T15:33:07.589Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_config
+2026-06-26T15:33:07.596Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_relimit
+2026-06-26T15:33:07.600Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_status
+2026-06-26T15:33:07.606Z [DEBUG] [LOADER] Loaded modals: help:report_modal
+2026-06-26T15:33:07.610Z [DEBUG] [LOADER] Loaded modals: suggestion:submit
+2026-06-26T15:33:07.619Z [DEBUG] [LOADER] Loaded event: interactionCreate
+2026-06-26T15:33:07.626Z [DEBUG] [LOADER] Loaded event: messageCreate
+2026-06-26T15:33:07.631Z [DEBUG] [LOADER] Loaded event: messageDelete
+2026-06-26T15:33:07.641Z [DEBUG] [LOADER] Loaded event: clientReady
+2026-06-26T15:33:07.645Z [DEBUG] [LOADER] Loaded event: voiceStateUpdate
+2026-06-26T15:33:09.199Z [SUCCESS] [BOT] Amo.GG is online as Amo.GG#3390
+2026-06-26T15:33:09.201Z [INFO] [GIVEAWAY_TICKER] Giveaway background scheduler started
+2026-06-26T15:33:17.817Z [INFO] [TEMP_VC] Deleted empty temporary voice channel: Among Us (1520087251927957556)
+2026-06-26T15:33:18.905Z [INFO] [TEMP_VC] Deleted creation success message 1520087260018638951 for VC 1520087251927957556
+2026-06-26T15:33:19.439Z [INFO] [TEMP_VC] Deleted empty "🎮 Gaming VCs" Category channel.
+2026-06-26T15:37:25.963Z [INFO] [TEMP_VC] Created "🎮 Gaming VCs" Category channel.
+2026-06-26T15:37:26.419Z [INFO] [TEMP_VC] Created temporary VC 1520090650320699473 for user 1021765669185925150
+2026-06-26T15:37:53.552Z [INFO] [TEMP_VC] Deleted empty temporary voice channel: Lounge (1520090650320699473)
+2026-06-26T15:37:54.137Z [INFO] [TEMP_VC] Deleted creation success message 1520090661951373364 for VC 1520090650320699473
+2026-06-26T15:37:54.575Z [INFO] [TEMP_VC] Deleted empty "🎮 Gaming VCs" Category channel.
+2026-06-26T15:48:53.638Z [INFO] [BOT] Starting Amo.GG...
+2026-06-26T15:48:53.652Z [INFO] [DB] Database initialized
+2026-06-26T15:48:53.692Z [DEBUG] [LOADER] Loaded command: config [admin]
+2026-06-26T15:48:53.697Z [DEBUG] [LOADER] Loaded command: reset [admin]
+2026-06-26T15:48:53.716Z [DEBUG] [LOADER] Loaded command: confess [confessions]
+2026-06-26T15:48:53.750Z [DEBUG] [LOADER] Loaded command: dev [dev]
+2026-06-26T15:48:53.766Z [DEBUG] [LOADER] Loaded command: gameping [gameping]
+2026-06-26T15:48:53.789Z [DEBUG] [LOADER] Loaded command: gamepingalias [gameping]
+2026-06-26T15:48:53.838Z [DEBUG] [LOADER] Loaded command: arole [roles]
+2026-06-26T15:48:53.885Z [DEBUG] [LOADER] Loaded command: inrole [roles]
+2026-06-26T15:48:53.905Z [DEBUG] [LOADER] Loaded command: role [roles]
+2026-06-26T15:48:53.919Z [DEBUG] [LOADER] Loaded command: suggest [suggestions]
+2026-06-26T15:48:53.952Z [DEBUG] [LOADER] Loaded command: bb [utility]
+2026-06-26T15:48:53.967Z [DEBUG] [LOADER] Loaded command: embed [utility]
+2026-06-26T15:48:53.998Z [DEBUG] [LOADER] Loaded command: giveaway [utility]
+2026-06-26T15:48:54.012Z [DEBUG] [LOADER] Loaded command: help [utility]
+2026-06-26T15:48:54.016Z [DEBUG] [LOADER] Loaded command: ping [utility]
+2026-06-26T15:48:54.034Z [DEBUG] [LOADER] Loaded command: serverinfo [utility]
+2026-06-26T15:48:54.063Z [DEBUG] [LOADER] Loaded command: snipe [utility]
+2026-06-26T15:48:54.102Z [DEBUG] [LOADER] Loaded command: disconnect [voice]
+2026-06-26T15:48:54.108Z [DEBUG] [LOADER] Loaded command: dragme [voice]
+2026-06-26T15:48:54.123Z [DEBUG] [LOADER] Loaded command: forcemove [voice]
+2026-06-26T15:48:54.141Z [DEBUG] [LOADER] Loaded command: gpvc [voice]
+2026-06-26T15:48:54.158Z [DEBUG] [LOADER] Loaded command: move [voice]
+2026-06-26T15:48:54.182Z [DEBUG] [LOADER] Loaded command: shiftvc [voice]
+2026-06-26T15:48:54.206Z [DEBUG] [LOADER] Loaded command: usermove [voice]
+2026-06-26T15:48:54.224Z [DEBUG] [LOADER] Loaded command: vcdeafen [voice]
+2026-06-26T15:48:54.239Z [DEBUG] [LOADER] Loaded command: vclockdown [voice]
+2026-06-26T15:48:54.255Z [DEBUG] [LOADER] Loaded command: vcmute [voice]
+2026-06-26T15:48:54.271Z [DEBUG] [LOADER] Loaded command: vcundeafen [voice]
+2026-06-26T15:48:54.278Z [DEBUG] [LOADER] Loaded command: vcunlockdown [voice]
+2026-06-26T15:48:54.305Z [DEBUG] [LOADER] Loaded command: vcunmute [voice]
+2026-06-26T15:48:54.314Z [DEBUG] [LOADER] Loaded command: wv [voice]
+2026-06-26T15:48:54.315Z [INFO] [LOADER] Loaded 31 commands
+2026-06-26T15:48:54.327Z [DEBUG] [LOADER] Loaded buttons: admin:reset_cancel
+2026-06-26T15:48:54.334Z [DEBUG] [LOADER] Loaded buttons: admin:reset_confirm
+2026-06-26T15:48:54.340Z [DEBUG] [LOADER] Loaded buttons: confession:anonymous
+2026-06-26T15:48:54.352Z [DEBUG] [LOADER] Loaded buttons: confession:known
+2026-06-26T15:48:54.377Z [DEBUG] [LOADER] Loaded buttons: config:clear
+2026-06-26T15:48:54.385Z [DEBUG] [LOADER] Loaded buttons: config:close
+2026-06-26T15:48:54.394Z [DEBUG] [LOADER] Loaded buttons: dev:logs
+2026-06-26T15:48:54.448Z [DEBUG] [LOADER] Loaded buttons: embed
+2026-06-26T15:48:54.512Z [DEBUG] [LOADER] Loaded buttons: giveaway:enter
+2026-06-26T15:48:54.536Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_config
+2026-06-26T15:48:54.567Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_create
+2026-06-26T15:48:54.608Z [DEBUG] [LOADER] Loaded buttons: gpvc:manage
+2026-06-26T15:48:54.626Z [DEBUG] [LOADER] Loaded buttons: help:back
+2026-06-26T15:48:54.635Z [DEBUG] [LOADER] Loaded buttons: help:btn_home
+2026-06-26T15:48:54.643Z [DEBUG] [LOADER] Loaded buttons: help:btn_list
+2026-06-26T15:48:54.651Z [DEBUG] [LOADER] Loaded buttons: help:page
+2026-06-26T15:48:54.657Z [DEBUG] [LOADER] Loaded buttons: help:report
+2026-06-26T15:48:54.662Z [DEBUG] [LOADER] Loaded buttons: help:sort
+2026-06-26T15:48:54.677Z [DEBUG] [LOADER] Loaded buttons: report:accept
+2026-06-26T15:48:54.689Z [DEBUG] [LOADER] Loaded buttons: report:complete
+2026-06-26T15:48:54.697Z [DEBUG] [LOADER] Loaded buttons: report:reject
+2026-06-26T15:48:54.720Z [DEBUG] [LOADER] Loaded buttons: suggestion:complete
+2026-06-26T15:48:54.726Z [DEBUG] [LOADER] Loaded buttons: suggestion:thread
+2026-06-26T15:48:54.732Z [DEBUG] [LOADER] Loaded buttons: suggestion:vote
+2026-06-26T15:48:54.743Z [DEBUG] [LOADER] Loaded selects: config:channel_set
+2026-06-26T15:48:54.751Z [DEBUG] [LOADER] Loaded selects: config:perm_set
+2026-06-26T15:48:54.758Z [DEBUG] [LOADER] Loaded selects: config:role_set
+2026-06-26T15:48:54.768Z [DEBUG] [LOADER] Loaded selects: config:select
+2026-06-26T15:48:54.777Z [DEBUG] [LOADER] Loaded selects: gpvc:select_kick
+2026-06-26T15:48:54.792Z [DEBUG] [LOADER] Loaded selects: gpvc:select_regame
+2026-06-26T15:48:54.800Z [DEBUG] [LOADER] Loaded selects: gpvc:select_game
+2026-06-26T15:48:54.810Z [DEBUG] [LOADER] Loaded selects: gpvc:select_trust
+2026-06-26T15:48:54.818Z [DEBUG] [LOADER] Loaded selects: gpvc:select_untrust
+2026-06-26T15:48:54.823Z [DEBUG] [LOADER] Loaded selects: help:category
+2026-06-26T15:48:54.828Z [DEBUG] [LOADER] Loaded selects: help:command
+2026-06-26T15:48:54.851Z [DEBUG] [LOADER] Loaded modals: confession:submit
+2026-06-26T15:48:54.857Z [DEBUG] [LOADER] Loaded modals: embed:submit
+2026-06-26T15:48:54.866Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_config
+2026-06-26T15:48:54.878Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_relimit
+2026-06-26T15:48:54.886Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_status
+2026-06-26T15:48:54.906Z [DEBUG] [LOADER] Loaded modals: help:report_modal
+2026-06-26T15:48:54.914Z [DEBUG] [LOADER] Loaded modals: suggestion:submit
+2026-06-26T15:48:54.918Z [DEBUG] [LOADER] Loaded event: interactionCreate
+2026-06-26T15:48:54.926Z [DEBUG] [LOADER] Loaded event: messageCreate
+2026-06-26T15:48:54.933Z [DEBUG] [LOADER] Loaded event: messageDelete
+2026-06-26T15:48:54.940Z [DEBUG] [LOADER] Loaded event: clientReady
+2026-06-26T15:48:54.949Z [DEBUG] [LOADER] Loaded event: voiceStateUpdate
+2026-06-26T15:48:56.594Z [SUCCESS] [BOT] Amo.GG is online as Amo.GG#3390
+2026-06-26T15:48:56.596Z [INFO] [GIVEAWAY_TICKER] Giveaway background scheduler started
+2026-06-26T15:52:42.632Z [INFO] [TEMP_VC] Created "🎮 Gaming VCs" Category channel.
+2026-06-26T15:52:43.118Z [INFO] [TEMP_VC] Created temporary VC 1520094494979133601 for user 1021765669185925150
+2026-06-26T15:53:08.340Z [INFO] [TEMP_VC] VC 1520094494979133601 locked state updated to: true
+2026-06-26T16:10:53.430Z [INFO] [BOT] Starting Amo.GG...
+2026-06-26T16:10:53.437Z [INFO] [DB] Database initialized
+2026-06-26T16:10:53.455Z [DEBUG] [LOADER] Loaded command: config [admin]
+2026-06-26T16:10:53.457Z [DEBUG] [LOADER] Loaded command: reset [admin]
+2026-06-26T16:10:53.461Z [DEBUG] [LOADER] Loaded command: confess [confessions]
+2026-06-26T16:10:53.471Z [DEBUG] [LOADER] Loaded command: dev [dev]
+2026-06-26T16:10:53.491Z [DEBUG] [LOADER] Loaded command: gameping [gameping]
+2026-06-26T16:10:53.496Z [DEBUG] [LOADER] Loaded command: gamepingalias [gameping]
+2026-06-26T16:10:53.514Z [DEBUG] [LOADER] Loaded command: arole [roles]
+2026-06-26T16:10:53.521Z [DEBUG] [LOADER] Loaded command: inrole [roles]
+2026-06-26T16:10:53.527Z [DEBUG] [LOADER] Loaded command: role [roles]
+2026-06-26T16:10:53.531Z [DEBUG] [LOADER] Loaded command: suggest [suggestions]
+2026-06-26T16:10:53.541Z [DEBUG] [LOADER] Loaded command: bb [utility]
+2026-06-26T16:10:53.545Z [DEBUG] [LOADER] Loaded command: embed [utility]
+2026-06-26T16:10:53.558Z [DEBUG] [LOADER] Loaded command: giveaway [utility]
+2026-06-26T16:10:53.561Z [DEBUG] [LOADER] Loaded command: help [utility]
+2026-06-26T16:10:53.564Z [DEBUG] [LOADER] Loaded command: ping [utility]
+2026-06-26T16:10:53.569Z [DEBUG] [LOADER] Loaded command: serverinfo [utility]
+2026-06-26T16:10:53.577Z [DEBUG] [LOADER] Loaded command: snipe [utility]
+2026-06-26T16:10:53.586Z [DEBUG] [LOADER] Loaded command: disconnect [voice]
+2026-06-26T16:10:53.592Z [DEBUG] [LOADER] Loaded command: dragme [voice]
+2026-06-26T16:10:53.594Z [DEBUG] [LOADER] Loaded command: forcemove [voice]
+2026-06-26T16:10:53.598Z [DEBUG] [LOADER] Loaded command: gpvc [voice]
+2026-06-26T16:10:53.603Z [DEBUG] [LOADER] Loaded command: move [voice]
+2026-06-26T16:10:53.610Z [DEBUG] [LOADER] Loaded command: shiftvc [voice]
+2026-06-26T16:10:53.614Z [DEBUG] [LOADER] Loaded command: usermove [voice]
+2026-06-26T16:10:53.620Z [DEBUG] [LOADER] Loaded command: vcdeafen [voice]
+2026-06-26T16:10:53.628Z [DEBUG] [LOADER] Loaded command: vclockdown [voice]
+2026-06-26T16:10:53.636Z [DEBUG] [LOADER] Loaded command: vcmute [voice]
+2026-06-26T16:10:53.644Z [DEBUG] [LOADER] Loaded command: vcundeafen [voice]
+2026-06-26T16:10:53.656Z [DEBUG] [LOADER] Loaded command: vcunlockdown [voice]
+2026-06-26T16:10:53.661Z [DEBUG] [LOADER] Loaded command: vcunmute [voice]
+2026-06-26T16:10:53.665Z [DEBUG] [LOADER] Loaded command: wv [voice]
+2026-06-26T16:10:53.665Z [INFO] [LOADER] Loaded 31 commands
+2026-06-26T16:10:53.671Z [DEBUG] [LOADER] Loaded buttons: admin:reset_cancel
+2026-06-26T16:10:53.676Z [DEBUG] [LOADER] Loaded buttons: admin:reset_confirm
+2026-06-26T16:10:53.679Z [DEBUG] [LOADER] Loaded buttons: confession:anonymous
+2026-06-26T16:10:53.681Z [DEBUG] [LOADER] Loaded buttons: confession:known
+2026-06-26T16:10:53.692Z [DEBUG] [LOADER] Loaded buttons: config:clear
+2026-06-26T16:10:53.696Z [DEBUG] [LOADER] Loaded buttons: config:close
+2026-06-26T16:10:53.703Z [DEBUG] [LOADER] Loaded buttons: dev:logs
+2026-06-26T16:10:53.707Z [DEBUG] [LOADER] Loaded buttons: embed
+2026-06-26T16:10:53.711Z [DEBUG] [LOADER] Loaded buttons: giveaway:enter
+2026-06-26T16:10:53.720Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_config
+2026-06-26T16:10:53.731Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_create
+2026-06-26T16:10:53.741Z [DEBUG] [LOADER] Loaded buttons: gpvc:manage
+2026-06-26T16:10:53.747Z [DEBUG] [LOADER] Loaded buttons: help:back
+2026-06-26T16:10:53.754Z [DEBUG] [LOADER] Loaded buttons: help:btn_home
+2026-06-26T16:10:53.762Z [DEBUG] [LOADER] Loaded buttons: help:btn_list
+2026-06-26T16:10:53.765Z [DEBUG] [LOADER] Loaded buttons: help:page
+2026-06-26T16:10:53.769Z [DEBUG] [LOADER] Loaded buttons: help:report
+2026-06-26T16:10:53.774Z [DEBUG] [LOADER] Loaded buttons: help:sort
+2026-06-26T16:10:53.778Z [DEBUG] [LOADER] Loaded buttons: report:accept
+2026-06-26T16:10:53.782Z [DEBUG] [LOADER] Loaded buttons: report:complete
+2026-06-26T16:10:53.787Z [DEBUG] [LOADER] Loaded buttons: report:reject
+2026-06-26T16:10:53.796Z [DEBUG] [LOADER] Loaded buttons: suggestion:complete
+2026-06-26T16:10:53.799Z [DEBUG] [LOADER] Loaded buttons: suggestion:thread
+2026-06-26T16:10:53.803Z [DEBUG] [LOADER] Loaded buttons: suggestion:vote
+2026-06-26T16:10:53.808Z [DEBUG] [LOADER] Loaded selects: config:channel_set
+2026-06-26T16:10:53.812Z [DEBUG] [LOADER] Loaded selects: config:perm_set
+2026-06-26T16:10:53.815Z [DEBUG] [LOADER] Loaded selects: config:role_set
+2026-06-26T16:10:53.819Z [DEBUG] [LOADER] Loaded selects: config:select
+2026-06-26T16:10:53.824Z [DEBUG] [LOADER] Loaded selects: gpvc:select_kick
+2026-06-26T16:10:53.830Z [DEBUG] [LOADER] Loaded selects: gpvc:select_regame
+2026-06-26T16:10:53.834Z [DEBUG] [LOADER] Loaded selects: gpvc:select_game
+2026-06-26T16:10:53.840Z [DEBUG] [LOADER] Loaded selects: gpvc:select_trust
+2026-06-26T16:10:53.843Z [DEBUG] [LOADER] Loaded selects: gpvc:select_untrust
+2026-06-26T16:10:53.846Z [DEBUG] [LOADER] Loaded selects: help:category
+2026-06-26T16:10:53.850Z [DEBUG] [LOADER] Loaded selects: help:command
+2026-06-26T16:10:53.860Z [DEBUG] [LOADER] Loaded modals: confession:submit
+2026-06-26T16:10:53.863Z [DEBUG] [LOADER] Loaded modals: embed:submit
+2026-06-26T16:10:53.866Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_config
+2026-06-26T16:10:53.874Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_relimit
+2026-06-26T16:10:53.877Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_status
+2026-06-26T16:10:53.881Z [DEBUG] [LOADER] Loaded modals: help:report_modal
+2026-06-26T16:10:53.885Z [DEBUG] [LOADER] Loaded modals: suggestion:submit
+2026-06-26T16:10:53.891Z [DEBUG] [LOADER] Loaded event: interactionCreate
+2026-06-26T16:10:53.895Z [DEBUG] [LOADER] Loaded event: messageCreate
+2026-06-26T16:10:53.897Z [DEBUG] [LOADER] Loaded event: messageDelete
+2026-06-26T16:10:53.901Z [DEBUG] [LOADER] Loaded event: clientReady
+2026-06-26T16:10:53.907Z [DEBUG] [LOADER] Loaded event: voiceStateUpdate
+2026-06-26T16:10:55.530Z [SUCCESS] [BOT] Amo.GG is online as Amo.GG#3390
+2026-06-26T16:10:55.532Z [INFO] [GIVEAWAY_TICKER] Giveaway background scheduler started
+2026-06-26T16:11:04.393Z [INFO] [TEMP_VC] Deleted empty temporary voice channel: VALORANT (1520094494979133601)
+2026-06-26T16:11:05.325Z [INFO] [TEMP_VC] Deleted creation success message 1520094506353950801 for VC 1520094494979133601
+2026-06-26T16:11:05.841Z [INFO] [TEMP_VC] Deleted empty "🎮 Gaming VCs" Category channel.
+2026-06-26T16:12:04.677Z [ERROR] [CMD] Error in command: Received one or more errors
+Error: Received one or more errors
+    at _UnionValidator.handle (D:\Amo.gg\node_modules\@sapphire\shapeshift\dist\cjs\index.cjs:1965:23)
+    at _UnionValidator.parse (D:\Amo.gg\node_modules\@sapphire\shapeshift\dist\cjs\index.cjs:972:90)
+    at SectionBuilder.toJSON (D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:3129:37)
+    at D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:2830:64
+    at Array.map (<anonymous>)
+    at ContainerBuilder.toJSON (D:\Amo.gg\node_modules\@discordjs\builders\dist\index.js:2830:35)
+    at D:\Amo.gg\node_modules\discord.js\src\structures\MessagePayload.js:151:46
+    at Array.map (<anonymous>)
+    at MessagePayload.resolveBody (D:\Amo.gg\node_modules\discord.js\src\structures\MessagePayload.js:150:49)
+    at TextChannel.send (D:\Amo.gg\node_modules\discord.js\src\structures\interfaces\TextBasedChannel.js:191:61)
+2026-06-26T16:19:34.109Z [INFO] [BOT] Starting Amo.GG...
+2026-06-26T16:19:34.184Z [INFO] [DB] Database initialized
+2026-06-26T16:19:34.207Z [DEBUG] [LOADER] Loaded command: config [admin]
+2026-06-26T16:19:34.224Z [DEBUG] [LOADER] Loaded command: reset [admin]
+2026-06-26T16:19:34.236Z [DEBUG] [LOADER] Loaded command: confess [confessions]
+2026-06-26T16:19:34.288Z [DEBUG] [LOADER] Loaded command: dev [dev]
+2026-06-26T16:19:34.329Z [DEBUG] [LOADER] Loaded command: gameping [gameping]
+2026-06-26T16:19:34.334Z [DEBUG] [LOADER] Loaded command: gamepingalias [gameping]
+2026-06-26T16:19:34.374Z [DEBUG] [LOADER] Loaded command: arole [roles]
+2026-06-26T16:19:34.397Z [DEBUG] [LOADER] Loaded command: inrole [roles]
+2026-06-26T16:19:34.419Z [DEBUG] [LOADER] Loaded command: role [roles]
+2026-06-26T16:19:34.438Z [DEBUG] [LOADER] Loaded command: suggest [suggestions]
+2026-06-26T16:19:34.457Z [DEBUG] [LOADER] Loaded command: bb [utility]
+2026-06-26T16:19:34.472Z [DEBUG] [LOADER] Loaded command: embed [utility]
+2026-06-26T16:19:34.491Z [DEBUG] [LOADER] Loaded command: giveaway [utility]
+2026-06-26T16:19:34.512Z [DEBUG] [LOADER] Loaded command: help [utility]
+2026-06-26T16:19:34.516Z [DEBUG] [LOADER] Loaded command: ping [utility]
+2026-06-26T16:19:34.522Z [DEBUG] [LOADER] Loaded command: serverinfo [utility]
+2026-06-26T16:19:34.538Z [DEBUG] [LOADER] Loaded command: snipe [utility]
+2026-06-26T16:19:34.548Z [DEBUG] [LOADER] Loaded command: disconnect [voice]
+2026-06-26T16:19:34.560Z [DEBUG] [LOADER] Loaded command: dragme [voice]
+2026-06-26T16:19:34.576Z [DEBUG] [LOADER] Loaded command: forcemove [voice]
+2026-06-26T16:19:34.606Z [DEBUG] [LOADER] Loaded command: gpvc [voice]
+2026-06-26T16:19:34.626Z [DEBUG] [LOADER] Loaded command: move [voice]
+2026-06-26T16:19:34.644Z [DEBUG] [LOADER] Loaded command: shiftvc [voice]
+2026-06-26T16:19:34.660Z [DEBUG] [LOADER] Loaded command: usermove [voice]
+2026-06-26T16:19:34.669Z [DEBUG] [LOADER] Loaded command: vcdeafen [voice]
+2026-06-26T16:19:34.673Z [DEBUG] [LOADER] Loaded command: vclockdown [voice]
+2026-06-26T16:19:34.678Z [DEBUG] [LOADER] Loaded command: vcmute [voice]
+2026-06-26T16:19:34.683Z [DEBUG] [LOADER] Loaded command: vcundeafen [voice]
+2026-06-26T16:19:34.687Z [DEBUG] [LOADER] Loaded command: vcunlockdown [voice]
+2026-06-26T16:19:34.691Z [DEBUG] [LOADER] Loaded command: vcunmute [voice]
+2026-06-26T16:19:34.696Z [DEBUG] [LOADER] Loaded command: wv [voice]
+2026-06-26T16:19:34.697Z [INFO] [LOADER] Loaded 31 commands
+2026-06-26T16:19:34.702Z [DEBUG] [LOADER] Loaded buttons: admin:reset_cancel
+2026-06-26T16:19:34.706Z [DEBUG] [LOADER] Loaded buttons: admin:reset_confirm
+2026-06-26T16:19:34.709Z [DEBUG] [LOADER] Loaded buttons: confession:anonymous
+2026-06-26T16:19:34.712Z [DEBUG] [LOADER] Loaded buttons: confession:known
+2026-06-26T16:19:34.722Z [DEBUG] [LOADER] Loaded buttons: config:clear
+2026-06-26T16:19:34.726Z [DEBUG] [LOADER] Loaded buttons: config:close
+2026-06-26T16:19:34.730Z [DEBUG] [LOADER] Loaded buttons: dev:logs
+2026-06-26T16:19:34.735Z [DEBUG] [LOADER] Loaded buttons: embed
+2026-06-26T16:19:34.737Z [DEBUG] [LOADER] Loaded buttons: giveaway:enter
+2026-06-26T16:19:34.743Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_config
+2026-06-26T16:19:34.753Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_create
+2026-06-26T16:19:34.757Z [DEBUG] [LOADER] Loaded buttons: gpvc:manage
+2026-06-26T16:19:34.763Z [DEBUG] [LOADER] Loaded buttons: help:back
+2026-06-26T16:19:34.768Z [DEBUG] [LOADER] Loaded buttons: help:btn_home
+2026-06-26T16:19:34.770Z [DEBUG] [LOADER] Loaded buttons: help:btn_list
+2026-06-26T16:19:34.773Z [DEBUG] [LOADER] Loaded buttons: help:page
+2026-06-26T16:19:34.776Z [DEBUG] [LOADER] Loaded buttons: help:report
+2026-06-26T16:19:34.780Z [DEBUG] [LOADER] Loaded buttons: help:sort
+2026-06-26T16:19:34.786Z [DEBUG] [LOADER] Loaded buttons: report:accept
+2026-06-26T16:19:34.789Z [DEBUG] [LOADER] Loaded buttons: report:complete
+2026-06-26T16:19:34.794Z [DEBUG] [LOADER] Loaded buttons: report:reject
+2026-06-26T16:19:34.802Z [DEBUG] [LOADER] Loaded buttons: suggestion:complete
+2026-06-26T16:19:34.805Z [DEBUG] [LOADER] Loaded buttons: suggestion:thread
+2026-06-26T16:19:34.807Z [DEBUG] [LOADER] Loaded buttons: suggestion:vote
+2026-06-26T16:19:34.813Z [DEBUG] [LOADER] Loaded selects: config:channel_set
+2026-06-26T16:19:34.817Z [DEBUG] [LOADER] Loaded selects: config:perm_set
+2026-06-26T16:19:34.820Z [DEBUG] [LOADER] Loaded selects: config:role_set
+2026-06-26T16:19:34.823Z [DEBUG] [LOADER] Loaded selects: config:select
+2026-06-26T16:19:34.827Z [DEBUG] [LOADER] Loaded selects: gpvc:select_kick
+2026-06-26T16:19:34.834Z [DEBUG] [LOADER] Loaded selects: gpvc:select_regame
+2026-06-26T16:19:34.838Z [DEBUG] [LOADER] Loaded selects: gpvc:select_game
+2026-06-26T16:19:34.842Z [DEBUG] [LOADER] Loaded selects: gpvc:select_trust
+2026-06-26T16:19:34.846Z [DEBUG] [LOADER] Loaded selects: gpvc:select_untrust
+2026-06-26T16:19:34.851Z [DEBUG] [LOADER] Loaded selects: help:category
+2026-06-26T16:19:34.853Z [DEBUG] [LOADER] Loaded selects: help:command
+2026-06-26T16:19:34.861Z [DEBUG] [LOADER] Loaded modals: confession:submit
+2026-06-26T16:19:34.866Z [DEBUG] [LOADER] Loaded modals: embed:submit
+2026-06-26T16:19:34.868Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_config
+2026-06-26T16:19:34.873Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_relimit
+2026-06-26T16:19:34.878Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_status
+2026-06-26T16:19:34.883Z [DEBUG] [LOADER] Loaded modals: help:report_modal
+2026-06-26T16:19:34.887Z [DEBUG] [LOADER] Loaded modals: suggestion:submit
+2026-06-26T16:19:34.890Z [DEBUG] [LOADER] Loaded event: interactionCreate
+2026-06-26T16:19:34.895Z [DEBUG] [LOADER] Loaded event: messageCreate
+2026-06-26T16:19:34.898Z [DEBUG] [LOADER] Loaded event: messageDelete
+2026-06-26T16:19:34.902Z [DEBUG] [LOADER] Loaded event: clientReady
+2026-06-26T16:19:34.907Z [DEBUG] [LOADER] Loaded event: voiceStateUpdate
+2026-06-26T16:19:36.397Z [SUCCESS] [BOT] Amo.GG is online as Amo.GG#3390
+2026-06-26T16:19:36.398Z [INFO] [GIVEAWAY_TICKER] Giveaway background scheduler started
+2026-06-26T16:19:49.946Z [ERROR] [CMD] Error in command: Invalid Form Body
+components[0].components[0].accessory[BASE_TYPE_REQUIRED]: This field is required
+DiscordAPIError[50035]: Invalid Form Body
+components[0].components[0].accessory[BASE_TYPE_REQUIRED]: This field is required
+    at handleErrors (D:\Amo.gg\node_modules\@discordjs\rest\dist\index.js:762:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async SequentialHandler.runRequest (D:\Amo.gg\node_modules\@discordjs\rest\dist\index.js:1163:23)
+    at async SequentialHandler.queueRequest (D:\Amo.gg\node_modules\@discordjs\rest\dist\index.js:994:14)
+    at async _REST.request (D:\Amo.gg\node_modules\@discordjs\rest\dist\index.js:1307:22)
+    at async TextChannel.send (D:\Amo.gg\node_modules\discord.js\src\structures\interfaces\TextBasedChannel.js:195:15)
+    at async Object.execute (file:///D:/Amo.gg/src/commands/dev/dev.js?update=1782490774244:287:9)
+    at async Object.execute (file:///D:/Amo.gg/src/events/messageCreate.js?update=1782490774891:72:7)
+2026-06-26T16:22:03.280Z [INFO] [BOT] Starting Amo.GG...
+2026-06-26T16:22:03.287Z [INFO] [DB] Database initialized
+2026-06-26T16:22:03.305Z [DEBUG] [LOADER] Loaded command: config [admin]
+2026-06-26T16:22:03.307Z [DEBUG] [LOADER] Loaded command: reset [admin]
+2026-06-26T16:22:03.310Z [DEBUG] [LOADER] Loaded command: confess [confessions]
+2026-06-26T16:22:03.317Z [DEBUG] [LOADER] Loaded command: dev [dev]
+2026-06-26T16:22:03.339Z [DEBUG] [LOADER] Loaded command: gameping [gameping]
+2026-06-26T16:22:03.342Z [DEBUG] [LOADER] Loaded command: gamepingalias [gameping]
+2026-06-26T16:22:03.365Z [DEBUG] [LOADER] Loaded command: arole [roles]
+2026-06-26T16:22:03.373Z [DEBUG] [LOADER] Loaded command: inrole [roles]
+2026-06-26T16:22:03.384Z [DEBUG] [LOADER] Loaded command: role [roles]
+2026-06-26T16:22:03.394Z [DEBUG] [LOADER] Loaded command: suggest [suggestions]
+2026-06-26T16:22:03.401Z [DEBUG] [LOADER] Loaded command: bb [utility]
+2026-06-26T16:22:03.414Z [DEBUG] [LOADER] Loaded command: embed [utility]
+2026-06-26T16:22:03.423Z [DEBUG] [LOADER] Loaded command: giveaway [utility]
+2026-06-26T16:22:03.429Z [DEBUG] [LOADER] Loaded command: help [utility]
+2026-06-26T16:22:03.432Z [DEBUG] [LOADER] Loaded command: ping [utility]
+2026-06-26T16:22:03.434Z [DEBUG] [LOADER] Loaded command: serverinfo [utility]
+2026-06-26T16:22:03.443Z [DEBUG] [LOADER] Loaded command: snipe [utility]
+2026-06-26T16:22:03.448Z [DEBUG] [LOADER] Loaded command: disconnect [voice]
+2026-06-26T16:22:03.451Z [DEBUG] [LOADER] Loaded command: dragme [voice]
+2026-06-26T16:22:03.455Z [DEBUG] [LOADER] Loaded command: forcemove [voice]
+2026-06-26T16:22:03.461Z [DEBUG] [LOADER] Loaded command: gpvc [voice]
+2026-06-26T16:22:03.463Z [DEBUG] [LOADER] Loaded command: move [voice]
+2026-06-26T16:22:03.466Z [DEBUG] [LOADER] Loaded command: shiftvc [voice]
+2026-06-26T16:22:03.471Z [DEBUG] [LOADER] Loaded command: usermove [voice]
+2026-06-26T16:22:03.478Z [DEBUG] [LOADER] Loaded command: vcdeafen [voice]
+2026-06-26T16:22:03.481Z [DEBUG] [LOADER] Loaded command: vclockdown [voice]
+2026-06-26T16:22:03.483Z [DEBUG] [LOADER] Loaded command: vcmute [voice]
+2026-06-26T16:22:03.488Z [DEBUG] [LOADER] Loaded command: vcundeafen [voice]
+2026-06-26T16:22:03.494Z [DEBUG] [LOADER] Loaded command: vcunlockdown [voice]
+2026-06-26T16:22:03.496Z [DEBUG] [LOADER] Loaded command: vcunmute [voice]
+2026-06-26T16:22:03.499Z [DEBUG] [LOADER] Loaded command: wv [voice]
+2026-06-26T16:22:03.500Z [INFO] [LOADER] Loaded 31 commands
+2026-06-26T16:22:03.506Z [DEBUG] [LOADER] Loaded buttons: admin:reset_cancel
+2026-06-26T16:22:03.513Z [DEBUG] [LOADER] Loaded buttons: admin:reset_confirm
+2026-06-26T16:22:03.515Z [DEBUG] [LOADER] Loaded buttons: confession:anonymous
+2026-06-26T16:22:03.517Z [DEBUG] [LOADER] Loaded buttons: confession:known
+2026-06-26T16:22:03.527Z [DEBUG] [LOADER] Loaded buttons: config:clear
+2026-06-26T16:22:03.529Z [DEBUG] [LOADER] Loaded buttons: config:close
+2026-06-26T16:22:03.532Z [DEBUG] [LOADER] Loaded buttons: dev:logs
+2026-06-26T16:22:03.536Z [DEBUG] [LOADER] Loaded buttons: embed
+2026-06-26T16:22:03.539Z [DEBUG] [LOADER] Loaded buttons: giveaway:enter
+2026-06-26T16:22:03.546Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_config
+2026-06-26T16:22:03.553Z [DEBUG] [LOADER] Loaded buttons: gpvc:btn_create
+2026-06-26T16:22:03.559Z [DEBUG] [LOADER] Loaded buttons: gpvc:manage
+2026-06-26T16:22:03.564Z [DEBUG] [LOADER] Loaded buttons: help:back
+2026-06-26T16:22:03.567Z [DEBUG] [LOADER] Loaded buttons: help:btn_home
+2026-06-26T16:22:03.571Z [DEBUG] [LOADER] Loaded buttons: help:btn_list
+2026-06-26T16:22:03.574Z [DEBUG] [LOADER] Loaded buttons: help:page
+2026-06-26T16:22:03.578Z [DEBUG] [LOADER] Loaded buttons: help:report
+2026-06-26T16:22:03.580Z [DEBUG] [LOADER] Loaded buttons: help:sort
+2026-06-26T16:22:03.584Z [DEBUG] [LOADER] Loaded buttons: report:accept
+2026-06-26T16:22:03.590Z [DEBUG] [LOADER] Loaded buttons: report:complete
+2026-06-26T16:22:03.594Z [DEBUG] [LOADER] Loaded buttons: report:reject
+2026-06-26T16:22:03.600Z [DEBUG] [LOADER] Loaded buttons: suggestion:complete
+2026-06-26T16:22:03.604Z [DEBUG] [LOADER] Loaded buttons: suggestion:thread
+2026-06-26T16:22:03.607Z [DEBUG] [LOADER] Loaded buttons: suggestion:vote
+2026-06-26T16:22:03.612Z [DEBUG] [LOADER] Loaded selects: config:channel_set
+2026-06-26T16:22:03.615Z [DEBUG] [LOADER] Loaded selects: config:perm_set
+2026-06-26T16:22:03.619Z [DEBUG] [LOADER] Loaded selects: config:role_set
+2026-06-26T16:22:03.622Z [DEBUG] [LOADER] Loaded selects: config:select
+2026-06-26T16:22:03.629Z [DEBUG] [LOADER] Loaded selects: gpvc:select_kick
+2026-06-26T16:22:03.633Z [DEBUG] [LOADER] Loaded selects: gpvc:select_regame
+2026-06-26T16:22:03.637Z [DEBUG] [LOADER] Loaded selects: gpvc:select_game
+2026-06-26T16:22:03.641Z [DEBUG] [LOADER] Loaded selects: gpvc:select_trust
+2026-06-26T16:22:03.646Z [DEBUG] [LOADER] Loaded selects: gpvc:select_untrust
+2026-06-26T16:22:03.649Z [DEBUG] [LOADER] Loaded selects: help:category
+2026-06-26T16:22:03.651Z [DEBUG] [LOADER] Loaded selects: help:command
+2026-06-26T16:22:03.660Z [DEBUG] [LOADER] Loaded modals: confession:submit
+2026-06-26T16:22:03.663Z [DEBUG] [LOADER] Loaded modals: embed:submit
+2026-06-26T16:22:03.666Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_config
+2026-06-26T16:22:03.671Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_relimit
+2026-06-26T16:22:03.678Z [DEBUG] [LOADER] Loaded modals: gpvc:modal_status
+2026-06-26T16:22:03.683Z [DEBUG] [LOADER] Loaded modals: help:report_modal
+2026-06-26T16:22:03.687Z [DEBUG] [LOADER] Loaded modals: suggestion:submit
+2026-06-26T16:22:03.693Z [DEBUG] [LOADER] Loaded event: interactionCreate
+2026-06-26T16:22:03.697Z [DEBUG] [LOADER] Loaded event: messageCreate
+2026-06-26T16:22:03.699Z [DEBUG] [LOADER] Loaded event: messageDelete
+2026-06-26T16:22:03.703Z [DEBUG] [LOADER] Loaded event: clientReady
+2026-06-26T16:22:03.707Z [DEBUG] [LOADER] Loaded event: voiceStateUpdate
+2026-06-26T16:22:05.152Z [SUCCESS] [BOT] Amo.GG is online as Amo.GG#3390
+2026-06-26T16:22:05.153Z [INFO] [GIVEAWAY_TICKER] Giveaway background scheduler started
+2026-06-26T16:23:16.016Z [INFO] [CONFIG] Admin 1021765669185925150 updated config "log_channel" to channel "1518914759838269471"
+2026-06-26T16:23:20.640Z [INFO] [CONFIG] Admin 1021765669185925150 closed the configuration dashboard.
+2026-06-26T16:24:16.979Z [INFO] [TEMP_VC] Created "🎮 Gaming VCs" Category channel.
+2026-06-26T16:24:17.487Z [INFO] [TEMP_VC] Created temporary VC 1520102440966422528 for user 1021765669185925150
+2026-06-26T16:24:32.739Z [INFO] [TEMP_VC] Deleted empty temporary voice channel: Minecraft (1520102440966422528)
+2026-06-26T16:24:33.277Z [INFO] [TEMP_VC] Deleted empty "🎮 Gaming VCs" Category channel.

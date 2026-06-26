@@ -1,0 +1,22 @@
+{
+  "name": "amo-gg",
+  "version": "1.0.0",
+  "description": "Amo.GG — Premium Discord Bot for Voice Moderation, Role Management, Game Coordination & Community Systems",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.19.0",
+    "dotenv": "^16.4.7",
+    "fuse.js": "^7.0.0"
+  },
+  "author": "Naman",
+  "license": "UNLICENSED",
+  "private": true
+}
