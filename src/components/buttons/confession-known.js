@@ -4,6 +4,7 @@ import {
   TextInputStyle,
   ActionRowBuilder,
 } from 'discord.js';
+import { emojis } from '../../config/emojis.config.js';
 
 export default {
   customId: 'confession:known',
@@ -11,7 +12,7 @@ export default {
   async execute(interaction) {
     const modal = new ModalBuilder()
       .setCustomId('confession:submit:known')
-      .setTitle('📝 Known Confession');
+      .setTitle(`${emojis.confession} Known Confession`);
 
     const contentInput = new TextInputBuilder()
       .setCustomId('confession-content')

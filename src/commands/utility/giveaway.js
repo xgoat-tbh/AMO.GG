@@ -40,7 +40,7 @@ export default {
 
   async sendHelp(message, client) {
     const lines = [
-      `### 🎁 Giveaway Commands`,
+      '### 🎁 Giveaway Commands',
       `• \`?giveaway start <duration> <winners> <prize>\` — Starts a new giveaway.`,
       `  *Example: ?giveaway start 10m 2 Steam Key*`,
       `• \`?giveaway end <message_id>\` — Force-ends an active giveaway early.`,
@@ -72,14 +72,14 @@ export default {
 
     const durationMs = parseDuration(durationStr);
     if (!durationMs) {
-      const container = createV2Error(`${emojis.error} Invalid duration format. Use e.g. \`30s\`, \`10m\`, \`2h\`, \`1d\`.`, client);
+      const container = createV2Error('❌ Invalid duration format. Use e.g. `30s`, `10m`, `2h`, `1d`.', client);
       await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
       return;
     }
 
     const winnerCount = parseInt(winnersStr, 10);
     if (isNaN(winnerCount) || winnerCount <= 0) {
-      const container = createV2Error(`${emojis.error} Winner count must be a valid positive number.`, client);
+      const container = createV2Error('❌ Winner count must be a valid positive number.', client);
       await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
       return;
     }
@@ -121,20 +121,20 @@ export default {
     const giveaway = GiveawaysRepo.getByMessageId(db, messageId);
 
     if (!giveaway) {
-      const container = createV2Error(`${emojis.error} Giveaway message not found in database.`, client);
+      const container = createV2Error('❌ Giveaway message not found in database.', client);
       await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
       return;
     }
 
     if (giveaway.status !== 'active') {
-      const container = createV2Error(`${emojis.error} This giveaway has already ended.`, client);
+      const container = createV2Error('❌ This giveaway has already ended.', client);
       await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
       return;
     }
 
     await rollGiveaway(client, giveaway);
 
-    const container = createV2Success(`${emojis.success} Giveaway rolled early successfully.`, client);
+    const container = createV2Success('✅ Giveaway rolled early successfully.', client);
     const reply = await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
     
     try { await message.delete(); } catch {}
@@ -152,13 +152,13 @@ export default {
 
     try {
       const winners = await rerollGiveaway(client, messageId);
-      const container = createV2Success(`${emojis.success} Rerolled giveaway successfully. New winners: ${winners.map(w => `<@${w}>`).join(', ')}`, client);
+      const container = createV2Success(`✅ Rerolled giveaway successfully. New winners: ${winners.map(w => `<@${w}>`).join(', ')}`, client);
       await message.reply({ 
         ...v2Payload(container), 
         allowedMentions: { repliedUser: false } 
       });
     } catch (err) {
-      const container = createV2Error(`${emojis.error} ${err.message}`, client);
+      const container = createV2Error(`❌ ${err.message}`, client);
       await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
     }
   },

@@ -3,6 +3,7 @@ import { getDb } from '../../database/connection.js';
 import { createV2Success, createV2Error, v2Payload } from '../../helpers/v2Helper.js';
 import { emojis } from '../../config/emojis.config.js';
 import { logger } from '../../helpers/logger.js';
+import { logModeration } from '../../services/loggingService.js';
 import fs from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -24,14 +25,12 @@ export default {
       return;
     }
 
-    // Defer update immediately to resolve the button click interaction
     await interaction.deferUpdate();
 
     try {
       const db = getDb();
 
       // Wipe tables
-      db.exec('DELETE FROM reports');
       db.exec('DELETE FROM confessions');
       db.exec('DELETE FROM suggestions');
       db.exec('DELETE FROM suggestion_votes');
@@ -42,6 +41,10 @@ export default {
       db.exec('DELETE FROM gameping_aliases');
       db.exec('DELETE FROM jail_records');
       db.exec('DELETE FROM jail_stored_roles');
+      db.exec('DELETE FROM giveaways');
+      db.exec('DELETE FROM giveaway_entries');
+      db.exec('DELETE FROM booster_roles');
+      db.exec('DELETE FROM blacklist');
 
       // Clear combined log file
       const logFile = join(__dirname, '..', '..', '..', 'logs', 'combined.log');
@@ -54,6 +57,12 @@ export default {
       }
 
       logger.success('RESET', `System reset initiated by user ${interaction.user.id} completed successfully.`);
+
+      await logModeration(client, {
+        action: 'database_reset',
+        moderator: interaction.user,
+        reason: 'Full database reset performed',
+      });
 
       try { await interaction.message.delete(); } catch {}
 

@@ -25,10 +25,10 @@ export function buildGiveawayPayload(client, giveaway) {
   const isEnded = giveaway.status === 'ended';
 
   const lines = [
-    `### 🎁 GIVEAWAY: ${giveaway.prize}`,
-    `**Hosted By**: <@${giveaway.host_id}>`,
-    `**Winners**: \`${giveaway.winner_count}\``,
-    `**Total Entries**: \`${entriesCount}\``,
+    `### ${emojis.prize || '🎁'} GIVEAWAY: ${giveaway.prize}`,
+    `**${emojis.host || '👤'} Hosted By**: <@${giveaway.host_id}>`,
+    `**${emojis.winner || '🏆'} Winners**: \`${giveaway.winner_count}\``,
+    `**${emojis.entrants || '👥'} Total Entries**: \`${entriesCount}\``,
   ];
 
   let accentColor = config.colors.primary;
@@ -38,10 +38,10 @@ export function buildGiveawayPayload(client, giveaway) {
     
     const winners = getWinners(db, giveaway.id);
     if (winners.length > 0) {
-      lines.push(`**Winners**: ${winners.map(w => `<@${w}>`).join(', ')}`);
+      lines.push(`**${emojis.winner || '🏆'} Winners**: ${winners.map(w => `<@${w}>`).join(', ')}`);
       accentColor = config.colors.success;
     } else {
-      lines.push(`**Winners**: *No valid entries received.*`);
+      lines.push(`**${emojis.winner || '🏆'} Winners**: *No valid entries received.*`);
       accentColor = config.colors.error;
     }
   } else {

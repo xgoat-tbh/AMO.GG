@@ -24,7 +24,7 @@ export default {
         const vc = message.member.voice.channel;
         if (!vc) {
           return message.reply({
-            ...v2Payload(createV2Error(`${emojis.error} You must be in a voice channel.`, client)),
+            ...v2Payload(createV2Error('❌ You must be in a voice channel.', client)),
             allowedMentions: { repliedUser: false },
           });
         }
@@ -42,7 +42,7 @@ export default {
 
       if (!targets.length) {
         return message.reply({
-          ...v2Payload(createV2Error(`${emojis.error} No valid targets to deafen.`, client)),
+          ...v2Payload(createV2Error('❌ No valid targets to deafen.', client)),
           allowedMentions: { repliedUser: false },
         });
       }
@@ -56,7 +56,7 @@ export default {
       });
 
       await message.reply({
-        ...v2Payload(createV2Success(`${emojis.success} Server deafened **${targets.length}** member${targets.length !== 1 ? 's' : ''}.`, client)),
+        ...v2Payload(createV2Success(`✅ Server deafened **${targets.length}** member${targets.length !== 1 ? 's' : ''}.`, client)),
         allowedMentions: { repliedUser: false },
       });
     } catch (error) {

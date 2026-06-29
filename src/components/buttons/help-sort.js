@@ -23,7 +23,8 @@ export default {
 
     const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
 
+    await interaction.deferUpdate();
     const payload = renderHelp(client, interaction.member, category, page, newSortOrder, null);
-    await interaction.update(payload);
+    await interaction.editReply(payload);
   },
 };

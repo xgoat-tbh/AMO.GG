@@ -22,7 +22,7 @@ export default {
 
       if (!channel.isVoiceBased()) {
         return message.reply({
-          ...v2Payload(createV2Error(`${emojis.error} ${channel} is not a voice channel.`, client)),
+          ...v2Payload(createV2Error(`❌ ${channel} is not a voice channel.`, client)),
           allowedMentions: { repliedUser: false },
         });
       }
@@ -31,7 +31,7 @@ export default {
       const inVoice = members.filter(m => m.voice.channel);
       if (!inVoice.size) {
         return message.reply({
-          ...v2Payload(createV2Error(`${emojis.error} None of the mentioned users are in a voice channel.`, client)),
+          ...v2Payload(createV2Error('❌ None of the mentioned users are in a voice channel.', client)),
           allowedMentions: { repliedUser: false },
         });
       }
@@ -46,7 +46,7 @@ export default {
       });
 
       await message.reply({
-        ...v2Payload(createV2Success(`${emojis.success} Moved **${inVoice.size}** user${inVoice.size !== 1 ? 's' : ''} to **${channel.name}**.`, client)),
+        ...v2Payload(createV2Success(`✅ Moved **${inVoice.size}** user${inVoice.size !== 1 ? 's' : ''} to **${channel.name}**.`, client)),
         allowedMentions: { repliedUser: false },
       });
     } catch (error) {

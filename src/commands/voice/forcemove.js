@@ -22,14 +22,14 @@ export default {
       const vc = message.member.voice.channel;
       if (!vc) {
         return message.reply({
-          ...v2Payload(createV2Error(`${emojis.error} You must be in a voice channel.`, client)),
+          ...v2Payload(createV2Error('❌ You must be in a voice channel.', client)),
           allowedMentions: { repliedUser: false },
         });
       }
 
       if (!member.voice.channel) {
         return message.reply({
-          ...v2Payload(createV2Error(`${emojis.error} ${member} is not in a voice channel.`, client)),
+          ...v2Payload(createV2Error(`❌ ${member} is not in a voice channel.`, client)),
           allowedMentions: { repliedUser: false },
         });
       }
@@ -46,7 +46,7 @@ export default {
       });
 
       await message.reply({
-        ...v2Payload(createV2Success(`${emojis.success} Force moved ${member} to **${vc.name}**.`, client)),
+        ...v2Payload(createV2Success(`✅ Force moved ${member} to **${vc.name}**.`, client)),
         allowedMentions: { repliedUser: false },
       });
     } catch (error) {

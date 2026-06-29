@@ -1,5 +1,6 @@
+import { ActionRowBuilder, StringSelectMenuBuilder } from 'discord.js';
 import { getDb } from '../../database/connection.js';
-import { getSnipe, canSnipe, getMaxLimit, setMaxLimit } from '../../systems/snipe/snipeManager.js';
+import { getChannelSnipes, getMaxLimit, setMaxLimit } from '../../systems/snipe/snipeManager.js';
 import { createV2Container, createV2Success, createV2Error, v2Payload } from '../../helpers/v2Helper.js';
 import { checkPermission } from '../../helpers/permissions.js';
 import { handleCommandError, sendUsageError } from '../../helpers/errorHandler.js';
@@ -11,12 +12,11 @@ export default {
   name: 'snipe',
   aliases: ['s'],
   description: 'Recover recently deleted messages in the channel.',
-  usage: '?snipe [index] | ?snipe limit [1-20] | ?snipe permit <add | remove | list | clear> [user | role] [target]',
-  permission: 'everyone', // Permission is checked dynamically in execute()
+  usage: '?snipe | ?snipe limit [1-20] | ?snipe permit <add | remove | list | clear> [user | role] [target]',
+  permission: 'everyone',
 
   async execute(message, args, client) {
     try {
-      // 1. Check if permission setup or limit subcommand is run
       if (args[0] === 'permit') {
         return await this.handlePermit(message, args.slice(1), client);
       }
@@ -25,57 +25,47 @@ export default {
         return await this.handleLimit(message, args.slice(1), client);
       }
 
-      // 2. Regular snipe execution
-      // Check custom/staff permission
-      if (!canSnipe(message.member)) {
-        const container = createV2Error(`${emojis.error} You do not have permission to use the snipe command.`, client);
-        await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+      const snipes = getChannelSnipes(message.channel.id);
+      if (!snipes.length) {
+        const container = createV2Error(`${emojis.error} No deleted messages found in this channel.`, client);
+        const reply = await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+        setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
         return;
       }
 
-      const maxLimit = getMaxLimit();
-      let index = 1;
-      if (args.length) {
-        index = parseInt(args[0], 10);
-        if (isNaN(index) || index < 1 || index > maxLimit) {
-          const container = createV2Error(`${emojis.error} Snipe index must be a number between 1 and ${maxLimit}.`, client);
-          await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
-          return;
+      const authorMap = new Map();
+      for (const msg of snipes) {
+        const id = msg.author.id;
+        if (!authorMap.has(id)) {
+          authorMap.set(id, { ...msg.author, count: 0 });
         }
+        authorMap.get(id).count++;
       }
 
-      const snipeData = getSnipe(message.channel.id, index);
-      if (!snipeData) {
-        const container = createV2Error(`${emojis.error} No deleted messages found at index **${index}** in this channel.`, client);
-        await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
-        return;
+      const users = [...authorMap.values()];
+
+      const menu = new StringSelectMenuBuilder()
+        .setCustomId(`snipe:user:${message.author.id}`)
+        .setPlaceholder('Select a user to view their deleted messages...');
+
+      for (const user of users) {
+        const label = `${user.displayName} (${user.count})`.slice(0, 100);
+        menu.addOptions({
+          label,
+          value: user.id,
+        });
       }
 
-      const { message: deletedMsg, totalCount } = snipeData;
-
-      const lines = [
-        `### 🎯 Snipe #${index} of ${totalCount}`,
-        `**Author**: <@${deletedMsg.author.id}> (${deletedMsg.author.tag})`,
-        `**Deleted**: <t:${deletedMsg.timestamp}:R>`,
-        `\n**Content**: ${deletedMsg.content || '*No text content*'}`
-      ];
-
-      if (deletedMsg.attachments.length > 0) {
-        lines.push(
-          `\n🖼️ **Attachments**:`,
-          ...deletedMsg.attachments.map((url, idx) => `• [Attachment ${idx + 1}](${url})`)
-        );
-      }
+      const row = new ActionRowBuilder().addComponents(menu);
 
       const container = createV2Container({
-        description: lines.join('\n'),
+        description: `### 🎯 Snipe — User Selection\nSelect a user to view their deleted messages from this channel.`,
         color: config.colors.primary,
-        thumbnail: deletedMsg.author.avatar,
         client,
       });
 
       await message.reply({
-        ...v2Payload(container),
+        ...v2Payload(container, [row]),
         allowedMentions: { repliedUser: false },
       });
     } catch (error) {
@@ -88,8 +78,9 @@ export default {
       // Admin only for configuration
       const isAdmin = checkPermission(message.member, 'admin');
       if (!isAdmin) {
-        const container = createV2Error(`${emojis.error} Only Administrators can configure the snipe limit.`, client);
-        await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+        const container = createV2Error('❌ Only Administrators can configure the snipe limit.', client);
+        const reply = await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+        setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
         return;
       }
 
@@ -106,14 +97,16 @@ export default {
 
       const newLimit = parseInt(args[0], 10);
       if (isNaN(newLimit) || newLimit < 1 || newLimit > 20) {
-        const container = createV2Error(`${emojis.error} Snipe limit must be a number between 1 and 20.`, client);
-        await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+        const container = createV2Error('❌ Snipe limit must be a number between 1 and 20.', client);
+        const reply = await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+        setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
         return;
       }
 
       setMaxLimit(newLimit);
-      const container = createV2Success(`${emojis.success} Successfully updated the snipe limit to **${newLimit}** messages.`, client);
-      await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+      const container = createV2Success(`✅ Successfully updated the snipe limit to **${newLimit}** messages.`, client);
+      const reply = await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+      setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
     } catch (error) {
       await handleCommandError(message, error);
     }
@@ -123,8 +116,9 @@ export default {
     // Admin only for configuration
     const isAdmin = checkPermission(message.member, 'admin');
     if (!isAdmin) {
-      const container = createV2Error(`${emojis.error} Only Administrators can configure snipe permissions.`, client);
-      await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+      const container = createV2Error('❌ Only Administrators can configure snipe permissions.', client);
+      const reply = await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+      setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
       return;
     }
 
@@ -137,8 +131,9 @@ export default {
 
     if (action === 'clear') {
       db.prepare("DELETE FROM bot_config WHERE key IN ('snipe_allowed_users', 'snipe_allowed_roles')").run();
-      const container = createV2Success(`${emojis.success} Successfully cleared all custom snipe permissions. Default staff permissions restored.`, client);
-      await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+      const container = createV2Success('✅ Successfully cleared all custom snipe permissions. Default staff permissions restored.', client);
+      const reply = await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+      setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
       return;
     }
 
@@ -176,8 +171,9 @@ export default {
     const targetId = targetQuery.replace(/[<@&!>]/g, '');
 
     if (type !== 'user' && type !== 'role') {
-      const container = createV2Error(`${emojis.error} Target type must be either \`user\` or \`role\`.`, client);
-      await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+      const container = createV2Error('❌ Target type must be either `user` or `role`.', client);
+      const reply = await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+      setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
       return;
     }
 
@@ -189,22 +185,25 @@ export default {
       if (type === 'user') {
         const user = await client.users.fetch(targetId).catch(() => null);
         if (!user) {
-          const container = createV2Error(`${emojis.error} Invalid user ID or mention.`, client);
-          await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+          const container = createV2Error('❌ Invalid user ID or mention.', client);
+          const reply = await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+          setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
           return;
         }
       } else {
         const role = message.guild.roles.cache.get(targetId);
         if (!role) {
-          const container = createV2Error(`${emojis.error} Invalid role ID or mention.`, client);
-          await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+          const container = createV2Error('❌ Invalid role ID or mention.', client);
+          const reply = await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+          setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
           return;
         }
       }
 
       if (ids.includes(targetId)) {
-        const container = createV2Error(`${emojis.error} That target already has custom snipe permissions.`, client);
-        await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+        const container = createV2Error('❌ That target already has custom snipe permissions.', client);
+        const reply = await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+        setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
         return;
       }
 
@@ -213,13 +212,15 @@ export default {
         .run(configKey, ids.join(','));
 
       const mention = type === 'user' ? `<@${targetId}>` : `<@&${targetId}>`;
-      const container = createV2Success(`${emojis.success} Successfully granted custom snipe permissions to ${mention}.`, client);
-      await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+      const container = createV2Success(`✅ Successfully granted custom snipe permissions to ${mention}.`, client);
+      const reply = await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+      setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
 
     } else if (action === 'remove') {
       if (!ids.includes(targetId)) {
-        const container = createV2Error(`${emojis.error} That target does not have custom snipe permissions.`, client);
-        await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+        const container = createV2Error('❌ That target does not have custom snipe permissions.', client);
+        const reply = await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+        setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
         return;
       }
 
@@ -232,8 +233,9 @@ export default {
       }
 
       const mention = type === 'user' ? `<@${targetId}>` : `<@&${targetId}>`;
-      const container = createV2Success(`${emojis.success} Successfully removed custom snipe permissions from ${mention}.`, client);
-      await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+      const container = createV2Success(`✅ Successfully removed custom snipe permissions from ${mention}.`, client);
+      const reply = await message.reply({ ...v2Payload(container), allowedMentions: { repliedUser: false } });
+      setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
     }
   },
 };

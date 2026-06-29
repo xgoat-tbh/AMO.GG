@@ -1,4 +1,4 @@
-import { createV2Container, createV2Error, v2Payload } from '../../helpers/v2Helper.js';
+import { createV2Container, createV2Error, v2Payload, codeStat } from '../../helpers/v2Helper.js';
 import { config } from '../../config/bot.config.js';
 import { emojis } from '../../config/emojis.config.js';
 import { handleCommandError } from '../../helpers/errorHandler.js';
@@ -16,18 +16,25 @@ export default {
       const vc = message.member.voice.channel;
 
       if (!vc) {
-        return message.reply({
-          ...v2Payload(createV2Error(`${emojis.error} You must be in a voice channel.`, client)),
+        const reply = await message.reply({
+          ...v2Payload(createV2Error('❌ You must be in a voice channel.', client)),
           allowedMentions: { repliedUser: false },
         });
+        setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
+        return;
       }
 
       const members = voiceManager.getVoiceMembers(vc);
-      const list = members.map(m => `• ${m.user.tag}`).join('\n') || 'No members';
+      const sorted = [...members.values()].sort((a, b) => a.displayName.localeCompare(b.displayName));
+      const memberList = sorted.map(m => `• ${m.user.displayName}`).join('\n');
 
       const container = createV2Container({
-        title: `${emojis.voice} ${vc.name}`,
-        description: `**${members.length} member${members.length !== 1 ? 's' : ''}**\n\n${list}`,
+        title: `🔊 ${vc.name}`,
+        description: [
+          codeStat('Members', members.length),
+          '',
+          memberList || '*No members*',
+        ].join('\n'),
         color: config.colors.voice,
         client,
       });

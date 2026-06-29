@@ -1,5 +1,6 @@
 import { MessageFlags } from 'discord.js';
 import { handleVote } from '../../systems/suggestions/suggestionManager.js';
+import { emojis } from '../../config/emojis.config.js';
 
 export default {
   customId: 'suggestion:vote',
@@ -11,7 +12,7 @@ export default {
     const suggestionId = parseInt(parts[3], 10);
 
     if (!voteType || !['yes', 'no'].includes(voteType) || isNaN(suggestionId)) {
-      await interaction.reply({ content: '❌ Invalid vote data.', flags: MessageFlags.Ephemeral });
+      await interaction.reply({ content: `${emojis.error} Invalid vote data.`, flags: MessageFlags.Ephemeral });
       return;
     }
 

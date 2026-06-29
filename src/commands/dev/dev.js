@@ -72,12 +72,12 @@ export default {
         title: '💻 Amo.GG Developer Center',
         color: config.colors.primary,
         fields: [
-          { name: 'Bot Status', value: '🟢 Online' },
+          { name: 'Bot Status', value: `${emojis.success} Online` },
           { name: 'Uptime', value: uptimeStr },
           { name: 'Ping', value: `${client.ws.ping}ms` },
-          { name: 'Memory Usage', value: memoryStr },
-          { name: 'CPU Usage', value: cpuStr },
-          { name: 'Database Status', value: dbStatus },
+          { name: `${emojis.memory || '💾'} Memory Usage`, value: memoryStr },
+          { name: `${emojis.cpu || '💻'} CPU Usage`, value: cpuStr },
+          { name: `${emojis.database || '🗄️'} Database Status`, value: dbStatus },
           { name: 'Bot Version', value: `v${botVersion}` },
         ],
         client,
@@ -135,12 +135,12 @@ export default {
           title: '📊 Full System Status',
           color: config.colors.primary,
           fields: [
-            { name: 'Status', value: '🟢 Active' },
+            { name: 'Status', value: `${emojis.success} Active` },
             { name: 'Uptime', value: uptimeStr },
             { name: 'Ping', value: `${client.ws.ping}ms` },
-            { name: 'Memory Usage', value: memoryStr },
-            { name: 'CPU Usage', value: cpuStr },
-            { name: 'Database Health', value: dbHealth },
+            { name: `${emojis.memory || '💾'} Memory Usage`, value: memoryStr },
+            { name: `${emojis.cpu || '💻'} CPU Usage`, value: cpuStr },
+            { name: `${emojis.database || '🗄️'} Database Health`, value: dbHealth },
             { name: 'Discord API Status', value: apiStatus },
             { name: 'Version', value: `v${botVersion}` },
           ],
@@ -178,7 +178,7 @@ export default {
 
       case 'restart': {
         deleteTrigger();
-        const notifyMsg = await message.channel.send(v2Payload(createV2Success('🔄 Restarting Amo.GG... Spawning detached process.', client)));
+        const notifyMsg = await message.channel.send(v2Payload(createV2Success(`${emojis.loading} Restarting Amo.GG... Spawning detached process.`, client)));
 
         logger.info('DEV', 'Graceful restart initiated via command.');
         closeDb();
@@ -339,7 +339,7 @@ export default {
           });
 
           const container = createV2Container({
-            title: '🗄️ Database Backups',
+            title: `${emojis.backup || '🗄️'} Database Backups`,
             description: lines.join('\n'),
             color: config.colors.primary,
             client,
@@ -384,7 +384,7 @@ export default {
           const backupFilePath = join(backupsDir, targetFile);
 
           deleteTrigger();
-          const progressMsg = await message.channel.send(v2Payload(createV2Success(`🔄 Restoring backup \`${targetFile}\`... Closing DB.`, client)));
+          const progressMsg = await message.channel.send(v2Payload(createV2Success(`${emojis.loading} Restoring backup \`${targetFile}\`... Closing DB.`, client)));
 
           try {
             closeDb();
@@ -424,13 +424,13 @@ export default {
         }
 
         const container = createV2Container({
-          title: '🗄️ Database Operations Status',
+          title: `${emojis.database || '🗄️'} Database Operations Status`,
           color: config.colors.primary,
           fields: [
-            { name: 'Connection Status', value: '🟢 Connected' },
+            { name: 'Connection Status', value: `${emojis.success} Connected` },
             { name: 'Latency', value: `${dbLatency}ms` },
             { name: 'Database Size', value: `${sizeMB}MB` },
-            { name: 'Last Backup Time', value: lastBackupTime },
+            { name: `${emojis.backup || '🗃️'} Last Backup Time`, value: lastBackupTime },
           ],
           client,
         });
@@ -519,6 +519,7 @@ export default {
         const db = getDb();
         BlacklistRepo.add(db, targetUser.id, message.author.id);
         client.blacklist.add(targetUser.id);
+        logger.info('BLACKLIST', `User ${targetUser.tag} (${targetUser.id}) was blacklisted by ${message.author.tag} (${message.author.id})`);
 
         await sendEphemeralResult(createV2Success(`${emojis.success} **${targetUser.tag}** has been globally blacklisted.`, client));
         break;
@@ -542,6 +543,7 @@ export default {
         const db = getDb();
         BlacklistRepo.remove(db, targetUser.id);
         client.blacklist.delete(targetUser.id);
+        logger.info('BLACKLIST', `User ${targetUser.tag} (${targetUser.id}) was whitelisted by ${message.author.tag} (${message.author.id})`);
 
         await sendEphemeralResult(createV2Success(`${emojis.success} **${targetUser.tag}** has been whitelisted.`, client));
         break;

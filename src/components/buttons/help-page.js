@@ -11,7 +11,7 @@ export default {
 
     if (executorId && interaction.user.id !== executorId) {
       await interaction.reply({
-        content: `${emojis.error} Only the person who ran the help command can use these buttons.`,
+        content: `${emojis.error} Only the person who ran the help command can use this.`,
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -20,16 +20,13 @@ export default {
     const action = parts[2];
     const category = parts[3];
     const page = parseInt(parts[4], 10) || 1;
-    const sortOrder = parts[5] || 'asc';
 
     let newPage = page;
-    if (action === 'prev') {
-      newPage = page - 1;
-    } else if (action === 'next') {
-      newPage = page + 1;
-    }
+    if (action === 'prev') newPage = page - 1;
+    else if (action === 'next') newPage = page + 1;
 
-    const payload = renderHelp(client, interaction.member, category, newPage, sortOrder, null);
-    await interaction.update(payload);
+    await interaction.deferUpdate();
+    const payload = renderHelp(client, interaction.member, 'category', { category, page: newPage });
+    await interaction.editReply(payload);
   },
 };

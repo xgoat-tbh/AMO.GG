@@ -1,13 +1,7 @@
 import { MessageFlags } from 'discord.js';
 import { pendingVcs, buildSetupPayload } from '../../commands/voice/gpvc.js';
 import { emojis } from '../../config/emojis.config.js';
-
-const BADWORDS = ['fuck', 'shit', 'bitch', 'asshole', 'bastard', 'nigger', 'cunt', 'retard', 'whore', 'slut'];
-
-function isProfane(text) {
-  const lower = text.toLowerCase();
-  return BADWORDS.some(word => lower.includes(word));
-}
+import { sanitizeContent } from '../../helpers/sanitizer.js';
 
 export default {
   customId: 'gpvc:modal_config',
@@ -27,18 +21,17 @@ export default {
     const vcName = interaction.fields.getTextInputValue('vc_name');
     const vcLimitRaw = interaction.fields.getTextInputValue('vc_limit');
 
-    const statusText = vcName ? vcName.trim() : '';
-
-    // Improvement #13: Basic Profanity Filter
-    if (statusText && isProfane(statusText)) {
+    // Validate VC name/topic
+    const { sanitized: statusText, valid, reason } = sanitizeContent(vcName, 100, 'Channel topic');
+    if (vcName && !valid) {
       await interaction.reply({
-        content: `${emojis.error} Channel status contains blacklisted words. Please choose a cleaner status.`,
+        content: `${emojis.error} ${reason}`,
         flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
-    // 2. Limit validation
+    // Limit validation
     let finalLimit = 0;
     if (vcLimitRaw && vcLimitRaw.trim()) {
       const parsed = parseInt(vcLimitRaw.trim(), 10);
@@ -52,13 +45,11 @@ export default {
       finalLimit = parsed;
     }
 
-    // Update pending state
     const state = pendingVcs.get(userId) || { name: '', limit: 0, game: null };
     state.name = statusText;
     state.limit = finalLimit;
     pendingVcs.set(userId, state);
 
-    // Update message
     const payload = buildSetupPayload(userId, client);
     await interaction.update(payload);
   },

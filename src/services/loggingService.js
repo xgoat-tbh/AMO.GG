@@ -61,7 +61,7 @@ export async function logModeration(client, { action, moderator, target, reason,
   }
 
   const container = createV2Container({
-    title: `${emojis.moderation} Moderation — ${action}`,
+    title: `🛡️ Moderation — ${action}`,
     color: config.colors.warning,
     fields,
     thumbnail: assets.moderation,
@@ -95,7 +95,7 @@ export async function logVoice(client, { action, moderator, target, channel, ext
   }
 
   const container = createV2Container({
-    title: `${emojis.voice} Voice — ${action}`,
+    title: `🔊 Voice — ${action}`,
     color: config.colors.voice,
     fields,
     thumbnail: assets.voice,
@@ -129,7 +129,7 @@ export async function logRole(client, { action, moderator, target, role, extra }
   }
 
   const container = createV2Container({
-    title: `${emojis.roles} Roles — ${action}`,
+    title: `🎭 Roles — ${action}`,
     color: config.colors.primary,
     fields,
     thumbnail: assets.ticket,
@@ -158,7 +158,7 @@ export async function logConfession(client, { author, content, type, messageId }
   fields.push({ name: 'Content', value: displayContent });
 
   const container = createV2Container({
-    title: `${emojis.confession} Confession Log`,
+    title: `📝 Confession Log`,
     color: config.colors.confession,
     fields,
     thumbnail: assets.confession,
@@ -195,7 +195,7 @@ export async function logSuggestion(client, { action, author, content, extra }) 
   }
 
   const container = createV2Container({
-    title: `${emojis.suggestion} Suggestion — ${action}`,
+    title: `💡 Suggestion — ${action}`,
     color: config.colors.suggestion,
     fields,
     thumbnail: assets.suggestion,
@@ -223,7 +223,7 @@ export async function logGamePing(client, { executor, alias, role, channel }) {
   }
 
   const container = createV2Container({
-    title: `${emojis.game} GamePing Executed`,
+    title: `🎮 GamePing Executed`,
     color: config.colors.info,
     fields,
     thumbnail: assets.voice,
@@ -231,4 +231,54 @@ export async function logGamePing(client, { executor, alias, role, channel }) {
   });
 
   await sendLog(client, config.channels.logs.gameping, container);
+}
+
+/**
+ * Log a Creator System action (setup, repairs, config updates).
+ */
+export async function logCreatorSetup(client, { action, details, executor }) {
+  const fields = [
+    { name: 'Action', value: action },
+    { name: 'Details', value: details },
+  ];
+  if (executor) {
+    fields.push({ name: 'Executor', value: `<@${executor.id}> (${executor.tag || executor.username || executor.id})` });
+  }
+
+  const container = createV2Container({
+    title: `⚙️ Creator System — ${action}`,
+    color: config.colors.primary,
+    fields,
+    client,
+  });
+
+  await sendLog(client, config.channels.log || config.channels.logs.moderation, container);
+}
+
+/**
+ * Log a configuration change (admin overrides).
+ */
+export async function logConfigChange(client, { action, setting, oldValue, newValue, executor }) {
+  const fields = [
+    { name: 'Action', value: action || 'updated' },
+    { name: 'Setting', value: `\`${setting}\`` },
+  ];
+  if (oldValue !== undefined) {
+    fields.push({ name: 'Previous Value', value: `\`${oldValue || 'none'}\`` });
+  }
+  fields.push({ name: 'New Value', value: `\`${newValue || 'none'}\`` });
+  if (executor) {
+    fields.push({ name: 'Executor', value: `<@${executor.id}> (${executor.tag || executor.id})` });
+  }
+
+  const container = createV2Container({
+    title: `⚙️ Configuration Change`,
+    color: config.colors.warning,
+    fields,
+    thumbnail: assets.ticket,
+    client,
+  });
+
+  await sendLog(client, config.channels.log || config.channels.logs.moderation, container);
+  logger.info('CONFIG_AUDIT', `${executor?.id || 'unknown'} ${action || 'updated'} "${setting}" from "${oldValue || 'none'}" to "${newValue || 'none'}"`);
 }

@@ -17,7 +17,8 @@ export default {
       return;
     }
 
+    await interaction.deferUpdate();
     const payload = renderHelp(client, interaction.member, 'utility', 1, 'asc', null);
-    await interaction.update(payload);
+    await interaction.editReply(payload);
   },
 };

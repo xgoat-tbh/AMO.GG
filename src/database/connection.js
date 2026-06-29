@@ -8,34 +8,36 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 let db = null;
 
-/**
- * Returns the singleton database instance.
- * Initializes on first call: creates file, enables WAL + FK, runs schema.
- */
 export function getDb() {
   if (db) return db;
 
   const dbPath = join(__dirname, '..', '..', 'amo.db');
   db = new DatabaseSync(dbPath);
 
-  // Performance & integrity
   db.exec('PRAGMA journal_mode = WAL');
   db.exec('PRAGMA foreign_keys = ON');
   db.exec('PRAGMA busy_timeout = 5000');
 
-  // Run schema
   const schema = readFileSync(join(__dirname, 'schema.sql'), 'utf-8');
-  db.exec(schema);
+
+  // Run main schema (CREATE TABLE IF NOT EXISTS)
+  const mainSchema = schema.split('\n').filter(line => !line.trim().startsWith('ALTER TABLE')).join('\n');
+  db.exec(mainSchema);
+
+  // Run migrations (ALTER TABLE) individually, ignore errors if column exists
+  const alterLines = schema.split('\n').filter(line => line.trim().startsWith('ALTER TABLE'));
+  for (const line of alterLines) {
+    try {
+      db.exec(line.trim());
+    } catch {
+      // Column already exists, safe to ignore
+    }
+  }
 
   logger.info('DB', 'Database initialized');
   return db;
-
-
 }
 
-/**
- * close the database connection.
- */
 export function closeDb() {
   if (db) {
     db.close();

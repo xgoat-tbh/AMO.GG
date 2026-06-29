@@ -5,13 +5,7 @@ import { buildInterfaceContainer, buildInterfaceRows } from '../../systems/voice
 import { v2Payload, v2EditPayload } from '../../helpers/v2Helper.js';
 import { emojis } from '../../config/emojis.config.js';
 import { logger } from '../../helpers/logger.js';
-
-const BADWORDS = ['fuck', 'shit', 'bitch', 'asshole', 'bastard', 'nigger', 'cunt', 'retard', 'whore', 'slut'];
-
-function isProfane(text) {
-  const lower = text.toLowerCase();
-  return BADWORDS.some(word => lower.includes(word));
-}
+import { sanitizeContent } from '../../helpers/sanitizer.js';
 
 export default {
   customId: 'gpvc:modal_status',
@@ -31,11 +25,13 @@ export default {
       return;
     }
 
-    const newStatus = interaction.fields.getTextInputValue('vc_new_status') || '';
-    
-    if (newStatus && isProfane(newStatus)) {
+    const statusInput = interaction.fields.getTextInputValue('vc_new_status') || '';
+
+    // Validate and sanitize
+    const { sanitized: newStatus, valid, reason } = sanitizeContent(statusInput, 500, 'Channel status');
+    if (statusInput && !valid) {
       await interaction.reply({
-        content: `${emojis.error} Channel status contains blacklisted words. Please choose a cleaner status.`,
+        content: `${emojis.error} ${reason}`,
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -50,17 +46,14 @@ export default {
     await interaction.deferUpdate();
 
     try {
-      // Save status in DB (using name column)
-      TempVcsRepo.updateName(db, channelId, newStatus.trim());
+      TempVcsRepo.updateName(db, channelId, newStatus);
 
-      // Update voice channel status in Discord
       await client.rest.put(`/channels/${channelId}/voice-status`, {
-        body: { status: newStatus.trim() }
+        body: { status: newStatus }
       }).catch(err => {
         logger.warn('GPVC_STATUS', `Could not set Discord voice status: ${err.message}`);
       });
 
-      // Update control panel
       const everyoneRole = interaction.guild.roles.everyone;
       const isLocked = channel.permissionOverwrites.cache.get(everyoneRole.id)?.deny.has(PermissionFlagsBits.Connect) ?? false;
 
@@ -69,7 +62,7 @@ export default {
         record.game,
         record.user_limit,
         isLocked,
-        newStatus.trim(),
+        newStatus,
         client
       );
       const rows = buildInterfaceRows(channelId, isLocked);

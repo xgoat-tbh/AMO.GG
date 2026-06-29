@@ -1,5 +1,4 @@
-import { MessageFlags } from 'discord.js';
-import { createV2Container, createV2Error } from '../../helpers/v2Helper.js';
+import { createV2Container, createV2Error, v2Payload } from '../../helpers/v2Helper.js';
 import { config } from '../../config/bot.config.js';
 import { emojis } from '../../config/emojis.config.js';
 import { handleCommandError, sendUsageError } from '../../helpers/errorHandler.js';
@@ -29,8 +28,7 @@ export default {
 
       if (!member) {
         return message.reply({
-          components: [createV2Error(`${emojis.error} Could not find that user.`, client)],
-          flags: [MessageFlags.IsComponentsV2],
+          ...v2Payload(createV2Error(`${emojis.error} Could not find that user.`, client)),
           allowedMentions: { repliedUser: false },
         });
       }
@@ -83,8 +81,7 @@ export default {
       });
 
       await message.reply({
-        components: [container],
-        flags: [MessageFlags.IsComponentsV2],
+        ...v2Payload(container),
         allowedMentions: { repliedUser: false },
       });
     } catch (error) {

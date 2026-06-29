@@ -50,7 +50,7 @@ export default {
     if (action === 'status') {
       const modal = new ModalBuilder()
         .setCustomId(`gpvc:modal_status:${channelId}`)
-        .setTitle('📝 Edit Voice Channel Status');
+        .setTitle(`${emojis.confession} Edit Voice Channel Status`);
 
       const statusInput = new TextInputBuilder()
         .setCustomId('vc_new_status')
@@ -69,7 +69,7 @@ export default {
     if (action === 'limit') {
       const modal = new ModalBuilder()
         .setCustomId(`gpvc:modal_relimit:${channelId}`)
-        .setTitle('👥 Edit User Limit');
+        .setTitle(`${emojis.entrants} Edit User Limit`);
 
       const limitInput = new TextInputBuilder()
         .setCustomId('vc_new_limit')
@@ -156,9 +156,9 @@ export default {
         .setPlaceholder('Choose a User to Kick')
         .addOptions(
           otherMembers.map(m => ({
-            label: m.displayName,
+            label: m.displayName.slice(0, 100),
             value: m.id,
-            description: m.user.tag,
+            description: m.user.tag.slice(0, 100),
           }))
         );
 

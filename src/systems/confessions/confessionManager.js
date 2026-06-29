@@ -2,7 +2,6 @@ import { getDb } from '../../database/connection.js';
 import { ConfessionsRepo } from '../../database/repositories/confessions.repo.js';
 import { createV2Container, v2Payload } from '../../helpers/v2Helper.js';
 import { config } from '../../config/bot.config.js';
-import { emojis } from '../../config/emojis.config.js';
 import { logConfession } from '../../services/loggingService.js';
 import { logger } from '../../helpers/logger.js';
 
@@ -30,9 +29,9 @@ export async function create(author, content, type, channel, client) {
 
   if (type === 'known') {
     container = createV2Container({
-      title: `${emojis.confession} Confession #${confessionNumber}`,
+      title: `📝 Confession #${confessionNumber}`,
       description: `> ${content.replace(/\n/g, '\n> ')}`,
-      color: 0x2ECC71, // Green for known
+      color: 0x2ECC71,
       author: {
         name: author.tag || author.user?.tag || author.displayName || 'Unknown',
       },
@@ -42,9 +41,9 @@ export async function create(author, content, type, channel, client) {
   } else {
     // Anonymous
     container = createV2Container({
-      title: `${emojis.confession} Confession #${confessionNumber}`,
+      title: `📝 Confession #${confessionNumber}`,
       description: `> ${content.replace(/\n/g, '\n> ')}`,
-      color: 0xE67E22, // Orange for anonymous
+      color: 0xE67E22,
       author: {
         name: 'Anonymous',
       },

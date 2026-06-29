@@ -11,11 +11,11 @@ export const config = {
   },
 
   colors: {
-    primary: 0x5865F2,
+    primary: 0xFFFFFF,
     success: 0x57F287,
     error: 0xED4245,
     warning: 0xFEE75C,
-    info: 0x5865F2,
+    info: 0xFFFFFF,
     confession: 0x2B2D31,
     suggestion: 0xF1C40F,
     voice: 0x3BA55D,

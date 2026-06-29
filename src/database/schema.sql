@@ -44,6 +44,8 @@ CREATE TABLE IF NOT EXISTS jail_records (
     user_id TEXT NOT NULL,
     moderator_id TEXT NOT NULL,
     reason TEXT,
+    duration INTEGER,
+    channel_id TEXT,
     jailed_at INTEGER NOT NULL DEFAULT (unixepoch()),
     unjailed_at INTEGER,
     unjailed_by TEXT,
@@ -93,15 +95,6 @@ CREATE TABLE IF NOT EXISTS bot_config (
     value TEXT
 );
 
--- Problem Reports
-CREATE TABLE IF NOT EXISTS reports (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id TEXT NOT NULL,
-    problem TEXT NOT NULL,
-    status TEXT DEFAULT 'pending' CHECK(status IN ('pending', 'accepted', 'rejected', 'completed')),
-    moderator_id TEXT,
-    created_at INTEGER NOT NULL DEFAULT (unixepoch())
-);
 
 -- Temporary VCs
 CREATE TABLE IF NOT EXISTS temp_vcs (
@@ -152,6 +145,127 @@ CREATE TABLE IF NOT EXISTS blacklist (
     blacklisted_at INTEGER NOT NULL DEFAULT (unixepoch())
 );
 
+-- ============================================================
+-- Moderation Cases System
+-- ============================================================
+CREATE TABLE IF NOT EXISTS cases (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    case_id TEXT UNIQUE NOT NULL,
+    guild_id TEXT NOT NULL,
+    action TEXT NOT NULL,
+    moderator_id TEXT NOT NULL,
+    target_id TEXT NOT NULL,
+    reason TEXT,
+    duration INTEGER,
+    channel_id TEXT,
+    message_link TEXT,
+    created_at INTEGER NOT NULL DEFAULT (unixepoch())
+);
 
+CREATE INDEX IF NOT EXISTS idx_cases_target ON cases(target_id);
+CREATE INDEX IF NOT EXISTS idx_cases_moderator ON cases(moderator_id);
+CREATE INDEX IF NOT EXISTS idx_cases_guild ON cases(guild_id);
+
+-- ============================================================
+-- XP / Leveling System
+-- ============================================================
+CREATE TABLE IF NOT EXISTS xp (
+    user_id TEXT NOT NULL,
+    guild_id TEXT NOT NULL,
+    xp INTEGER NOT NULL DEFAULT 0,
+    level INTEGER NOT NULL DEFAULT 1,
+    voice_xp INTEGER NOT NULL DEFAULT 0,
+    last_message INTEGER,
+    last_voice INTEGER,
+    joined_at INTEGER NOT NULL DEFAULT (unixepoch()),
+    PRIMARY KEY (user_id, guild_id)
+);
+
+CREATE TABLE IF NOT EXISTS xp_rewards (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    guild_id TEXT NOT NULL,
+    level INTEGER NOT NULL,
+    role_id TEXT NOT NULL,
+    description TEXT,
+    icon TEXT,
+    created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+    UNIQUE(guild_id, level)
+);
+
+CREATE TABLE IF NOT EXISTS xp_config (
+    guild_id TEXT PRIMARY KEY,
+    enabled INTEGER NOT NULL DEFAULT 1,
+    rate INTEGER NOT NULL DEFAULT 1,
+    message_cooldown INTEGER NOT NULL DEFAULT 60,
+    voice_interval INTEGER NOT NULL DEFAULT 60,
+    xp_min INTEGER NOT NULL DEFAULT 15,
+    xp_max INTEGER NOT NULL DEFAULT 25,
+    announcement_channel TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_xp_guild ON xp(guild_id, xp DESC);
+CREATE INDEX IF NOT EXISTS idx_xp_rewards_guild ON xp_rewards(guild_id, level);
+
+-- ============================================================
+-- Anti-Promotion System
+-- ============================================================
+CREATE TABLE IF NOT EXISTS promotion_config (
+    guild_id TEXT PRIMARY KEY,
+    enabled INTEGER NOT NULL DEFAULT 0,
+    strict_mode INTEGER NOT NULL DEFAULT 1,
+    log_channel TEXT,
+    auto_delete INTEGER NOT NULL DEFAULT 1,
+    notify_user INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS promotion_whitelist (
+    guild_id TEXT NOT NULL,
+    domain TEXT NOT NULL,
+    added_by TEXT NOT NULL,
+    created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+    PRIMARY KEY (guild_id, domain)
+);
+
+CREATE TABLE IF NOT EXISTS promotion_blacklist (
+    guild_id TEXT NOT NULL,
+    domain TEXT NOT NULL,
+    added_by TEXT NOT NULL,
+    created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+    PRIMARY KEY (guild_id, domain)
+);
+
+-- Default game invite exceptions
+INSERT OR IGNORE INTO promotion_whitelist (guild_id, domain, added_by) VALUES
+    ('_default', 'richup.io', 'system'),
+    ('_default', 'codenames.game', 'system'),
+    ('_default', 'skribbl.io', 'system'),
+    ('_default', 'smashkarts.io', 'system'),
+    ('_default', 'gartic.io', 'system'),
+    ('_default', 'chess.com', 'system'),
+    ('_default', 'lichess.org', 'system'),
+    ('_default', 'boardgamearena.com', 'system'),
+    ('_default', 'jackbox.tv', 'system');
+
+-- ============================================================
+-- Move Request System
+-- ============================================================
+CREATE TABLE IF NOT EXISTS move_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    target_id TEXT NOT NULL,
+    moderator_id TEXT NOT NULL,
+    from_channel_id TEXT,
+    to_channel_id TEXT NOT NULL,
+    status TEXT DEFAULT 'pending' CHECK(status IN ('pending', 'accepted', 'declined', 'expired')),
+    created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+    expires_at INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_move_requests_target ON move_requests(target_id, status);
+
+-- ============================================================
+-- Migrations for existing databases (safe to re-run)
+-- ============================================================
+ALTER TABLE jail_records ADD COLUMN duration INTEGER;
+ALTER TABLE jail_records ADD COLUMN channel_id TEXT;
 
 

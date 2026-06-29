@@ -22,7 +22,7 @@ export default {
       const inVoice = members.filter(m => m.voice.channel);
       if (!inVoice.size) {
         return message.reply({
-          ...v2Payload(createV2Error(`${emojis.error} None of the mentioned users are in a voice channel.`, client)),
+          ...v2Payload(createV2Error('❌ None of the mentioned users are in a voice channel.', client)),
           allowedMentions: { repliedUser: false },
         });
       }
@@ -39,7 +39,7 @@ export default {
 
       const names = inVoice.map(m => m.user.tag).join(', ');
       await message.reply({
-        ...v2Payload(createV2Success(`${emojis.success} Disconnected **${names}** from voice.`, client)),
+        ...v2Payload(createV2Success(`✅ Disconnected **${names}** from voice.`, client)),
         allowedMentions: { repliedUser: false },
       });
     } catch (error) {

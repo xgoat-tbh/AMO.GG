@@ -10,6 +10,7 @@ import { ConfigRepo } from './database/repositories/config.repo.js';
 import { BlacklistRepo } from './database/repositories/blacklist.repo.js';
 import { permConfig } from './config/permissions.config.js';
 import { assets } from './config/assets.config.js';
+import { validateAllConfig } from './helpers/configValidator.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -38,10 +39,24 @@ async function loadCommands() {
   client.commands.clear();
   client.aliases.clear();
   const commandsPath = join(__dirname, 'commands');
-  const categories = readdirSync(commandsPath, { withFileTypes: true })
-    .filter(d => d.isDirectory())
-    .map(d => d.name);
+  const entries = readdirSync(commandsPath, { withFileTypes: true });
 
+  // Load top-level commands (e.g. rank.js, moderation.js)
+  for (const entry of entries) {
+    if (!entry.isFile() || !entry.name.endsWith('.js')) continue;
+    const filePath = join(commandsPath, entry.name);
+    const fileUrl = `${pathToFileURL(filePath).href}?update=${Date.now()}`;
+    const command = await import(fileUrl);
+    const cmd = command.default || command;
+    if (!cmd.name) { logger.warn('LOADER', `Command ${entry.name} is missing a name, skipping`); continue; }
+    cmd.category = 'general';
+    client.commands.set(cmd.name, cmd);
+    if (cmd.aliases?.length) { for (const alias of cmd.aliases) client.aliases.set(alias, cmd.name); }
+    logger.debug('LOADER', `Loaded command: ${cmd.name} [general]`);
+  }
+
+  // Load commands from subdirectories (categorized)
+  const categories = entries.filter(d => d.isDirectory()).map(d => d.name);
   for (const category of categories) {
     const categoryPath = join(commandsPath, category);
     const files = readdirSync(categoryPath).filter(f => f.endsWith('.js'));
@@ -158,6 +173,23 @@ async function start() {
   // Cache configuration and blacklist in memory
   client.maintenanceMode = ConfigRepo.get(db, 'maintenance_mode') === 'true';
   client.blacklist = new Set(BlacklistRepo.getAll(db));
+
+  // Validate config overrides on startup
+  if (config.guildId) {
+    try {
+      const validation = await validateAllConfig(client, config.guildId);
+      if (validation.invalid.length > 0) {
+        logger.warn('CONFIG', `Found ${validation.invalid.length} invalid config overrides:`);
+        for (const item of validation.invalid) {
+          logger.warn('CONFIG', `  ${item.key}=${item.value} - ${item.reason}`);
+        }
+      } else if (validation.valid.length > 0) {
+        logger.info('CONFIG', `Validated ${validation.valid.length} config overrides`);
+      }
+    } catch (error) {
+      logger.error('CONFIG', `Failed to validate config overrides: ${error.message}`, error);
+    }
+  }
 
   // Expose loader methods on client for hot-reloads
   client.loadCommands = loadCommands;

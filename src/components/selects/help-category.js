@@ -7,7 +7,7 @@ export default {
 
   async execute(interaction, client) {
     const parts = interaction.customId.split(':');
-    const executorId = parts[parts.length - 1];
+    const executorId = parts[2];
 
     if (executorId && interaction.user.id !== executorId) {
       await interaction.reply({
@@ -19,11 +19,15 @@ export default {
 
     const category = interaction.values[0];
     if (!category) {
-      await interaction.reply({ content: `${emojis.error} No category selected.`, flags: MessageFlags.Ephemeral });
+      await interaction.reply({
+        content: `${emojis.error} No category selected.`,
+        flags: MessageFlags.Ephemeral,
+      });
       return;
     }
 
-    const payload = renderHelp(client, interaction.member, category, 1, 'asc', null);
-    await interaction.update(payload);
+    await interaction.deferUpdate();
+    const payload = renderHelp(client, interaction.member, 'category', { category, page: 1 });
+    await interaction.editReply(payload);
   },
 };

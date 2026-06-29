@@ -33,7 +33,7 @@ export function checkPermission(member, level) {
 export function isBotOwner(user) {
   if (!user) return false;
   if (process.env.OWNER_ID && user.id === process.env.OWNER_ID) return true;
-  return user.username === 'xgoat.tbh';
+  return false;
 }
 
 /**

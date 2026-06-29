@@ -2,6 +2,7 @@ import { MessageFlags } from 'discord.js';
 import { getDb } from '../../database/connection.js';
 import { GiveawaysRepo } from '../../database/repositories/giveaways.repo.js';
 import { updateGiveawayCard } from '../../systems/giveaways/giveawayManager.js';
+import { emojis } from '../../config/emojis.config.js';
 
 export default {
   customId: 'giveaway:enter',
@@ -11,7 +12,7 @@ export default {
     const giveawayId = parseInt(parts[2], 10);
 
     if (isNaN(giveawayId)) {
-      await interaction.reply({ content: '❌ Invalid giveaway ID.', flags: MessageFlags.Ephemeral });
+      await interaction.reply({ content: `${emojis.error} Invalid giveaway ID.`, flags: MessageFlags.Ephemeral });
       return;
     }
 
@@ -19,25 +20,25 @@ export default {
     const giveaway = GiveawaysRepo.get(db, giveawayId);
 
     if (!giveaway) {
-      await interaction.reply({ content: '❌ Giveaway not found in the database.', flags: MessageFlags.Ephemeral });
+      await interaction.reply({ content: `${emojis.error} Giveaway not found in the database.`, flags: MessageFlags.Ephemeral });
       return;
     }
 
     if (giveaway.status !== 'active') {
-      await interaction.reply({ content: '❌ This giveaway has already ended!', flags: MessageFlags.Ephemeral });
+      await interaction.reply({ content: `${emojis.error} This giveaway has already ended!`, flags: MessageFlags.Ephemeral });
       return;
     }
 
     const hasEntered = GiveawaysRepo.hasEntered(db, giveaway.id, interaction.user.id);
     if (hasEntered) {
-      await interaction.reply({ content: '⚠️ You have already entered this giveaway!', flags: MessageFlags.Ephemeral });
+      await interaction.reply({ content: `${emojis.warning} You have already entered this giveaway!`, flags: MessageFlags.Ephemeral });
       return;
     }
 
     GiveawaysRepo.addEntry(db, giveaway.id, interaction.user.id);
 
     await interaction.reply({ 
-      content: '✅ **You have successfully entered the giveaway!** Good luck! 🍀', 
+      content: `${emojis.success} **You have successfully entered the giveaway!** Good luck! 🍀`, 
       flags: MessageFlags.Ephemeral 
     });
 

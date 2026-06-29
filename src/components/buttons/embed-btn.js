@@ -2,6 +2,7 @@ import { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, Messa
 import { getDraft, deleteDraft, buildPublishedContainer } from '../../systems/embeds/embedBuilderManager.js';
 import { createV2Success, v2Payload } from '../../helpers/v2Helper.js';
 import { checkPermission } from '../../helpers/permissions.js';
+import { emojis } from '../../config/emojis.config.js';
 
 export default {
   // Matches customId starting with embed:edit, embed:publish, embed:cancel
@@ -29,7 +30,7 @@ export default {
     const draft = getDraft(userId);
     if (!draft || (draft.messageId && draft.messageId !== interaction.message.id)) {
       await interaction.reply({
-        content: '❌ **You do not own this builder session.** Run `?embed` to start your own builder.',
+        content: `${emojis.error} **You do not own this builder session.** Run \`?embed\` to start your own builder.`,
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -48,7 +49,7 @@ export default {
       // Validate
       if (!draft.title && !draft.description) {
         await interaction.reply({
-          content: '❌ **Please specify at least a title or a description.**',
+          content: `${emojis.error} **Please specify at least a title or a description.**`,
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -59,7 +60,7 @@ export default {
 
       if (!targetChannel) {
         await interaction.reply({
-          content: '❌ **Could not find the target channel.** Please update the target channel.',
+          content: `${emojis.error} **Could not find the target channel.** Please update the target channel.`,
           flags: MessageFlags.Ephemeral,
         });
         return;

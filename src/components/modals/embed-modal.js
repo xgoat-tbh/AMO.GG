@@ -1,6 +1,8 @@
 import { MessageFlags } from 'discord.js';
 import { getDraft, saveDraft, buildBuilderPayload } from '../../systems/embeds/embedBuilderManager.js';
 import { logger } from '../../helpers/logger.js';
+import { sanitizeContent, sanitizeMentions } from '../../helpers/sanitizer.js';
+import { emojis } from '../../config/emojis.config.js';
 
 export default {
   // Matches customId starting with embed:submit
@@ -15,7 +17,7 @@ export default {
     const draft = getDraft(userId);
     if (!draft || (draft.messageId && draft.messageId !== interaction.message.id)) {
       await interaction.reply({
-        content: '❌ **You do not own this builder session.**',
+        content: `${emojis.error} **You do not own this builder session.**`,
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -31,7 +33,6 @@ export default {
       if (!clean.startsWith('#')) {
         clean = '#' + clean;
       }
-      // Simple hex color validator
       const hexMatch = clean.match(/^#[0-9a-fA-F]{6}$/);
       if (hexMatch) {
         saveDraft(userId, { color: clean });
@@ -45,22 +46,29 @@ export default {
       }
     } else if (field === 'channel') {
       let clean = value.trim();
-      // Extract channel ID if mention is passed: <#1234567890>
       const match = clean.match(/^<#(\d+)>$/);
       const channelId = match ? match[1] : clean;
 
-      // Verify channel exists in current guild
       const targetChannel = interaction.guild.channels.cache.get(channelId);
       if (targetChannel) {
         saveDraft(userId, { channelId });
       }
     } else if (field === 'title') {
-      saveDraft(userId, { title: value.trim() });
+      const { sanitized, valid, reason } = sanitizeContent(value, 256, 'Title');
+      if (!valid) {
+        try { await interaction.message.delete(); } catch {}
+        return;
+      }
+      saveDraft(userId, { title: sanitized });
     } else if (field === 'description') {
-      saveDraft(userId, { description: value });
+      const { sanitized, valid, reason } = sanitizeContent(value, 4096, 'Description');
+      if (!valid) {
+        try { await interaction.message.delete(); } catch {}
+        return;
+      }
+      saveDraft(userId, { description: sanitized });
     }
 
-    // Rebuild preview card and edit the wizard message
     const payload = buildBuilderPayload(client, userId);
     await interaction.editReply(payload).catch(err => {
       logger.error('EMBED_MODAL', `Failed to edit preview message: ${err.message}`, err);

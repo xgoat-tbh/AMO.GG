@@ -74,13 +74,13 @@ export default {
 
     const prevBtn = new ButtonBuilder()
       .setCustomId(`dev:logs:prev:${targetPage}:${interaction.user.id}`)
-      .setLabel('◀️ Previous')
+      .setLabel('◀ Previous')
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(targetPage === 1);
 
     const nextBtn = new ButtonBuilder()
       .setCustomId(`dev:logs:next:${targetPage}:${interaction.user.id}`)
-      .setLabel('Next ▶️')
+      .setLabel('Next ▶')
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(targetPage === totalPages);
 

@@ -16,7 +16,7 @@ export default {
       const vc = message.member.voice.channel;
       if (!vc) {
         return message.reply({
-          ...v2Payload(createV2Error(`${emojis.error} You must be in a voice channel.`, client)),
+          ...v2Payload(createV2Error('❌ You must be in a voice channel.', client)),
           allowedMentions: { repliedUser: false },
         });
       }

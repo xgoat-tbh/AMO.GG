@@ -1,324 +1,345 @@
-import { ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, ContainerBuilder, SectionBuilder, TextDisplayBuilder, ThumbnailBuilder, MessageFlags } from 'discord.js';
-import { createV2Error, v2Payload } from '../../helpers/v2Helper.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ContainerBuilder, SectionBuilder, TextDisplayBuilder, ThumbnailBuilder, MessageFlags } from 'discord.js';
+import { createV2Container, v2Payload, codeStat, field, commandPills, permissionBadge, relativeTime, helpNavRow, categoryDropdown, searchDropdown, notification, CATEGORY_ORDER, CATEGORY_NAMES, CATEGORY_DESCRIPTIONS, getCategoryMeta } from '../../helpers/v2Helper.js';
 import { config } from '../../config/bot.config.js';
 import { emojis } from '../../config/emojis.config.js';
+import { assets } from '../../config/assets.config.js';
 import { handleCommandError } from '../../helpers/errorHandler.js';
 import { checkPermission } from '../../helpers/permissions.js';
-import { assets } from '../../config/assets.config.js';
-import { existsSync } from 'node:fs';
 
-const categoryNames = {
-  utility: 'General',
-  voice: 'Voice',
-  roles: 'Roles',
-  suggestions: 'Suggestions',
-  confessions: 'Confessions',
-  gameping: 'GamePing',
-  admin: 'Administration',
+// ── Metadata ─────────────────────────────────────────────────────
+
+const CATEGORY_THUMBNAILS = {
+  utility: assets.help,
+  voice: assets.voice,
+  roles: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3ad.png',
+  suggestions: assets.suggestion,
+  confessions: assets.confession,
+  gameping: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3ae.png',
+  admin: assets.moderation,
+  creator: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3ac.png',
 };
 
-const categoryDescriptions = {
-  utility: 'General and utility tools for everyone.',
-  voice: 'Voice channel management and configuration.',
-  roles: 'Configure and assign roles in the guild.',
-  suggestions: 'Submit and vote on community suggestions.',
-  confessions: 'Send anonymous or known confessions.',
-  gameping: 'Configure and ping game roles easily.',
-  admin: 'Manage bot settings and server configuration.',
-};
+// ── View Renderers ───────────────────────────────────────────────
 
-export function renderHelp(client, member, category = 'home', page = 1, sortOrder = 'asc', selectedCommandName = null) {
+function renderHome(client, member) {
+  const totalServers = client.guilds.cache.size;
+  const totalMembers = client.guilds.cache.reduce((acc, g) => acc + g.memberCount, 0);
+  const totalCmds = client.commands.size;
+  const totalCats = CATEGORY_ORDER.length;
+
   const executorId = member.id;
-  let files = [];
 
-  const inviteUrl = `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands`;
-  const supportUrl = 'https://discord.gg/amo';
-  const websiteUrl = 'https://amo.gg';
+  const lines = [
+    `## Hey, I'm ${config.branding.name}`,
+    '',
+    `I'm that one bot who does a little bit of everything — voice stuff, roles, suggestions, confessions, game pings, and keeping the place from burning down. Probably.`,
+    '',
+    `**Prefix** \`${config.prefix}\``,
+    `**Commands** \`${totalCmds}\` **Categories** \`${totalCats}\``,
+    `**Serving** \`${totalServers}\` **servers** — \`${totalMembers.toLocaleString()}\` **members**`,
+    '',
+    `*Powered by ${config.branding.name} Devs*`,
+  ].join('\n');
 
-  const container = new ContainerBuilder();
+  const container = createV2Container({
+    description: lines,
+    color: config.colors.primary,
+    thumbnail: client.user.displayAvatarURL(),
+    client,
+  });
 
-  if (category === 'home') {
-    // ── Home View ──
-    const totalServers = client.guilds.cache.size;
-    const totalMembers = client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
-
-    const homeText = [
-      `### Hey, I'm ${config.branding.name}`,
-      `• **My prefix is** \`${config.prefix}\``,
-      `• **Type** \`${config.prefix}help\` **for more**`,
-      `• **Serving** \`${totalMembers.toLocaleString()}\` **users in Amo India`,
-      '',
-      `${emojis.voice} » **Voice**`,
-      `${emojis.roles} » **Roles**`,
-      `${emojis.suggestion} » **Suggestions**`,
-      `${emojis.confession} » **Confessions**`,
-      `${emojis.game} » **GamePing**`,
-      `${emojis.admin} » **Administration**`,
-      `${emojis.general} » **General**`,
-      '',
-      '__**Links**__',
-      `[Invite me](${inviteUrl}) • [Support](${supportUrl}) • [Website](${websiteUrl})`,
-      '',
-      `*Powered By ${config.branding.name} Devs*`
-    ].join('\n');
-
-    // Logo thumbnail accessory (local check)
-    const logoPath = 'D:/Amo.gg/assets/logo.png';
-    let thumbnailURL = client.user.displayAvatarURL();
-    if (existsSync(logoPath)) {
-      thumbnailURL = 'attachment://logo.png';
-      files.push({
-        attachment: logoPath,
-        name: 'logo.png'
-      });
-    }
-
-    container.addSectionComponents(
-      new SectionBuilder()
-        .addTextDisplayComponents(
-          new TextDisplayBuilder().setContent(homeText)
-        )
-        .setThumbnailAccessory(
-          new ThumbnailBuilder().setURL(thumbnailURL)
-        )
-    );
-
-    // Dropdown 1: Switch category...
-    const switchMenu = new StringSelectMenuBuilder()
-      .setCustomId(`help:category:primary:${executorId}`)
-      .setPlaceholder('Switch category...');
-    switchMenu.addOptions([
-      { label: 'Voice', value: 'voice' },
-      { label: 'Roles', value: 'roles' },
-      { label: 'Suggestions', value: 'suggestions' },
-      { label: 'Confessions', value: 'confessions' },
-    ]);
-    container.addActionRowComponents(new ActionRowBuilder().addComponents(switchMenu));
-
-    // Dropdown 2: More categories...
-    const moreMenu = new StringSelectMenuBuilder()
-      .setCustomId(`help:category:secondary:${executorId}`)
-      .setPlaceholder('More categories...');
-    moreMenu.addOptions([
-      { label: 'GamePing', value: 'gameping' },
-      { label: 'General', value: 'utility' },
-      { label: 'Administration', value: 'admin' },
-    ]);
-    container.addActionRowComponents(new ActionRowBuilder().addComponents(moreMenu));
-
-    // Buttons Row
-    const buttonRow = new ActionRowBuilder().addComponents(
-      new ButtonBuilder()
-        .setCustomId(`help:page:prev:home:1:asc:${executorId}`)
-        .setLabel('◀')
-        .setStyle(ButtonStyle.Secondary)
-        .setDisabled(true),
-      new ButtonBuilder()
-        .setCustomId(`help:indicator:${executorId}`)
-        .setLabel('1/1')
-        .setStyle(ButtonStyle.Secondary)
-        .setDisabled(true),
-      new ButtonBuilder()
-        .setCustomId(`help:page:next:home:1:asc:${executorId}`)
-        .setLabel('▶')
-        .setStyle(ButtonStyle.Secondary)
-        .setDisabled(true),
-      new ButtonBuilder()
-        .setCustomId(`help:sort:home:1:asc:${executorId}`)
-        .setLabel('⇅')
-        .setStyle(ButtonStyle.Secondary)
-        .setDisabled(true)
-    );
-    container.addActionRowComponents(buttonRow);
-
-  } else {
-    // ── Category View ──
-    const commands = client.commands.filter(cmd => cmd.category === category && checkPermission(member, cmd.permission));
-    const categoryName = categoryNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
-    const categoryDesc = categoryDescriptions[category] || '';
-
-    // Sort commands
-    const sortedCmds = [...commands.values()].sort((a, b) => {
-      return sortOrder === 'desc' ? b.name.localeCompare(a.name) : a.name.localeCompare(b.name);
-    });
-
-    // Paginate commands
-    const pageSize = 6;
-    const totalPages = Math.ceil(sortedCmds.length / pageSize) || 1;
-    const currentPage = Math.min(Math.max(1, page), totalPages);
-    const startIndex = (currentPage - 1) * pageSize;
-    const pageCmds = sortedCmds.slice(startIndex, startIndex + pageSize);
-
-    // Build the combined description content
-    const contentLines = [];
-
-    if (selectedCommandName) {
-      contentLines.push(`### Command Details`);
-      const cmd = client.commands.get(selectedCommandName);
-      if (cmd) {
-        const aliases = cmd.aliases?.length ? cmd.aliases.map(a => `\`${a}\``).join(', ') : 'None';
-        contentLines.push(
-          `> **Command**: \`${cmd.name}\``,
-          `> **Description**: ${cmd.description || 'No description'}`,
-          `> **Usage**: \`${cmd.usage || `?${cmd.name}`}\``,
-          `> **Aliases**: ${aliases}`,
-          `> **Permission**: \`${cmd.permission || 'everyone'}\``
-        );
-      } else {
-        contentLines.push(`*Command \`${selectedCommandName}\` not found.*`);
-      }
-    } else {
-      contentLines.push(`### ${categoryName}`, categoryDesc, '');
-      if (pageCmds.length === 0) {
-        contentLines.push(`*No commands found in this category.*`);
-      } else {
-        const listLines = pageCmds.map(cmd => `• **${cmd.name}** - ${cmd.description || 'No description'}`);
-        contentLines.push(listLines.join('\n'), ``, `Page ${currentPage} of ${totalPages}`);
-      }
-    }
-
-    const sectionContent = contentLines.join('\n');
-
-    const categoryIcons = {
-      utility: assets.help || 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e0.png',
-      voice: assets.voice || 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3a7.png',
-      roles: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3ad.png',
-      suggestions: assets.suggestion || 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4a1.png',
-      confessions: assets.confession || 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4ad.png',
-      gameping: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3ae.png',
-      admin: assets.moderation || 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f6e1.png',
-    };
-
-    const catThumbnailURL = categoryIcons[category] || 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4d6.png';
-
-    container.addSectionComponents(
-      new SectionBuilder()
-        .addTextDisplayComponents(
-          new TextDisplayBuilder().setContent(sectionContent)
-        )
-        .setThumbnailAccessory(
-          new ThumbnailBuilder().setURL(catThumbnailURL)
-        )
-    );
-    // Dropdown 1: Switch category...
-    const switchMenu = new StringSelectMenuBuilder()
-      .setCustomId(`help:category:primary:${executorId}`)
-      .setPlaceholder('Switch category...');
-    const primaryOptions = [
-      { label: 'Voice', value: 'voice' },
-      { label: 'Roles', value: 'roles' },
-      { label: 'Suggestions', value: 'suggestions' },
-      { label: 'Confessions', value: 'confessions' },
-    ].map(opt => ({ ...opt, default: opt.value === category }));
-    switchMenu.addOptions(primaryOptions);
-    container.addActionRowComponents(new ActionRowBuilder().addComponents(switchMenu));
-
-    // Dropdown 2: More categories...
-    const moreMenu = new StringSelectMenuBuilder()
-      .setCustomId(`help:category:secondary:${executorId}`)
-      .setPlaceholder('More categories...');
-    const secondaryOptions = [
-      { label: 'GamePing', value: 'gameping' },
-      { label: 'General', value: 'utility' },
-      { label: 'Administration', value: 'admin' },
-    ].map(opt => ({ ...opt, default: opt.value === category }));
-    moreMenu.addOptions(secondaryOptions);
-    container.addActionRowComponents(new ActionRowBuilder().addComponents(moreMenu));
-
-    // Select 3: Select a command for details... (only in command list view)
-    if (!selectedCommandName && sortedCmds.length > 0) {
-      const detailMenu = new StringSelectMenuBuilder()
-        .setCustomId(`help:command:${category}:${currentPage}:${sortOrder}:${executorId}`)
-        .setPlaceholder('Select a command for details...');
-      const detailOptions = sortedCmds.map(cmd => ({
-        label: cmd.name,
-        value: cmd.name,
-        description: cmd.description ? (cmd.description.length > 50 ? cmd.description.slice(0, 47) + '...' : cmd.description) : undefined
-      }));
-      detailMenu.addOptions(detailOptions);
-      container.addActionRowComponents(new ActionRowBuilder().addComponents(detailMenu));
-    }
-
-    // Pagination / Back Buttons
-    const buttonRow = new ActionRowBuilder();
-    if (selectedCommandName) {
-      const backBtn = new ButtonBuilder()
-        .setCustomId(`help:back:${category}:${currentPage}:${sortOrder}:${executorId}`)
-        .setLabel('Back to Category')
-        .setStyle(ButtonStyle.Secondary);
-      buttonRow.addComponents(backBtn);
-    } else {
-      const prevBtn = new ButtonBuilder()
-        .setCustomId(`help:page:prev:${category}:${currentPage}:${sortOrder}:${executorId}`)
-        .setLabel('◀')
-        .setStyle(ButtonStyle.Secondary)
-        .setDisabled(currentPage === 1);
-
-      const pageIndicator = new ButtonBuilder()
-        .setCustomId(`help:indicator:${executorId}`)
-        .setLabel(`${currentPage}/${totalPages}`)
-        .setStyle(ButtonStyle.Secondary)
-        .setDisabled(true);
-
-      const nextBtn = new ButtonBuilder()
-        .setCustomId(`help:page:next:${category}:${currentPage}:${sortOrder}:${executorId}`)
-        .setLabel('▶')
-        .setStyle(ButtonStyle.Secondary)
-        .setDisabled(currentPage === totalPages);
-
-      const sortBtn = new ButtonBuilder()
-        .setCustomId(`help:sort:${category}:${currentPage}:${sortOrder}:${executorId}`)
-        .setLabel('⇅')
-        .setStyle(ButtonStyle.Secondary);
-
-      buttonRow.addComponents(prevBtn, pageIndicator, nextBtn, sortBtn);
-    }
-    container.addActionRowComponents(buttonRow);
-  }
-
-  container.setAccentColor(config.colors.primary);
+  const navRow = new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId(`help:nav:${executorId}:home`)
+      .setEmoji('🏠')
+      .setStyle(ButtonStyle.Secondary)
+      .setDisabled(true),
+    new ButtonBuilder()
+      .setCustomId(`help:support:${executorId}`)
+      .setLabel('Support')
+      .setStyle(ButtonStyle.Secondary)
+      .setEmoji('🆘'),
+  );
 
   return {
-    components: [container],
-    flags: [MessageFlags.IsComponentsV2],
-    files,
+    container,
+    extraComponents: [
+      categoryDropdown(executorId),
+      navRow,
+    ],
   };
 }
 
+function renderCategory(client, member, categoryKey, page = 1) {
+  const executorId = member.id;
+  const commands = [...client.commands.filter(cmd => cmd.category === categoryKey && checkPermission(member, cmd.permission)).values()]
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  const meta = getCategoryMeta(categoryKey);
+  const cmdCount = commands.length;
+
+  const cmdsPerPage = 14;
+  const totalPages = Math.ceil(cmdCount / cmdsPerPage) || 1;
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const start = (safePage - 1) * cmdsPerPage;
+  const pageCmds = commands.slice(start, start + cmdsPerPage);
+
+  const cmdList = pageCmds.map(c => `\`${c.name}\``).join(' ');
+
+  const lines = [
+    `### ${meta.emoji} ${meta.name}`,
+    CATEGORY_DESCRIPTIONS[categoryKey] || '',
+    `${cmdCount} command${cmdCount !== 1 ? 's' : ''}`,
+    '',
+    cmdList || '*No commands available*',
+  ].join('\n');
+
+  const catIdx = CATEGORY_ORDER.indexOf(categoryKey);
+  const hasPrev = catIdx > 0;
+  const hasNext = catIdx < CATEGORY_ORDER.length - 1;
+
+  const container = createV2Container({
+    description: lines,
+    color: config.colors.primary,
+    thumbnail: CATEGORY_THUMBNAILS[categoryKey] || assets.help,
+    client,
+  });
+
+  const components = [categoryDropdown(executorId, categoryKey)];
+
+  // Category pagination (cmd list pages within a category)
+  if (totalPages > 1) {
+    const catPageRow = new ActionRowBuilder();
+    const prevBtn = new ButtonBuilder()
+      .setCustomId(`help:cat_page:${categoryKey}:${safePage}:prev:${executorId}`)
+      .setLabel('◀')
+      .setStyle(ButtonStyle.Secondary)
+      .setDisabled(safePage <= 1);
+    const pageInd = new ButtonBuilder()
+      .setCustomId(`help:cat_page_ind:${executorId}`)
+      .setLabel(`${safePage}/${totalPages}`)
+      .setStyle(ButtonStyle.Secondary)
+      .setDisabled(true);
+    const nextBtn = new ButtonBuilder()
+      .setCustomId(`help:cat_page:${categoryKey}:${safePage}:next:${executorId}`)
+      .setLabel('▶')
+      .setStyle(ButtonStyle.Secondary)
+      .setDisabled(safePage >= totalPages);
+    catPageRow.addComponents(prevBtn, pageInd, nextBtn);
+    components.push(catPageRow);
+  }
+
+  components.push(
+    helpNavRow('category', executorId, {
+      currentCategory: categoryKey,
+      currentPage: safePage,
+      cmdCount,
+      hasPrevCategory: hasPrev,
+      hasNextCategory: hasNext,
+    })
+  );
+
+  return { container, extraComponents: components };
+}
+
+function renderCommandDetail(client, member, cmd) {
+  const executorId = member.id;
+  const meta = getCategoryMeta(cmd.category);
+
+  const lines = [
+    `### ${meta.emoji} ${cmd.name}`,
+    '',
+    cmd.description ? `*${cmd.description}*` : '',
+    '',
+    field('Category', `${meta.emoji} ${meta.name}`),
+  ];
+
+  if (cmd.aliases?.length) {
+    lines.push(field('Aliases', cmd.aliases.map(a => `\`${a}\``).join(', ')));
+  }
+
+  lines.push(field('Usage', `\`${cmd.usage || `${config.prefix}${cmd.name}`}\``));
+
+  if (cmd.examples?.length) {
+    lines.push(field('Examples', cmd.examples.map(e => `\`${e}\``).join('\n')));
+  }
+
+  if (cmd.subcommands?.length) {
+    lines.push(field('Subcommands', cmd.subcommands.map(s => `\`${s}\``).join(', ')));
+  }
+
+  lines.push(field('Permission', permissionBadge(cmd.permission || 'everyone')));
+
+  if (cmd.cooldown) {
+    lines.push(field('Cooldown', `${cmd.cooldown}s`));
+  }
+
+  if (cmd.notes) {
+    lines.push(field('Notes', cmd.notes));
+  }
+
+  const container = createV2Container({
+    description: lines.join('\n'),
+    color: config.colors.primary,
+    thumbnail: CATEGORY_THUMBNAILS[cmd.category] || assets.help,
+    client,
+  });
+
+  const backBtn = new ButtonBuilder()
+    .setCustomId(`help:back:${executorId}:${cmd.category}:1`)
+    .setLabel('← Back')
+    .setStyle(ButtonStyle.Secondary);
+
+  return {
+    container,
+    extraComponents: [
+      categoryDropdown(executorId, cmd.category),
+      new ActionRowBuilder().addComponents(backBtn),
+    ],
+  };
+}
+
+function renderAllCommands(client, member, page = 1) {
+  const executorId = member.id;
+  const catsPerPage = 3;
+  const totalPages = Math.ceil(CATEGORY_ORDER.length / catsPerPage) || 1;
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const start = (safePage - 1) * catsPerPage;
+  const pageCats = CATEGORY_ORDER.slice(start, start + catsPerPage);
+
+  const sections = [];
+  for (const catKey of pageCats) {
+    const meta = getCategoryMeta(catKey);
+    const cmds = [...client.commands.filter(c => c.category === catKey && checkPermission(member, c.permission)).values()]
+      .sort((a, b) => a.name.localeCompare(b.name));
+    const names = cmds.map(c => c.name);
+    sections.push(`### ${meta.emoji} ${meta.name} (${names.length})`);
+    sections.push(names.length ? names.map(n => `\`${n}\``).join(' ') : '*No commands*');
+    sections.push('');
+  }
+
+  const lines = [
+    `### 📋 All Commands`,
+    '',
+    ...sections,
+    `Page ${safePage} of ${totalPages}`,
+  ].join('\n');
+
+  const container = createV2Container({
+    description: lines,
+    color: config.colors.primary,
+    thumbnail: assets.help,
+    client,
+  });
+
+  return {
+    container,
+    extraComponents: [
+      categoryDropdown(executorId),
+      helpNavRow('all', executorId, { currentPage: safePage, totalPages }),
+    ],
+  };
+}
+
+// ── Main Render Function ─────────────────────────────────────────
+
+export function renderHelp(client, member, view = 'home', opts = {}) {
+  const { category, page, command, query } = opts;
+  let result;
+
+  switch (view) {
+    case 'category':
+      result = renderCategory(client, member, category || 'utility', page || 1);
+      break;
+    case 'command':
+      result = renderCommandDetail(client, member, command);
+      break;
+    case 'all':
+      result = renderAllCommands(client, member, page || 1);
+      break;
+    default:
+      result = renderHome(client, member);
+  }
+
+  const payload = v2Payload(result.container, result.extraComponents);
+  payload.allowedMentions = { repliedUser: false };
+  return payload;
+}
+
+// ── Command Definition ───────────────────────────────────────────
+
 export default {
   name: 'help',
-  aliases: ['h'],
+  aliases: ['h', 'commands', 'cmds'],
   description: 'View bot help and command categories.',
   usage: '?help [command]',
   permission: 'everyone',
 
   async execute(message, args, client) {
     try {
-      // ── Specific command help ──
       if (args.length) {
         const query = args[0].toLowerCase();
-        const cmd =
-          client.commands.get(query) ||
-          client.commands.get(client.aliases.get(query));
+        const cmd = client.commands.get(query) || client.commands.get(client.aliases.get(query));
 
         if (!cmd) {
+          // Search for matching commands
+          const matches = client.commands.filter(c =>
+            c.name.includes(query) ||
+            (c.aliases && c.aliases.some(a => a.includes(query)))
+          ).sort((a, b) => a.name.localeCompare(b.name));
+
+          if (matches.size === 0) {
+            const reply = await message.reply({
+              ...v2Payload(notification('error', ['❌ Command \`${query}\` not found.'], client)),
+              allowedMentions: { repliedUser: false },
+            });
+            setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
+            return;
+          }
+
+          if (matches.size === 1) {
+            const cmd = matches.first();
+            return message.reply({
+              ...renderHelp(client, message.member, 'command', { command: cmd }),
+              allowedMentions: { repliedUser: false },
+            });
+          }
+
+          // Show search results
+          const executorId = message.member.id;
+          const matchNames = [...matches.values()].slice(0, 25);
+          const lines = [
+            `### 🔍 Search: \`${query}\``,
+            `${matches.size} result${matches.size !== 1 ? 's' : ''}`,
+            '',
+            matchNames.map(c => `\`${c.name}\` — ${c.description || ''}`).join('\n'),
+          ].join('\n');
+
+          const container = createV2Container({
+            description: lines,
+            color: config.colors.primary,
+            thumbnail: assets.help,
+            client,
+          });
+
+          const searchRow = searchDropdown(executorId, query, matchNames);
+          const components = [categoryDropdown(executorId)];
+          if (searchRow) components.push(searchRow);
+
           return message.reply({
-            ...v2Payload(createV2Error(`${emojis.error} Command \`${query}\` not found.`, client)),
+            ...v2Payload(container, components),
             allowedMentions: { repliedUser: false },
           });
         }
 
-        const payload = renderHelp(client, message.member, cmd.category, 1, 'asc', cmd.name);
         return message.reply({
-          ...payload,
+          ...renderHelp(client, message.member, 'command', { command: cmd }),
           allowedMentions: { repliedUser: false },
         });
       }
 
-      // ── Default help panel ──
-      const payload = renderHelp(client, message.member, 'home', 1, 'asc', null);
-      await message.reply({
-        ...payload,
+      return message.reply({
+        ...renderHelp(client, message.member, 'home'),
         allowedMentions: { repliedUser: false },
       });
     } catch (error) {

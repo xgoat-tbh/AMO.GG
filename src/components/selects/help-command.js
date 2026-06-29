@@ -27,7 +27,8 @@ export default {
     const page = parseInt(parts[3], 10) || 1;
     const sortOrder = parts[4] || 'asc';
 
+    await interaction.deferUpdate();
     const payload = renderHelp(client, interaction.member, category, page, sortOrder, selectedCmd);
-    await interaction.update(payload);
+    await interaction.editReply(payload);
   },
 };

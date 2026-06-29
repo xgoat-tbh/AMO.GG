@@ -11,6 +11,7 @@ import {
 import { config } from '../../config/bot.config.js';
 import { assets } from '../../config/assets.config.js';
 import { v2Payload } from '../../helpers/v2Helper.js';
+import { emojis } from '../../config/emojis.config.js';
 
 // In-memory drafts keyed by userId
 const activeDrafts = new Map();
@@ -100,7 +101,7 @@ export function buildBuilderPayload(client, userId) {
 
   const descBtn = new ButtonBuilder()
     .setCustomId('embed:edit:description')
-    .setLabel('📝 Description')
+    .setLabel(`${emojis.confession} Description`)
     .setStyle(ButtonStyle.Secondary);
 
   const colorBtn = new ButtonBuilder()
@@ -127,7 +128,7 @@ export function buildBuilderPayload(client, userId) {
 
   const cancelBtn = new ButtonBuilder()
     .setCustomId('embed:cancel')
-    .setLabel('❌ Cancel')
+    .setLabel(`${emojis.error} Cancel`)
     .setStyle(ButtonStyle.Danger);
 
   const row2 = new ActionRowBuilder().addComponents(chanBtn, publishBtn, cancelBtn);

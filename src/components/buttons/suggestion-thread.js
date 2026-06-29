@@ -1,5 +1,6 @@
 import { MessageFlags } from 'discord.js';
 import { createThread } from '../../systems/suggestions/suggestionManager.js';
+import { emojis } from '../../config/emojis.config.js';
 
 export default {
   customId: 'suggestion:thread',
@@ -10,7 +11,7 @@ export default {
     const suggestionId = parseInt(parts[2], 10);
 
     if (isNaN(suggestionId)) {
-      await interaction.reply({ content: '❌ Invalid suggestion data.', flags: MessageFlags.Ephemeral });
+      await interaction.reply({ content: `${emojis.error} Invalid suggestion data.`, flags: MessageFlags.Ephemeral });
       return;
     }
 

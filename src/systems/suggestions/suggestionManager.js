@@ -26,11 +26,11 @@ function buildVoteRow(suggestionId, yesCt = 0, noCt = 0, threadUrl = null, isCom
   const row = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId(`suggestion:vote:yes:${suggestionId}`)
-      .setLabel(`✅ Yes (${yesCt})`)
+      .setLabel(`${emojis.success} Yes (${yesCt})`)
       .setStyle(ButtonStyle.Success),
     new ButtonBuilder()
       .setCustomId(`suggestion:vote:no:${suggestionId}`)
-      .setLabel(`❌ No (${noCt})`)
+      .setLabel(`${emojis.error} No (${noCt})`)
       .setStyle(ButtonStyle.Danger),
     new ButtonBuilder()
       .setCustomId(`suggestion:complete:${suggestionId}`)
@@ -55,7 +55,7 @@ function buildVoteRow(suggestionId, yesCt = 0, noCt = 0, threadUrl = null, isCom
  */
 function buildSuggestionContainer(author, content, suggestionId, client, status = 'open') {
   return createV2Container({
-    title: `${emojis.suggestion} Suggestion #${suggestionId}`,
+    title: `💡 Suggestion #${suggestionId}`,
     description: `> ${content.replace(/\n/g, '\n> ')}`,
     color: status === 'completed' ? config.colors.success : config.colors.suggestion,
     fields: [
@@ -126,7 +126,7 @@ export async function handleVote(suggestionId, userId, voteType, interaction) {
   // Verify suggestion exists
   const suggestion = SuggestionsRepo.getById(db, suggestionId);
   if (!suggestion) {
-    const errContainer = createV2Error(`${emojis.error} Suggestion not found.`, interaction.client);
+    const errContainer = createV2Error(`❌ Suggestion not found.`, interaction.client);
     await interaction.reply({
       ...v2Payload(errContainer, [], true),
     });
@@ -171,7 +171,7 @@ export async function createThread(suggestionId, interaction) {
 
   const suggestion = SuggestionsRepo.getById(db, suggestionId);
   if (!suggestion) {
-    const errContainer = createV2Error(`${emojis.error} Suggestion not found.`, interaction.client);
+    const errContainer = createV2Error(`❌ Suggestion not found.`, interaction.client);
     await interaction.reply({
       ...v2Payload(errContainer, [], true),
     });
@@ -181,7 +181,7 @@ export async function createThread(suggestionId, interaction) {
   // Check if thread already exists
   if (suggestion.thread_id) {
     const warnContainer = createV2Container({
-      description: `${emojis.warning} A discussion thread already exists: <#${suggestion.thread_id}>`,
+      description: `⚠️ A discussion thread already exists: <#${suggestion.thread_id}>`,
       color: config.colors.warning,
       client: interaction.client,
     });
@@ -206,7 +206,7 @@ export async function createThread(suggestionId, interaction) {
   // Store thread ID in DB
   SuggestionsRepo.setThreadId(db, suggestionId, thread.id);
 
-  const successContainer = createV2Success(`${emojis.success} Discussion thread created: <#${thread.id}>`, interaction.client);
+  const successContainer = createV2Success(`✅ Discussion thread created: <#${thread.id}>`, interaction.client);
   await interaction.editReply(v2EditPayload(successContainer));
 
   logger.info('SUGGESTION', `Thread created for suggestion #${suggestionId}: ${thread.id}`);
@@ -220,7 +220,7 @@ export async function complete(suggestionId, moderator, interaction) {
 
   const suggestion = SuggestionsRepo.getById(db, suggestionId);
   if (!suggestion) {
-    const errContainer = createV2Error(`${emojis.error} Suggestion not found.`, interaction.client);
+    const errContainer = createV2Error(`❌ Suggestion not found.`, interaction.client);
     await interaction.reply({
       ...v2Payload(errContainer, [], true),
     });
@@ -228,7 +228,7 @@ export async function complete(suggestionId, moderator, interaction) {
   }
 
   if (suggestion.status === 'completed') {
-    const errContainer = createV2Error(`${emojis.error} This suggestion is already marked as completed.`, interaction.client);
+    const errContainer = createV2Error(`❌ This suggestion is already marked as completed.`, interaction.client);
     await interaction.reply({
       ...v2Payload(errContainer, [], true),
     });

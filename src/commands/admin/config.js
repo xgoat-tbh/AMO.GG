@@ -1,154 +1,294 @@
-import { ActionRowBuilder, StringSelectMenuBuilder, ChannelSelectMenuBuilder, RoleSelectMenuBuilder, ButtonBuilder, ButtonStyle, ChannelType, MessageFlags } from 'discord.js';
+import { ActionRowBuilder, StringSelectMenuBuilder, ChannelSelectMenuBuilder, RoleSelectMenuBuilder, ButtonBuilder, ButtonStyle, ChannelType } from 'discord.js';
 import { getDb } from '../../database/connection.js';
 import { ConfigRepo } from '../../database/repositories/config.repo.js';
 import { botConfig as config, getConfig } from '../../helpers/configHelper.js';
 import { createV2Container, v2Payload } from '../../helpers/v2Helper.js';
 import { emojis } from '../../config/emojis.config.js';
+import { CONFIG_SECTIONS } from '../../config/configSections.js';
 import { handleCommandError } from '../../helpers/errorHandler.js';
 
-/**
- * Renders the configuration dashboard embed and components.
- * Exported so other component handlers can use it to re-render the view.
- */
-export function renderDashboard(client, executorId = '', activeSetting = null) {
-  const db = getDb();
-  const overrides = ConfigRepo.getAll(db);
+const SECTION_ORDER = ['roles', 'notifications', 'suggestions', 'confessions', 'logging', 'voice', 'creator', 'jail', 'gameping', 'leveling', 'developer'];
 
-  // Helper to format values with override indicator
-  const formatSetting = (path, dbKey, type = 'channel') => {
-    const isOverride = overrides[dbKey] !== undefined && overrides[dbKey] !== null;
-    const value = getConfig(path);
-    const sourceTag = isOverride ? '`[Override]`' : '`[Default]`';
+function formatValue(settingKey, settingDef) {
+  let rawValue;
+  if (settingDef.configPath) {
+    rawValue = getConfig(settingDef.configPath);
+  } else {
+    const db = getDb();
+    rawValue = ConfigRepo.get(db, settingKey);
+  }
 
-    if (!value) return `❌ *Not Set* ${sourceTag}`;
+  if (!rawValue) return '❌ *Not Set*';
 
-    if (type === 'channel') {
-      return `<#${value}> (\`${value}\`)\n${sourceTag}`;
-    } else if (type === 'role') {
-      return `<@&${value}> (\`${value}\`)\n${sourceTag}`;
-    } else if (path === 'gamepingPermission') {
-      const permEmojis = {
-        everyone: emojis.general || '👥',
-        moderator: emojis.moderation || '⚒️',
-        admin: emojis.admin || '⚙️',
-      };
-      const emoji = permEmojis[value] || '⚙️';
-      return `${emoji} \`${value}\`\n${sourceTag}`;
+  switch (settingDef.type) {
+    case 'channel':
+    case 'category':
+      return `<#${rawValue}>`;
+    case 'role':
+      return `<@&${rawValue}>`;
+    case 'roles': {
+      const ids = typeof rawValue === 'string'
+        ? rawValue.split(',').map(id => id.trim()).filter(Boolean)
+        : (Array.isArray(rawValue) ? rawValue : []);
+      if (!ids.length) return '❌ *Not Set*';
+      return ids.map(id => `<@&${id}>`).join(' ');
     }
-    return `\`${value}\`\n${sourceTag}`;
-  };
+    case 'select': {
+      const option = settingDef.options?.find(o => o.value === rawValue);
+      return option ? `${option.emoji || ''} \`${rawValue}\`` : `\`${rawValue}\``;
+    }
+    default:
+      return `\`${rawValue}\``;
+  }
+}
 
-  const container = createV2Container({
-    title: `${emojis.admin} Amo.GG Configuration Dashboard`,
+function buildHomeContent(client, overrides) {
+  const lines = [
+    `### ⚙️ ${config.branding.name} Configuration Dashboard`,
+    `Manage bot configuration settings organized by section. Select a section below to view and edit its settings.`,
+    '',
+    `**Active Overrides:** ${Object.keys(overrides).length}`,
+  ];
+
+  return createV2Container({
+    description: lines.join('\n'),
     color: config.colors.primary,
-    description: `Manage runtime overrides for channel routing, logging, and mod roles.\n\n• Use the dropdown to select a setting to edit.\n• Click **Clear Config Overrides** to reset database values back to \`.env\` defaults.`,
-    fields: [
-      { name: '💡 Suggestions Channel', value: formatSetting('channels.suggestion', 'suggestion_channel'), inline: true },
-      { name: '📝 Confessions Channel', value: formatSetting('channels.confession', 'confession_channel'), inline: true },
-      { name: '📜 Logs Channel', value: formatSetting('channels.log', 'log_channel'), inline: true },
-      { name: '⛓️ Jail Role ID', value: formatSetting('jailRoleId', 'jail_role_id', 'role'), inline: true },
-      { name: '🎮 GamePing Role', value: formatSetting('gamepingRoleId', 'gameping_role_id', 'role'), inline: true },
-      { name: '⚙️ GamePing Permission', value: formatSetting('gamepingPermission', 'gameping_permission', 'text'), inline: true },
-    ],
     client,
   });
+}
 
-  const options = [
-    { emoji: '💡', label: 'Suggestions Channel', description: 'Configure suggestions posting channel', value: 'suggestion_channel' },
-    { emoji: '📝', label: 'Confessions Channel', description: 'Configure confessions posting channel', value: 'confession_channel' },
-    { emoji: '📜', label: 'Logs Channel', description: 'Configure unified system logs channel', value: 'log_channel' },
-    { emoji: '⛓️', label: 'Jail Role ID', description: 'Configure jail role assigned to jailed users', value: 'jail_role_id' },
-    { emoji: '🎮', label: 'GamePing Allowed Role', description: 'Configure role allowed to use ?gp', value: 'gameping_role_id' },
-    { emoji: '⚙️', label: 'GamePing Min Permission', description: 'Configure min permission level to use ?gp', value: 'gameping_permission' },
-  ].map(opt => ({
-    ...opt,
-    default: opt.value === activeSetting,
-  }));
+function buildSectionContent(sectionKey, client, overrides) {
+  const section = CONFIG_SECTIONS[sectionKey];
+  if (!section) return buildHomeContent(client, overrides);
 
-  const select = new StringSelectMenuBuilder()
-    .setCustomId(`config:select:${executorId}`)
-    .setPlaceholder('Select A Category From Menu')
-    .addOptions(options);
+  const lines = [
+    `### ⚙️ ${config.branding.name} — ${section.emoji} ${section.name}`,
+    section.description,
+    '',
+  ];
+
+  const settingEntries = Object.entries(section.settings);
+  if (settingEntries.length === 0) {
+    lines.push('*No settings available in this section yet.*');
+  } else {
+    for (const [settingKey, settingDef] of settingEntries) {
+      const value = formatValue(settingKey, settingDef);
+      lines.push(`**${settingDef.label}** ${value}`);
+    }
+  }
+
+  return createV2Container({
+    description: lines.join('\n'),
+    color: config.colors.primary,
+    client,
+  });
+}
+
+function buildHomeComponents(executorId) {
+  const components = [];
+
+  // Section buttons in rows of 4
+  const sectionButtons = SECTION_ORDER
+    .filter(key => CONFIG_SECTIONS[key])
+    .map(key => {
+      const section = CONFIG_SECTIONS[key];
+      return new ButtonBuilder()
+        .setCustomId(`config:nav:${executorId}:${key}`)
+        .setLabel(section.name)
+        .setEmoji(section.emoji)
+        .setStyle(ButtonStyle.Secondary);
+    });
+
+  for (let i = 0; i < sectionButtons.length; i += 4) {
+    const row = new ActionRowBuilder().addComponents(sectionButtons.slice(i, i + 4));
+    components.push(row);
+  }
 
   const clearBtn = new ButtonBuilder()
     .setCustomId(`config:clear:${executorId}`)
     .setLabel('Clear Config Overrides')
     .setStyle(ButtonStyle.Danger)
-    .setEmoji('🗑️');
+    .setEmoji(emojis.delete);
 
   const doneBtn = new ButtonBuilder()
     .setCustomId(`config:close:${executorId}`)
     .setLabel('Done')
     .setStyle(ButtonStyle.Success)
-    .setEmoji('✅');
-
-  const components = [];
-  components.push(new ActionRowBuilder().addComponents(select));
-
-  // Add the dynamic selector depending on activeSetting
-  if (activeSetting) {
-    const settingNames = {
-      suggestion_channel: 'Suggestions Channel',
-      confession_channel: 'Confessions Channel',
-      jail_role_id: 'Jail Role',
-      log_channel: 'Unified Logs Channel',
-      gameping_role_id: 'GamePing Allowed Role',
-      gameping_permission: 'GamePing Permission Level',
-    };
-    const displayName = settingNames[activeSetting] || activeSetting;
-
-    if (activeSetting === 'jail_role_id' || activeSetting === 'gameping_role_id') {
-      const roleSelect = new RoleSelectMenuBuilder()
-        .setCustomId(`config:role_set:${activeSetting}:${executorId}`)
-        .setPlaceholder(`Select role for ${displayName}...`);
-      components.push(new ActionRowBuilder().addComponents(roleSelect));
-    } else if (activeSetting === 'gameping_permission') {
-      const permSelect = new StringSelectMenuBuilder()
-        .setCustomId(`config:perm_set:${activeSetting}:${executorId}`)
-        .setPlaceholder(`Select permission for ${displayName}...`)
-        .addOptions([
-          { emoji: emojis.general || '👥', label: 'Everyone', value: 'everyone', description: 'Allow anyone to run ?gp' },
-          { emoji: emojis.moderation || '⚒️', label: 'Moderator', value: 'moderator', description: 'Allow moderators and above to run ?gp' },
-          { emoji: emojis.admin || '⚙️', label: 'Admin', value: 'admin', description: 'Allow administrators only to run ?gp' },
-        ]);
-      components.push(new ActionRowBuilder().addComponents(permSelect));
-    } else {
-      const channelSelect = new ChannelSelectMenuBuilder()
-        .setCustomId(`config:channel_set:${activeSetting}:${executorId}`)
-        .setPlaceholder(`Select channel for ${displayName}...`)
-        .setChannelTypes([ChannelType.GuildText, ChannelType.GuildAnnouncement]);
-      components.push(new ActionRowBuilder().addComponents(channelSelect));
-    }
-  }
+    .setEmoji(emojis.success);
 
   components.push(new ActionRowBuilder().addComponents(clearBtn, doneBtn));
 
+  return components;
+}
+
+function buildSectionComponents(sectionKey, executorId, overrides, activeSetting = null) {
+  const section = CONFIG_SECTIONS[sectionKey];
+  if (!section) return buildHomeComponents(executorId);
+
+  const components = [];
+
+  // Back button
+  const backBtn = new ButtonBuilder()
+    .setCustomId(`config:back:${executorId}`)
+    .setLabel('Back to Sections')
+    .setStyle(ButtonStyle.Secondary)
+    .setEmoji('◀');
+
+  const clearBtn = new ButtonBuilder()
+    .setCustomId(`config:clear:${executorId}`)
+    .setLabel('Clear Overrides')
+    .setStyle(ButtonStyle.Danger)
+    .setEmoji(emojis.delete);
+
+  const doneBtn = new ButtonBuilder()
+    .setCustomId(`config:close:${executorId}`)
+    .setLabel('Done')
+    .setStyle(ButtonStyle.Success)
+    .setEmoji(emojis.success);
+
+  components.push(new ActionRowBuilder().addComponents(backBtn, clearBtn, doneBtn));
+
+  // Edit buttons for each setting (up to 5 per row)
+  const settingEntries = Object.entries(section.settings);
+  if (settingEntries.length > 0) {
+    const editButtons = settingEntries.map(([settingKey, settingDef]) => {
+      const isActive = settingKey === activeSetting;
+      return new ButtonBuilder()
+        .setCustomId(`config:edit:${executorId}:${sectionKey}:${settingKey}`)
+        .setLabel(`Edit ${settingDef.label}`)
+        .setStyle(isActive ? ButtonStyle.Primary : ButtonStyle.Secondary)
+        .setDisabled(isActive);
+    });
+
+    for (let i = 0; i < editButtons.length; i += 3) {
+      components.push(new ActionRowBuilder().addComponents(editButtons.slice(i, i + 3)));
+    }
+  }
+
+  // Selector for the active setting
+  if (activeSetting) {
+    const settingDef = section.settings[activeSetting];
+    if (settingDef) {
+      const editId = `config:section_set:${executorId}:${sectionKey}:${activeSetting}`;
+      const placeholder = `Select ${settingDef.label}...`;
+
+      if (settingDef.type === 'role') {
+        const select = new RoleSelectMenuBuilder()
+          .setCustomId(editId)
+          .setPlaceholder(placeholder);
+        components.push(new ActionRowBuilder().addComponents(select));
+      } else if (settingDef.type === 'roles') {
+        const select = new RoleSelectMenuBuilder()
+          .setCustomId(editId)
+          .setPlaceholder(placeholder)
+          .setMinValues(1)
+          .setMaxValues(25);
+        components.push(new ActionRowBuilder().addComponents(select));
+      } else if (settingDef.type === 'channel') {
+        const select = new ChannelSelectMenuBuilder()
+          .setCustomId(editId)
+          .setPlaceholder(placeholder)
+          .setChannelTypes([ChannelType.GuildText, ChannelType.GuildAnnouncement]);
+        components.push(new ActionRowBuilder().addComponents(select));
+      } else if (settingDef.type === 'category') {
+        const select = new ChannelSelectMenuBuilder()
+          .setCustomId(editId)
+          .setPlaceholder(placeholder)
+          .setChannelTypes([ChannelType.GuildCategory]);
+        components.push(new ActionRowBuilder().addComponents(select));
+      } else if (settingDef.type === 'select' && settingDef.options) {
+        const select = new StringSelectMenuBuilder()
+          .setCustomId(editId)
+          .setPlaceholder(placeholder)
+          .addOptions(settingDef.options.map(opt => ({
+            label: opt.label,
+            value: opt.value,
+            emoji: opt.emoji,
+            description: opt.description,
+          })));
+        components.push(new ActionRowBuilder().addComponents(select));
+      } else if (settingDef.type === 'string') {
+        const editBtn = new ButtonBuilder()
+          .setCustomId(`config:text_edit:${executorId}:${sectionKey}:${activeSetting}`)
+          .setLabel(`Set ${settingDef.label}`)
+          .setStyle(ButtonStyle.Primary)
+          .setEmoji('✏️');
+        components.push(new ActionRowBuilder().addComponents(editBtn));
+      }
+    }
+  }
+
+  // Jail management buttons (only in jail section)
+  if (sectionKey === 'jail') {
+    const createJailBtn = new ButtonBuilder()
+      .setCustomId(`config:jail_create:${executorId}`)
+      .setLabel('Create Jail Role')
+      .setStyle(ButtonStyle.Primary)
+      .setEmoji(emojis.jail);
+
+    const deleteJailBtn = new ButtonBuilder()
+      .setCustomId(`config:jail_delete:${executorId}`)
+      .setLabel('Delete Jail Role')
+      .setStyle(ButtonStyle.Danger)
+      .setEmoji(emojis.delete);
+
+    components.push(new ActionRowBuilder().addComponents(createJailBtn, deleteJailBtn));
+  }
+
+  return components;
+}
+
+export function renderDashboard(client, executorId = '', sectionKey = null, activeSetting = null) {
+  const db = getDb();
+  const overrides = ConfigRepo.getAll(db);
+
+  const isHome = !sectionKey || !CONFIG_SECTIONS[sectionKey];
+
+  const container = isHome
+    ? buildHomeContent(client, overrides)
+    : buildSectionContent(sectionKey, client, overrides);
+
+  const components = isHome
+    ? buildHomeComponents(executorId)
+    : buildSectionComponents(sectionKey, executorId, overrides, activeSetting);
+
   return v2Payload(container, components);
+}
+
+function handleArgs(args) {
+  if (args.length === 0) return null;
+  const input = args[0].toLowerCase();
+  for (const key of SECTION_ORDER) {
+    const section = CONFIG_SECTIONS[key];
+    if (!section) continue;
+    if (key === input || section.name.toLowerCase() === input) {
+      return key;
+    }
+  }
+  return null;
 }
 
 export default {
   name: 'config',
   aliases: ['settings', 'cfg'],
   description: 'Manage bot configuration dashboard and overrides.',
-  usage: '?config',
+  usage: '?config [section]',
   permission: 'admin',
 
   async execute(message, args, client) {
     try {
       const executorId = message.author.id;
-      const payload = renderDashboard(client, executorId);
+      const sectionKey = handleArgs(args);
+      const payload = renderDashboard(client, executorId, sectionKey);
 
       const reply = await message.reply({
         ...payload,
         allowedMentions: { repliedUser: false },
       });
 
-      // Delete triggering message
       try {
         await message.delete();
       } catch {}
-
-
     } catch (error) {
       await handleCommandError(message, error);
     }

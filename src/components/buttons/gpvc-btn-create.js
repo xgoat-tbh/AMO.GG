@@ -63,9 +63,9 @@ export default {
       try { await interaction.message.delete(); } catch {}
 
       const successContainer = createV2Success(
-        `${emojis.success} Voice channel **${channel.name}** has been created successfully!\n\n${
+        `✅ Voice channel **${channel.name}** has been created successfully!\n\n${
           moved
-            ? '🔊 *You have been automatically moved into your new channel.*'
+            ? `🔊 *You have been automatically moved into your new channel.*`
             : `🔊 *Join your channel here: <#${channel.id}>*`
         }`,
         client
@@ -79,7 +79,7 @@ export default {
     } catch (error) {
       logger.error('GPVC_CREATE', `Failed to create temp voice channel: ${error.message}`, error);
       const errContainer = createV2Error(
-        `${emojis.error} Failed to create voice channel: ${error.message}`,
+        `❌ Failed to create voice channel: ${error.message}`,
         client
       );
       await interaction.followUp({

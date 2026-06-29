@@ -97,6 +97,13 @@ export function getSnipe(channelId, index = 1) {
 }
 
 /**
+ * Returns all deleted messages for a given channel.
+ */
+export function getChannelSnipes(channelId) {
+  return snipes.get(channelId) || [];
+}
+
+/**
  * Checks if a member is authorized to run the snipe command.
  * Access is granted if:
  * 1. Member is Moderator/Admin (default).
@@ -104,27 +111,5 @@ export function getSnipe(channelId, index = 1) {
  * 3. Member has a role in the custom allowed roles list.
  */
 export function canSnipe(member) {
-  if (!member) return false;
-
-  // 1. Default: Moderators and Admins
-  if (checkPermission(member, 'moderator')) return true;
-
-  const db = getDb();
-
-  // 2. Check custom allowed users
-  const userRow = db.prepare("SELECT value FROM bot_config WHERE key = 'snipe_allowed_users'").get();
-  if (userRow && userRow.value) {
-    const userIds = userRow.value.split(',').filter(Boolean);
-    if (userIds.includes(member.id)) return true;
-  }
-
-  // 3. Check custom allowed roles
-  const roleRow = db.prepare("SELECT value FROM bot_config WHERE key = 'snipe_allowed_roles'").get();
-  if (roleRow && roleRow.value) {
-    const roleIds = roleRow.value.split(',').filter(Boolean);
-    const hasRole = roleIds.some(rId => member.roles.cache.has(rId));
-    if (hasRole) return true;
-  }
-
-  return false;
+  return true;
 }
