@@ -22,12 +22,16 @@ export const COMPONENT_PERMISSIONS = {
   'config:section_set': { level: 'executor' },
   'config:clear': { level: 'executor' },
   'config:close': { level: 'executor' },
+  'config:refresh': { level: 'executor' },
+  'config:setting': { level: 'executor' },
 
   // GPVC system - creator only (validated in handler via DB)
   'gpvc:select_game': { level: 'creator' },
   'gpvc:btn_config': { level: 'creator' },
   'gpvc:btn_create': { level: 'creator' },
   'gpvc:manage': { level: 'creator' },
+  'gpvc:action': { level: 'creator' },
+  'gpvc:refresh': { level: 'creator' },
   'gpvc:select_kick': { level: 'creator' },
   'gpvc:select_trust': { level: 'creator' },
   'gpvc:select_untrust': { level: 'creator' },
@@ -38,12 +42,14 @@ export const COMPONENT_PERMISSIONS = {
 
   // Suggestion system - everyone for voting, moderator for completion
   'suggestion:vote': { level: 'everyone' },
+  'suggestion:action': { level: 'everyone' },
   'suggestion:complete': { level: 'moderator' },
   'suggestion:thread': { level: 'everyone' },
 
   // Confession system - everyone
   'confession:known': { level: 'everyone' },
   'confession:anonymous': { level: 'everyone' },
+  'confession:type': { level: 'everyone' },
 
   // Giveaway system - everyone for entering
   'giveaway:enter': { level: 'everyone' },
@@ -86,10 +92,6 @@ export const COMPONENT_PERMISSIONS = {
   // Dev logs - dev only
   'dev:logs': { level: 'dev' },
 
-  // Embed builder - moderator (validated in command)
-  'embed:edit': { level: 'moderator' },
-  'embed:publish': { level: 'moderator' },
-  'embed:cancel': { level: 'moderator' },
 };
 
 /**

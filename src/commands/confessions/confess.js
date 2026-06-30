@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { ActionRowBuilder, StringSelectMenuBuilder } from 'discord.js';
 import { config } from '../../config/bot.config.js';
 import { emojis } from '../../config/emojis.config.js';
 import { createV2Container, v2Payload } from '../../helpers/v2Helper.js';
@@ -24,19 +24,14 @@ export default {
       client,
     });
 
-    const row = new ActionRowBuilder().addComponents(
-      new ButtonBuilder()
-        .setCustomId('confession:known')
-        .setLabel('Known')
-        .setStyle(ButtonStyle.Primary)
-        .setEmoji(emojis.confession),
-      new ButtonBuilder()
-        .setCustomId('confession:anonymous')
-        .setLabel('Anonymous')
-        .setStyle(ButtonStyle.Secondary)
-        .setEmoji('🕶'),
-    );
+    const select = new StringSelectMenuBuilder()
+      .setCustomId('confession:type')
+      .setPlaceholder('Select confession type...')
+      .addOptions([
+        { label: 'Known', value: 'known', emoji: emojis.confession, description: 'Your name will be shown with the confession' },
+        { label: 'Anonymous', value: 'anonymous', emoji: '🕶', description: 'Your identity will be kept private' },
+      ]);
 
-    await message.author.send(v2Payload(container, [row])).catch(() => {});
+    await message.author.send(v2Payload(container, [new ActionRowBuilder().addComponents(select)])).catch(() => {});
   },
 };

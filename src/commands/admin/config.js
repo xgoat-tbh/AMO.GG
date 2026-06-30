@@ -9,6 +9,14 @@ import { handleCommandError } from '../../helpers/errorHandler.js';
 
 const SECTION_ORDER = ['roles', 'notifications', 'suggestions', 'confessions', 'logging', 'voice', 'creator', 'jail', 'gameping', 'leveling', 'developer'];
 
+function buildRefreshButton(executorId, sectionKey = null, activeSetting = null) {
+  return new ButtonBuilder()
+    .setCustomId(`config:refresh:${executorId}:${sectionKey || ''}:${activeSetting || ''}`)
+    .setLabel('Refresh')
+    .setStyle(ButtonStyle.Secondary)
+    .setEmoji(emojis.loading);
+}
+
 function formatValue(settingKey, settingDef) {
   let rawValue;
   if (settingDef.configPath) {
@@ -84,55 +92,32 @@ function buildSectionContent(sectionKey, client, overrides) {
   });
 }
 
+function buildSectionDropdown(executorId, currentSection = null) {
+  const menu = new StringSelectMenuBuilder()
+    .setCustomId(`config:nav:${executorId}`)
+    .setPlaceholder(currentSection ? CONFIG_SECTIONS[currentSection]?.name || 'Select a section...' : 'Select a section...');
+
+  for (const key of SECTION_ORDER) {
+    const section = CONFIG_SECTIONS[key];
+    if (!section) continue;
+    menu.addOptions({
+      label: section.name,
+      value: key,
+      emoji: section.emoji,
+      description: section.description?.slice(0, 100),
+      default: key === currentSection,
+    });
+  }
+
+  return new ActionRowBuilder().addComponents(menu);
+}
+
 function buildHomeComponents(executorId) {
   const components = [];
 
-  // Section buttons in rows of 4
-  const sectionButtons = SECTION_ORDER
-    .filter(key => CONFIG_SECTIONS[key])
-    .map(key => {
-      const section = CONFIG_SECTIONS[key];
-      return new ButtonBuilder()
-        .setCustomId(`config:nav:${executorId}:${key}`)
-        .setLabel(section.name)
-        .setEmoji(section.emoji)
-        .setStyle(ButtonStyle.Secondary);
-    });
+  components.push(buildSectionDropdown(executorId));
 
-  for (let i = 0; i < sectionButtons.length; i += 4) {
-    const row = new ActionRowBuilder().addComponents(sectionButtons.slice(i, i + 4));
-    components.push(row);
-  }
-
-  const clearBtn = new ButtonBuilder()
-    .setCustomId(`config:clear:${executorId}`)
-    .setLabel('Clear Config Overrides')
-    .setStyle(ButtonStyle.Danger)
-    .setEmoji(emojis.delete);
-
-  const doneBtn = new ButtonBuilder()
-    .setCustomId(`config:close:${executorId}`)
-    .setLabel('Done')
-    .setStyle(ButtonStyle.Success)
-    .setEmoji(emojis.success);
-
-  components.push(new ActionRowBuilder().addComponents(clearBtn, doneBtn));
-
-  return components;
-}
-
-function buildSectionComponents(sectionKey, executorId, overrides, activeSetting = null) {
-  const section = CONFIG_SECTIONS[sectionKey];
-  if (!section) return buildHomeComponents(executorId);
-
-  const components = [];
-
-  // Back button
-  const backBtn = new ButtonBuilder()
-    .setCustomId(`config:back:${executorId}`)
-    .setLabel('Back to Sections')
-    .setStyle(ButtonStyle.Secondary)
-    .setEmoji('◀');
+  const refreshBtn = buildRefreshButton(executorId);
 
   const clearBtn = new ButtonBuilder()
     .setCustomId(`config:clear:${executorId}`)
@@ -146,24 +131,46 @@ function buildSectionComponents(sectionKey, executorId, overrides, activeSetting
     .setStyle(ButtonStyle.Success)
     .setEmoji(emojis.success);
 
-  components.push(new ActionRowBuilder().addComponents(backBtn, clearBtn, doneBtn));
+  components.push(new ActionRowBuilder().addComponents(refreshBtn, clearBtn, doneBtn));
 
-  // Edit buttons for each setting (up to 5 per row)
+  return components;
+}
+
+function buildSettingsDropdown(sectionKey, executorId, activeSetting = null) {
+  const section = CONFIG_SECTIONS[sectionKey];
+  if (!section) return null;
+
   const settingEntries = Object.entries(section.settings);
-  if (settingEntries.length > 0) {
-    const editButtons = settingEntries.map(([settingKey, settingDef]) => {
-      const isActive = settingKey === activeSetting;
-      return new ButtonBuilder()
-        .setCustomId(`config:edit:${executorId}:${sectionKey}:${settingKey}`)
-        .setLabel(`Edit ${settingDef.label}`)
-        .setStyle(isActive ? ButtonStyle.Primary : ButtonStyle.Secondary)
-        .setDisabled(isActive);
-    });
+  if (!settingEntries.length) return null;
 
-    for (let i = 0; i < editButtons.length; i += 3) {
-      components.push(new ActionRowBuilder().addComponents(editButtons.slice(i, i + 3)));
-    }
+  const menu = new StringSelectMenuBuilder()
+    .setCustomId(`config:setting:${executorId}:${sectionKey}`)
+    .setPlaceholder(activeSetting ? `${section.settings[activeSetting]?.label} (editing)` : 'Select a setting to edit...');
+
+  for (const [settingKey, settingDef] of settingEntries) {
+    menu.addOptions({
+      label: settingDef.label,
+      value: settingKey,
+      description: (settingDef.description || '').slice(0, 100),
+      default: settingKey === activeSetting,
+    });
   }
+
+  return new ActionRowBuilder().addComponents(menu);
+}
+
+function buildSectionComponents(sectionKey, executorId, overrides, activeSetting = null) {
+  const section = CONFIG_SECTIONS[sectionKey];
+  if (!section) return buildHomeComponents(executorId);
+
+  const components = [];
+
+  // Section dropdown navigation
+  components.push(buildSectionDropdown(executorId, sectionKey));
+
+  // Settings dropdown (replaces edit buttons)
+  const settingsDropdown = buildSettingsDropdown(sectionKey, executorId, activeSetting);
+  if (settingsDropdown) components.push(settingsDropdown);
 
   // Selector for the active setting
   if (activeSetting) {
@@ -217,6 +224,23 @@ function buildSectionComponents(sectionKey, executorId, overrides, activeSetting
       }
     }
   }
+
+  // Primary action buttons (bottom)
+  const refreshBtn = buildRefreshButton(executorId, sectionKey, activeSetting);
+
+  const clearBtn = new ButtonBuilder()
+    .setCustomId(`config:clear:${executorId}`)
+    .setLabel('Clear Overrides')
+    .setStyle(ButtonStyle.Danger)
+    .setEmoji(emojis.delete);
+
+  const doneBtn = new ButtonBuilder()
+    .setCustomId(`config:close:${executorId}`)
+    .setLabel('Done')
+    .setStyle(ButtonStyle.Success)
+    .setEmoji(emojis.success);
+
+  components.push(new ActionRowBuilder().addComponents(refreshBtn, clearBtn, doneBtn));
 
   // Jail management buttons (only in jail section)
   if (sectionKey === 'jail') {

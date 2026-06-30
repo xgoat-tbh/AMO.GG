@@ -21,7 +21,7 @@ export default {
 
     const modal = new ModalBuilder()
       .setCustomId(`gpvc:modal_config:${userId}`)
-      .setTitle(`${emojis.game} VC Channel Settings`);
+      .setTitle('🎮 VC Channel Settings');
 
     const nameInput = new TextInputBuilder()
       .setCustomId('vc_name')

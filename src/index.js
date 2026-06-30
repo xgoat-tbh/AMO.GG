@@ -173,6 +173,8 @@ async function start() {
   // Cache configuration and blacklist in memory
   client.maintenanceMode = ConfigRepo.get(db, 'maintenance_mode') === 'true';
   client.blacklist = new Set(BlacklistRepo.getAll(db));
+  const dbPrefix = ConfigRepo.get(db, 'prefix');
+  if (dbPrefix) config.prefix = dbPrefix;
 
   // Validate config overrides on startup
   if (config.guildId) {

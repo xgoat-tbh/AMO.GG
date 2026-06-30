@@ -6,6 +6,7 @@ import {
   ActionRowBuilder, 
   ButtonBuilder, 
   ButtonStyle, 
+  StringSelectMenuBuilder,
   MessageFlags 
 } from 'discord.js';
 import { config } from '../../config/bot.config.js';
@@ -94,44 +95,31 @@ export function buildBuilderPayload(client, userId) {
     .addSectionComponents(previewSection)
     .setAccentColor(parseHexColor(draft.color));
 
-  const titleBtn = new ButtonBuilder()
-    .setCustomId('embed:edit:title')
-    .setLabel('✏️ Title')
-    .setStyle(ButtonStyle.Secondary);
-
-  const descBtn = new ButtonBuilder()
-    .setCustomId('embed:edit:description')
-    .setLabel(`${emojis.confession} Description`)
-    .setStyle(ButtonStyle.Secondary);
-
-  const colorBtn = new ButtonBuilder()
-    .setCustomId('embed:edit:color')
-    .setLabel('🎨 Color')
-    .setStyle(ButtonStyle.Secondary);
-
-  const thumbBtn = new ButtonBuilder()
-    .setCustomId('embed:edit:thumbnail')
-    .setLabel('🖼️ Thumbnail')
-    .setStyle(ButtonStyle.Secondary);
-
-  const row1 = new ActionRowBuilder().addComponents(titleBtn, descBtn, colorBtn, thumbBtn);
-
-  const chanBtn = new ButtonBuilder()
-    .setCustomId('embed:edit:channel')
-    .setLabel('🌐 Target Channel')
-    .setStyle(ButtonStyle.Secondary);
+  const editSelect = new StringSelectMenuBuilder()
+    .setCustomId('embed:edit')
+    .setPlaceholder('Edit field...')
+    .addOptions([
+      { label: 'Title', value: 'title', emoji: '✏️', description: 'Change the embed title' },
+      { label: 'Description', value: 'description', emoji: emojis.confession, description: 'Change the embed description' },
+      { label: 'Color', value: 'color', emoji: '🎨', description: 'Change the embed accent color' },
+      { label: 'Thumbnail', value: 'thumbnail', emoji: '🖼️', description: 'Set or change the thumbnail image URL' },
+      { label: 'Target Channel', value: 'channel', emoji: '🌐', description: 'Choose where to publish the embed' },
+    ]);
 
   const publishBtn = new ButtonBuilder()
     .setCustomId('embed:publish')
-    .setLabel('🚀 Publish')
-    .setStyle(ButtonStyle.Success);
+    .setLabel('Publish')
+    .setStyle(ButtonStyle.Success)
+    .setEmoji('🚀');
 
   const cancelBtn = new ButtonBuilder()
     .setCustomId('embed:cancel')
-    .setLabel(`${emojis.error} Cancel`)
-    .setStyle(ButtonStyle.Danger);
+    .setLabel('Cancel')
+    .setStyle(ButtonStyle.Danger)
+    .setEmoji(emojis.error);
 
-  const row2 = new ActionRowBuilder().addComponents(chanBtn, publishBtn, cancelBtn);
+  const row1 = new ActionRowBuilder().addComponents(editSelect);
+  const row2 = new ActionRowBuilder().addComponents(publishBtn, cancelBtn);
 
   return v2Payload(container, [row1, row2]);
 }

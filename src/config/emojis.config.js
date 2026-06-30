@@ -4,7 +4,7 @@ export const emojis = Object.freeze({
     error: '<:error:1520018407125422160>',
     warning: '<:warning:1520018447117848627>',
     info: '<:info:1520018413622132786>',
-    loading: '<a:loading:1520018417803858021>',
+    loading: '<a:loading:1521424152165220402>',
     arrow: '<:arrow:1520018397545496656>',
     lock: '<:lock:1520018420429754388>',
     unlock: '<:unlock:1520018439853445150>',

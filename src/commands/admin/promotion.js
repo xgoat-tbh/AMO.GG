@@ -139,18 +139,18 @@ export default {
 
   async showStatus(message, client) {
     const db = getDb();
-    const config = PromotionRepo.getConfig(db, message.guild.id);
+    const promoConfig = PromotionRepo.getConfig(db, message.guild.id);
     const whitelist = PromotionRepo.getWhitelist(db, message.guild.id);
     const blacklist = PromotionRepo.getBlacklist(db, message.guild.id);
 
     const lines = [
       `### 🚫 Anti-Promotion`,
       '',
-      codeStat('Status', config.enabled ? `✅ Enabled` : `❌ Disabled`),
-      codeStat('Strict Mode', config.strict_mode ? `✅ On` : `❌ Off`),
-      codeStat('Auto-Delete', config.auto_delete ? `✅ On` : `❌ Off`),
-      codeStat('Notify User', config.notify_user ? `✅ On` : `❌ Off`),
-      config.log_channel ? codeStat('Log Channel', `<#${config.log_channel}>`) : '',
+      codeStat('Status', promoConfig.enabled ? `✅ Enabled` : `❌ Disabled`),
+      codeStat('Strict Mode', promoConfig.strict_mode ? `✅ On` : `❌ Off`),
+      codeStat('Auto-Delete', promoConfig.auto_delete ? `✅ On` : `❌ Off`),
+      codeStat('Notify User', promoConfig.notify_user ? `✅ On` : `❌ Off`),
+      promoConfig.log_channel ? codeStat('Log Channel', `<#${promoConfig.log_channel}>`) : '',
       '',
       `**Whitelisted Domains:** ${whitelist.length}`,
       `**Blacklisted Domains:** ${blacklist.length}`,

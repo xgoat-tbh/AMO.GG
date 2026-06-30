@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, MessageFlags } from 'discord.js';
 import { getDb } from '../../database/connection.js';
 import { SuggestionsRepo } from '../../database/repositories/suggestions.repo.js';
 import { createV2Container, createV2Error, createV2Success, v2Payload, v2EditPayload } from '../../helpers/v2Helper.js';
@@ -10,12 +10,13 @@ import { logger } from '../../helpers/logger.js';
  * Build the vote action row for a suggestion.
  */
 function buildVoteRow(suggestionId, yesCt = 0, noCt = 0, threadUrl = null, isCompleted = false) {
+  const row = new ActionRowBuilder();
+
   if (isCompleted) {
-    const row = new ActionRowBuilder();
     if (threadUrl) {
       row.addComponents(
         new ButtonBuilder()
-          .setLabel('💬 Discussion')
+          .setLabel('Discussion')
           .setStyle(ButtonStyle.Link)
           .setURL(threadUrl)
       );
@@ -23,15 +24,28 @@ function buildVoteRow(suggestionId, yesCt = 0, noCt = 0, threadUrl = null, isCom
     return row;
   }
 
-  const row = new ActionRowBuilder().addComponents(
-    new ButtonBuilder()
-      .setCustomId(`suggestion:vote:yes:${suggestionId}`)
-      .setLabel(`${emojis.success} Yes (${yesCt})`)
-      .setStyle(ButtonStyle.Success),
-    new ButtonBuilder()
-      .setCustomId(`suggestion:vote:no:${suggestionId}`)
-      .setLabel(`${emojis.error} No (${noCt})`)
-      .setStyle(ButtonStyle.Danger),
+  const voteSelect = new StringSelectMenuBuilder()
+    .setCustomId(`suggestion:action:${suggestionId}`)
+    .setPlaceholder(`Vote — Yes (${yesCt}) • No (${noCt})`)
+
+    .addOptions([
+      {
+        label: `Yes (${yesCt})`,
+        value: 'yes',
+        emoji: emojis.success,
+        description: 'Upvote this suggestion',
+      },
+      {
+        label: `No (${noCt})`,
+        value: 'no',
+        emoji: emojis.error,
+        description: 'Downvote this suggestion',
+      },
+    ]);
+
+  row.addComponents(voteSelect);
+
+  row.addComponents(
     new ButtonBuilder()
       .setCustomId(`suggestion:complete:${suggestionId}`)
       .setLabel('Complete')
@@ -41,7 +55,7 @@ function buildVoteRow(suggestionId, yesCt = 0, noCt = 0, threadUrl = null, isCom
   if (threadUrl) {
     row.addComponents(
       new ButtonBuilder()
-        .setLabel('💬 Discussion')
+        .setLabel('Discussion')
         .setStyle(ButtonStyle.Link)
         .setURL(threadUrl)
     );

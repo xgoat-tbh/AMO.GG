@@ -12,7 +12,7 @@ export default {
   async execute(interaction) {
     const modal = new ModalBuilder()
       .setCustomId('confession:submit:known')
-      .setTitle(`${emojis.confession} Known Confession`);
+      .setTitle('📝 Known Confession');
 
     const contentInput = new TextInputBuilder()
       .setCustomId('confession-content')

@@ -7,7 +7,6 @@ import { emojis } from '../config/emojis.config.js';
 export function createV2Container({
   title,
   description,
-  color,
   fields,
   thumbnail,
   author,
@@ -29,8 +28,9 @@ export function createV2Container({
 
   if (footer) parts.push(`*${footer}*`);
 
+  parts.push(`-# ${config.branding.name} — Use \`${config.prefix}help\` for commands`);
+
   const textContent = parts.join('\n\n');
-  const finalColor = color ?? config.colors.primary;
 
   const container = new ContainerBuilder();
 
@@ -44,7 +44,7 @@ export function createV2Container({
     container.addTextDisplayComponents(new TextDisplayBuilder().setContent(textContent || ' '));
   }
 
-  container.setAccentColor(finalColor);
+  container.setAccentColor(config.colors.primary);
   return container;
 }
 
@@ -78,17 +78,9 @@ export function v2Ephemeral(target, extraComponents = []) {
 
 // ── Notification Cards (compact) ────────────────────────────────
 
-const notifyColors = {
-  success: config.colors.success,
-  error: config.colors.error,
-  warning: config.colors.warning,
-  info: config.colors.info,
-};
-
 export function notification(type, lines, client) {
-  const color = notifyColors[type] || config.colors.primary;
   const content = (Array.isArray(lines) ? lines : [lines]).join('\n');
-  return createV2Container({ description: content, color, client });
+  return createV2Container({ description: content, client });
 }
 
 export function notifySuccess(lines, client) { return notification('success', lines, client); }
@@ -99,15 +91,15 @@ export function notifyInfo(lines, client) { return notification('info', lines, c
 // ── Result containers (legacy compat) ────────────────────────────
 
 export function createV2Success(description, client) {
-  return createV2Container({ description, color: config.colors.success, client });
+  return createV2Container({ description, client });
 }
 
 export function createV2Error(description, client) {
-  return createV2Container({ description, color: config.colors.error, client });
+  return createV2Container({ description, client });
 }
 
 export function createV2Warning(description, client) {
-  return createV2Container({ description, color: config.colors.warning, client });
+  return createV2Container({ description, client });
 }
 
 // ── Text formatting helpers ──────────────────────────────────────

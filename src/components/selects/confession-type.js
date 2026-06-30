@@ -4,15 +4,17 @@ import {
   TextInputStyle,
   ActionRowBuilder,
 } from 'discord.js';
-import { emojis } from '../../config/emojis.config.js';
 
 export default {
-  customId: 'confession:anonymous',
+  customId: 'confession:type',
 
   async execute(interaction) {
+    const type = interaction.values?.[0];
+
+    const isKnown = type === 'known';
     const modal = new ModalBuilder()
-      .setCustomId('confession:submit:anonymous')
-      .setTitle('📝 Anonymous Confession');
+      .setCustomId(`confession:submit:${isKnown ? 'known' : 'anonymous'}`)
+      .setTitle(isKnown ? 'Known Confession' : 'Anonymous Confession');
 
     const contentInput = new TextInputBuilder()
       .setCustomId('confession-content')
@@ -20,7 +22,9 @@ export default {
       .setStyle(TextInputStyle.Paragraph)
       .setMaxLength(2000)
       .setRequired(true)
-      .setPlaceholder('Write your confession here... Your identity will be hidden.');
+      .setPlaceholder(isKnown
+        ? 'Write your confession here...'
+        : 'Write your confession here... Your identity will be hidden.');
 
     const row = new ActionRowBuilder().addComponents(contentInput);
     modal.addComponents(row);

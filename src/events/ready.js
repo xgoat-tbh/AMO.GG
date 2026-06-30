@@ -3,6 +3,9 @@ import { config } from '../config/bot.config.js';
 import { logger } from '../helpers/logger.js';
 import { startGiveawayTicker } from '../systems/giveaways/giveawayManager.js';
 import { jailManager } from '../systems/jail/jailManager.js';
+import { bumpManager } from '../systems/bump/bumpManager.js';
+import { tempRoleManager } from '../systems/temprole/tempRoleManager.js';
+import { voiceQueueManager } from '../systems/voicequeue/voiceQueueManager.js';
 
 export default {
   name: 'clientReady',
@@ -19,6 +22,15 @@ export default {
 
       // Start background giveaway rolling scheduler ticker
       startGiveawayTicker(client);
+
+      // Start bump reminder ticker
+      bumpManager.startTicker(client);
+
+      // Start temp role expiry ticker
+      tempRoleManager.startTicker(client);
+
+      // Start voice queue cleanup ticker
+      voiceQueueManager.startCleanupTicker();
 
       // Start jail auto-release ticker (every 30 seconds)
       setInterval(async () => {

@@ -1,7 +1,7 @@
-import { ActionRowBuilder, StringSelectMenuBuilder } from 'discord.js';
+import { ActionRowBuilder, StringSelectMenuBuilder, PermissionFlagsBits } from 'discord.js';
 import { getDb } from '../../database/connection.js';
 import { getChannelSnipes, getMaxLimit, setMaxLimit } from '../../systems/snipe/snipeManager.js';
-import { createV2Container, createV2Success, createV2Error, v2Payload } from '../../helpers/v2Helper.js';
+import { createV2Container, createV2Success, createV2Error, v2Payload, notification } from '../../helpers/v2Helper.js';
 import { checkPermission } from '../../helpers/permissions.js';
 import { handleCommandError, sendUsageError } from '../../helpers/errorHandler.js';
 import { config } from '../../config/bot.config.js';
@@ -11,12 +11,19 @@ import { assets } from '../../config/assets.config.js';
 export default {
   name: 'snipe',
   aliases: ['s'],
-  description: 'Recover recently deleted messages in the channel.',
+  description: 'Recover recently deleted messages in the channel. (Requires Manage Messages)',
   usage: '?snipe | ?snipe limit [1-20] | ?snipe permit <add | remove | list | clear> [user | role] [target]',
   permission: 'everyone',
 
   async execute(message, args, client) {
     try {
+      if (!message.member.permissions.has(PermissionFlagsBits.ManageMessages)) {
+        const card = notification('error', `${emojis.error} You need the **Manage Messages** permission to use snipe.`, client);
+        const reply = await message.reply({ ...v2Payload(card), allowedMentions: { repliedUser: false } });
+        setTimeout(async () => { try { await message.delete(); } catch {}; try { await reply.delete(); } catch {}; }, 5000);
+        return;
+      }
+
       if (args[0] === 'permit') {
         return await this.handlePermit(message, args.slice(1), client);
       }

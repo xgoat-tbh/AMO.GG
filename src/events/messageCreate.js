@@ -10,6 +10,8 @@ import { emojis } from '../config/emojis.config.js';
 import { getDb } from '../database/connection.js';
 import { PromotionRepo } from '../database/repositories/promotion.repo.js';
 import { scanForPromotion, isLikelyPromotion } from '../systems/moderation/promotionScanner.js';
+import { AutoResponderRepo } from '../database/repositories/autoresponder.repo.js';
+import { UsageRepo } from '../database/repositories/usage.repo.js';
 
 export default {
   name: 'messageCreate',
@@ -66,6 +68,29 @@ export default {
     if (!message.content.startsWith(config.prefix)) {
       // Award XP (async, non-blocking)
       xpManager.handleMessage(message.author.id, message.guild.id).catch(() => null);
+
+      // Auto-responder scanning
+      try {
+        const db = getDb();
+        const responders = AutoResponderRepo.getEnabled(db, message.guild.id);
+        for (const r of responders) {
+          let matched = false;
+          const content = message.content.toLowerCase();
+          const trigger = r.trigger.toLowerCase();
+
+          if (r.match_type === 'exact' && content === trigger) matched = true;
+          else if (r.match_type === 'contains' && content.includes(trigger)) matched = true;
+          else if (r.match_type === 'starts_with' && content.startsWith(trigger)) matched = true;
+
+          if (matched) {
+            await message.reply({
+              content: r.response,
+              allowedMentions: { repliedUser: false },
+            });
+            break;
+          }
+        }
+      } catch {}
 
       // Anti-promotion scanning for non-mod users
       const isMod = checkPermission(message.member, 'moderator');
@@ -170,9 +195,11 @@ export default {
       await command.execute(message, args, client);
       const duration = performance.now() - start;
       metricsManager.recordCommand(command.name, duration, false);
+      try { UsageRepo.record(getDb(), command.name, message.author.id, message.guild.id, duration, false); } catch {}
     } catch (error) {
       const duration = performance.now() - start;
       metricsManager.recordCommand(command.name, duration, true);
+      try { UsageRepo.record(getDb(), command.name, message.author.id, message.guild.id, duration, true); } catch {}
       await handleCommandError(message, error);
     }
   },

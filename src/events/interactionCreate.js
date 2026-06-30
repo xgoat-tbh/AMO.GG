@@ -101,11 +101,18 @@ export default {
 
 /**
  * Resolve a component handler by customId.
- * Strategy: try 'part1:part2' first (e.g. 'suggestion:vote'), then 'part1' (e.g. 'suggestion').
- * This allows handlers to register for a category of interactions with a two-part prefix.
+ * Strategy: try three-part, then two-part, then single-part prefix.
+ * Examples: 'help:support:modal:uid' → 'help:support:modal' → 'help:support' → 'help'
  */
 function resolveHandler(customId, collection) {
   const parts = customId.split(':');
+
+  // Try exact three-part key: 'system:action:sub'
+  if (parts.length >= 3) {
+    const threePartKey = `${parts[0]}:${parts[1]}:${parts[2]}`;
+    const handler = collection.get(threePartKey);
+    if (handler) return handler;
+  }
 
   // Try exact two-part key: 'system:action'
   if (parts.length >= 2) {

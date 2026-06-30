@@ -1,4 +1,4 @@
-import { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, MessageFlags, PermissionFlagsBits, UserSelectMenuBuilder } from 'discord.js';
+import { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, StringSelectMenuBuilder, MessageFlags, PermissionFlagsBits, UserSelectMenuBuilder } from 'discord.js';
 import { getDb } from '../../database/connection.js';
 import { TempVcsRepo } from '../../database/repositories/tempVcs.repo.js';
 import { createV2Container, v2Payload, v2EditPayload } from '../../helpers/v2Helper.js';
@@ -9,12 +9,20 @@ import { logger } from '../../helpers/logger.js';
 import { GAMES } from '../../commands/voice/gpvc.js';
 
 export default {
-  customId: 'gpvc:manage',
+  customId: 'gpvc:action',
 
   async execute(interaction, client) {
     const parts = interaction.customId.split(':');
-    const action = parts[2];
-    const channelId = parts[3];
+    const channelId = parts[2];
+    const action = interaction.values?.[0];
+
+    if (!action || !channelId) {
+      await interaction.reply({
+        content: `${emojis.error} Invalid action.`,
+        flags: MessageFlags.Ephemeral,
+      });
+      return;
+    }
 
     const db = getDb();
     const record = TempVcsRepo.get(db, channelId);
@@ -27,7 +35,6 @@ export default {
       return;
     }
 
-    // Security check: creator only
     if (interaction.user.id !== record.creator_id) {
       await interaction.reply({
         content: `${emojis.error} Only the owner of this voice channel (<@${record.creator_id}>) can manage it.`,
@@ -45,12 +52,12 @@ export default {
       return;
     }
 
-    // ── Actions ──────────────────────────────────────────────────
+    // ── Actions ──
 
     if (action === 'status') {
       const modal = new ModalBuilder()
         .setCustomId(`gpvc:modal_status:${channelId}`)
-        .setTitle('📝 Edit Voice Channel Status');
+        .setTitle('Edit Voice Channel Status');
 
       const statusInput = new TextInputBuilder()
         .setCustomId('vc_new_status')
@@ -69,7 +76,7 @@ export default {
     if (action === 'limit') {
       const modal = new ModalBuilder()
         .setCustomId(`gpvc:modal_relimit:${channelId}`)
-        .setTitle('👥 Edit User Limit');
+        .setTitle('Edit User Limit');
 
       const limitInput = new TextInputBuilder()
         .setCustomId('vc_new_limit')
@@ -86,9 +93,8 @@ export default {
     }
 
     if (action === 'game') {
-      // Ephemeral selection card for game update
       const container = createV2Container({
-        title: '🎮 Select New Game Category',
+        title: 'Select New Game Category',
         description: 'Choose a new game category to update your channel branding and prefix.',
         color: config.colors.primary,
         client,
@@ -116,13 +122,12 @@ export default {
       await interaction.deferUpdate();
       const everyoneRole = interaction.guild.roles.everyone;
       const currentConnectOverride = channel.permissionOverwrites.cache.get(everyoneRole.id);
-      
-      // If Connect is explicitly denied, it is currently Locked
+
       const isCurrentlyLocked = currentConnectOverride?.deny.has(PermissionFlagsBits.Connect) ?? false;
       const newLockState = !isCurrentlyLocked;
 
       await channel.permissionOverwrites.edit(everyoneRole, {
-        Connect: newLockState ? false : null, // Deny connect if locking, clear override to inherit/allow if unlocking
+        Connect: newLockState ? false : null,
       });
 
       logger.info('TEMP_VC', `VC ${channelId} locked state updated to: ${newLockState}`);
@@ -145,8 +150,8 @@ export default {
       }
 
       const container = createV2Container({
-        title: '🚫 Kick Member',
-        description: 'Select a user from the dropdown list below to kick them out of your voice channel.',
+        title: 'Kick Member',
+        description: 'Select a user to kick out of your voice channel.',
         color: config.colors.error,
         client,
       });
@@ -170,8 +175,8 @@ export default {
 
     if (action === 'trust') {
       const container = createV2Container({
-        title: '🤝 Trust Member',
-        description: 'Select a member from the dropdown below to trust them. Trusted members can join your voice channel even when it is Locked.',
+        title: 'Trust Member',
+        description: 'Select a member to trust. Trusted members can join your voice channel even when Locked.',
         color: config.colors.success,
         client,
       });
@@ -190,8 +195,8 @@ export default {
 
     if (action === 'untrust') {
       const container = createV2Container({
-        title: '👤 Untrust Member',
-        description: 'Select a member from the dropdown below to remove their trusted status.',
+        title: 'Untrust Member',
+        description: 'Select a member to remove their trusted status.',
         color: config.colors.warning,
         client,
       });

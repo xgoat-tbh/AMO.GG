@@ -247,6 +247,22 @@ INSERT OR IGNORE INTO promotion_whitelist (guild_id, domain, added_by) VALUES
     ('_default', 'jackbox.tv', 'system');
 
 -- ============================================================
+-- Auto-Responder System
+-- ============================================================
+CREATE TABLE IF NOT EXISTS auto_responders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    guild_id TEXT NOT NULL,
+    trigger TEXT NOT NULL,
+    response TEXT NOT NULL,
+    match_type TEXT NOT NULL DEFAULT 'exact' CHECK(match_type IN ('exact','contains','starts_with')),
+    enabled INTEGER NOT NULL DEFAULT 1,
+    created_by TEXT NOT NULL,
+    created_at INTEGER NOT NULL DEFAULT (unixepoch())
+);
+
+CREATE INDEX IF NOT EXISTS idx_auto_resp_guild ON auto_responders(guild_id, enabled);
+
+-- ============================================================
 -- Move Request System
 -- ============================================================
 CREATE TABLE IF NOT EXISTS move_requests (
@@ -263,9 +279,86 @@ CREATE TABLE IF NOT EXISTS move_requests (
 CREATE INDEX IF NOT EXISTS idx_move_requests_target ON move_requests(target_id, status);
 
 -- ============================================================
+-- VC Ban System
+-- ============================================================
+CREATE TABLE IF NOT EXISTS vc_bans (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    guild_id TEXT NOT NULL,
+    user_id TEXT NOT NULL,
+    channel_id TEXT,
+    moderator_id TEXT NOT NULL,
+    reason TEXT,
+    created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+    UNIQUE(guild_id, user_id, channel_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_vc_bans_user ON vc_bans(guild_id, user_id);
+
+-- ============================================================
 -- Migrations for existing databases (safe to re-run)
 -- ============================================================
 ALTER TABLE jail_records ADD COLUMN duration INTEGER;
 ALTER TABLE jail_records ADD COLUMN channel_id TEXT;
+
+-- ============================================================
+-- Bump Reminder System
+-- ============================================================
+CREATE TABLE IF NOT EXISTS bump_config (
+    guild_id TEXT PRIMARY KEY,
+    channel_id TEXT NOT NULL,
+    role_id TEXT,
+    enabled INTEGER NOT NULL DEFAULT 1,
+    last_bump_time INTEGER,
+    created_at INTEGER NOT NULL DEFAULT (unixepoch())
+);
+
+-- ============================================================
+-- Temporary Roles System
+-- ============================================================
+CREATE TABLE IF NOT EXISTS temp_roles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL,
+    role_id TEXT NOT NULL,
+    guild_id TEXT NOT NULL,
+    duration INTEGER NOT NULL,
+    assigned_at INTEGER NOT NULL DEFAULT (unixepoch()),
+    expires_at INTEGER NOT NULL,
+    expired INTEGER NOT NULL DEFAULT 0,
+    assigned_by TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_temp_roles_expires ON temp_roles(expired, expires_at);
+CREATE INDEX IF NOT EXISTS idx_temp_roles_user ON temp_roles(user_id, guild_id);
+
+-- ============================================================
+-- Command Usage Logs
+-- ============================================================
+CREATE TABLE IF NOT EXISTS command_usage (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    command_name TEXT NOT NULL,
+    user_id TEXT NOT NULL,
+    guild_id TEXT NOT NULL,
+    duration REAL,
+    error INTEGER NOT NULL DEFAULT 0,
+    used_at INTEGER NOT NULL DEFAULT (unixepoch())
+);
+
+CREATE INDEX IF NOT EXISTS idx_cmd_usage_name ON command_usage(command_name);
+CREATE INDEX IF NOT EXISTS idx_cmd_usage_at ON command_usage(used_at);
+
+-- ============================================================
+-- Voice Queue System
+-- ============================================================
+CREATE TABLE IF NOT EXISTS voice_queue (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    guild_id TEXT NOT NULL,
+    target_channel_id TEXT NOT NULL,
+    user_id TEXT NOT NULL,
+    status TEXT DEFAULT 'waiting' CHECK(status IN ('waiting','joined','removed')),
+    joined_queue_at INTEGER NOT NULL DEFAULT (unixepoch()),
+    UNIQUE(guild_id, target_channel_id, user_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_vq_channel ON voice_queue(target_channel_id, status);
 
 

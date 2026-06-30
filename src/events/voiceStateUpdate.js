@@ -44,6 +44,7 @@ export default {
 
       // Handle lockdown leave
       await voiceManager.handleLeave(oldState, newState, client).catch(() => null);
+
     }
 
     if (!wasInVC && isInVC) {

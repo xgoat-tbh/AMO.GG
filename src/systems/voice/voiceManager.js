@@ -281,6 +281,40 @@ export async function unlockdown(voiceChannel, client) {
   return { restored };
 }
 
+/**
+ * Handle a user joining a voice channel.
+ * If the channel is under lockdown, the joining member is auto-muted + auto-deafened.
+ */
+export async function handleJoin(oldState, newState, client) {
+  if (!newState.channelId) return;
+  const channel = newState.channel;
+  if (!channel) return;
+  const member = newState.member;
+  if (!member || member.user.bot) return;
+
+  const db = getDb();
+  const isLocked = ConfigRepo.get(db, `lockdown:connect:${channel.id}`);
+  if (!isLocked) return;
+
+  try {
+    await member.voice.setMute(true, 'Joined locked-down voice channel');
+    await member.voice.setDeaf(true, 'Joined locked-down voice channel');
+    // Store pre-lockdown state (they were neither muted nor deafened before joining)
+    VoiceRepo.saveState(db, channel.id, member.id, false, false);
+    logger.info('VOICE', `Auto-muted ${member.user.tag} for joining locked channel ${channel.name}`);
+  } catch (error) {
+    logger.warn('VOICE', `Failed to auto-mute joining member ${member.id}: ${error.message}`);
+  }
+}
+
+/**
+ * Handle a user leaving a voice channel.
+ * Currently a no-op; pre-lockdown states are preserved for re-join auto-muting.
+ */
+export async function handleLeave(oldState, newState, client) {
+  // Intentionally a no-op — stored states persist for handleJoin on re-join.
+}
+
 export const voiceManager = {
   getVoiceMembers,
   muteMembers,
@@ -289,4 +323,6 @@ export const voiceManager = {
   disconnectMembers,
   lockdown,
   unlockdown,
+  handleJoin,
+  handleLeave,
 };

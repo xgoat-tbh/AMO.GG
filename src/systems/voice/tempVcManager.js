@@ -1,4 +1,4 @@
-import { ChannelType, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { ChannelType, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } from 'discord.js';
 import { getDb } from '../../database/connection.js';
 import { TempVcsRepo } from '../../database/repositories/tempVcs.repo.js';
 import { createV2Container, v2Payload } from '../../helpers/v2Helper.js';
@@ -124,49 +124,63 @@ export function buildInterfaceContainer(creatorId, game, limit, isLocked = false
 }
 
 /**
- * Build buttons ActionRows for the VC interface.
+ * Build action select menu for the VC interface.
  */
 export function buildInterfaceRows(channelId, isLocked = false) {
-  const row1 = new ActionRowBuilder().addComponents(
-    new ButtonBuilder()
-      .setCustomId(`gpvc:manage:status:${channelId}`)
-      .setLabel('Status')
-      .setEmoji(emojis.general)
-      .setStyle(ButtonStyle.Secondary),
-    new ButtonBuilder()
-      .setCustomId(`gpvc:manage:limit:${channelId}`)
-      .setLabel('Limit')
-      .setEmoji(emojis.voice)
-      .setStyle(ButtonStyle.Secondary),
-    new ButtonBuilder()
-      .setCustomId(`gpvc:manage:game:${channelId}`)
-      .setLabel('Game')
-      .setEmoji(emojis.game)
-      .setStyle(ButtonStyle.Secondary),
-    new ButtonBuilder()
-      .setCustomId(`gpvc:manage:lock:${channelId}`)
-      .setLabel(isLocked ? 'Unlock' : 'Lock')
-      .setEmoji(isLocked ? emojis.unlock : emojis.lock)
-      .setStyle(isLocked ? ButtonStyle.Success : ButtonStyle.Danger),
-    new ButtonBuilder()
-      .setCustomId(`gpvc:manage:kick:${channelId}`)
-      .setLabel('Kick')
-      .setEmoji(emojis.moderation)
-      .setStyle(ButtonStyle.Secondary)
+  const select = new StringSelectMenuBuilder()
+    .setCustomId(`gpvc:action:${channelId}`)
+    .setPlaceholder('Manage voice channel...');
+
+  select.addOptions(
+    {
+      label: 'Status',
+      value: 'status',
+      emoji: emojis.general,
+      description: 'Change the voice channel status text',
+    },
+    {
+      label: 'Limit',
+      value: 'limit',
+      emoji: emojis.voice,
+      description: 'Set the maximum number of users',
+    },
+    {
+      label: 'Game',
+      value: 'game',
+      emoji: emojis.game,
+      description: 'Change the current game category',
+    },
+    {
+      label: isLocked ? 'Unlock' : 'Lock',
+      value: 'lock',
+      emoji: isLocked ? emojis.unlock : emojis.lock,
+      description: isLocked ? 'Allow anyone to join' : 'Restrict access to trusted users',
+    },
+    {
+      label: 'Kick',
+      value: 'kick',
+      emoji: emojis.moderation,
+      description: 'Remove a member from your channel',
+    },
+    {
+      label: 'Trust',
+      value: 'trust',
+      emoji: emojis.success,
+      description: 'Trust a member to join when locked',
+    },
+    {
+      label: 'Untrust',
+      value: 'untrust',
+      emoji: emojis.warning,
+      description: 'Remove trusted status from a member',
+    }
   );
 
-  const row2 = new ActionRowBuilder().addComponents(
-    new ButtonBuilder()
-      .setCustomId(`gpvc:manage:trust:${channelId}`)
-      .setLabel('Trust')
-      .setEmoji(emojis.success)
-      .setStyle(ButtonStyle.Secondary),
-    new ButtonBuilder()
-      .setCustomId(`gpvc:manage:untrust:${channelId}`)
-      .setLabel('Untrust')
-      .setEmoji(emojis.warning)
-      .setStyle(ButtonStyle.Secondary)
-  );
+  const refreshBtn = new ButtonBuilder()
+    .setCustomId(`gpvc:refresh:${channelId}`)
+    .setLabel('Refresh')
+    .setStyle(ButtonStyle.Secondary)
+    .setEmoji(emojis.loading);
 
-  return [row1, row2];
+  return [new ActionRowBuilder().addComponents(select), new ActionRowBuilder().addComponents(refreshBtn)];
 }
